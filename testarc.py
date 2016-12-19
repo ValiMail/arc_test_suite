@@ -5,6 +5,7 @@
 import unittest
 import yaml
 import argparse
+import tempfile
 
 import subprocess, os
 
@@ -16,24 +17,16 @@ SIGN_TEST_FILE   = "arc-draft-sign-tests.yml"
 VERIFY_TEST_FILE = "arc-draft-verify-tests.yml"
 
 def verify_test(self, script, test_case, port=8053):
-    tmp_file = 'tmp/message.txt'
-    print(test_case.tid)
-
-    with open(tmp_file,'w') as f:
-        f.write(test_case.test["message"])
-
-    with ArcTestResolver(test_case.txt_records, port):
-        proc = subprocess.Popen([script, tmp_file, str(port)], stdout=subprocess.PIPE)
+    with tempfile.NamedTemporaryFile(mode='w') as tmp, ArcTestResolver(test_case.txt_records, port):
+        tmp.write(test_case.test["message"])
+        proc = subprocess.Popen([script, tmp.name, str(port)], stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
 
     self.assertEqual(out.lower(), test_case.test["cv"].lower())
 
-    os.remove(tmp_file)
-
 def sign_test(self, script, test_case, port=8080):
     print(test_case)
     print(test_case.tid)
-
 
 class ArcVerifyTestCase(object):
     def __init__(self, tid, test, txt_records):
