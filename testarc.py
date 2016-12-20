@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Run the ARC test suite in YAML format agains an implementation
+# Run the ARC test suite in YAML format against an implementation
 
 import unittest
 import yaml
@@ -19,14 +19,31 @@ VERIFY_TEST_FILE = "arc-draft-verify-tests.yml"
 def verify_test(self, script, test_case, port=8053):
     with tempfile.NamedTemporaryFile(mode='w') as tmp, ArcTestResolver(test_case.txt_records, port):
         tmp.write(test_case.test["message"])
+        tmp.seek(0)
+
         proc = subprocess.Popen([script, tmp.name, str(port)], stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
 
     self.assertEqual(out.lower(), test_case.test["cv"].lower())
 
-def sign_test(self, script, test_case, port=8080):
-    print(test_case)
-    print(test_case.tid)
+def sign_test(self, script, test_case, port=8053):
+    #print(test_case.private)
+    with tempfile.NamedTemporaryFile(mode='w') as mtmp, tempfile.NamedTemporaryFile(mode='w') as pktmp:
+        mtmp.write(test_case.test["message"])
+        mtmp.seek(0)
+        pktmp.write(test_case.private)
+        pktmp.seek(0)
+        with tempfile.NamedTemporaryFile(mode='w') as artmp, ArcTestResolver(test_case.txt_records, port):
+            artmp.write(test_case.test["auth-res"])
+            artmp.seek(0)
+            proc = subprocess.Popen([script, mtmp.name, str(port), pktmp.name, artmp.name,
+                                     test_case.sel, test_case.domain, test_case.headers],
+                                    stdout=subprocess.PIPE)
+            out  = proc.communicate()[0].decode("utf-8")
+
+    print(out)
+
+
 
 class ArcVerifyTestCase(object):
     def __init__(self, tid, test, txt_records):
@@ -66,6 +83,8 @@ def main(op, script, test=None, verbose=False):
                       (k, v) in scenario["tests"].items()]
     else:
         raise ValueError("invalid operation")
+
+    print(tests[0])
 
     # use test variable here
 
