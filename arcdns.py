@@ -14,8 +14,8 @@ class ArcTestResolver(object):
             zones.append(domain + " IN TXT " + " ".join(frags))
 
         resolver = ZoneResolver("\n".join(zones))
-
         logger = DNSLogger()
+
         self.server = DNSServer(resolver, port=self.port, logger=logger)
         self.server.start_thread()
 

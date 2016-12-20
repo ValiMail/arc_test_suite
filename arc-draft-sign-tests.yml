@@ -28,13 +28,14 @@ tests:
       Hey gang,
       This is a test message.
       --J.
+    t: '2000000000'
     auth-res:    |
       lists.example.org;
       spf=pass smtp.mfrom=jqd@d1.example;
       dkim=pass (1024-bit key) header.i=@d1.example;
       dmarc=pass
     AS:          |
-      i=1; cv=none; a=rsa-sha256; d=example.com; s=dummy; t=1482193840;
+      i=1; cv=none; a=rsa-sha256; d=example.com; s=dummy; t=2000000000;
       b=YC/BQQ2kd2WpTZSAXDazUZ2DsAVtVDW1DrDHI9q96UuV4HUdBOl5bKCyTHr+t5W+l9uC3T
       KURK/Ti1aJlyRX0bmGMWFuBsKlMyjWe+qdLPoJZ7CoE2sJzXFC7R+K1DCOemOU3x6e+8GM5C
       roEJAWXry4KapgKcZgkEWIep/+Oo8=
@@ -44,16 +45,16 @@ tests:
       dkim=pass (1024-bit key) header.i=@d1.example;
       dmarc=pass
     AMS:         |
-      i=1; a=rsa-sha256; d=example.com; s=dummy; t=1482194231;
+      i=1; a=rsa-sha256; d=example.com; s=dummy; t=2000000000;
       h=From:To:Subject:arc-authentication-results;
       bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=;
-      b=JQqvlb6rohEGYRmR4Q3LQnvhb/9BXnTVybKLnFv2ATHW8gVnByGvN69HJGiyDxVPaRUaVx
-      kqTZKXNRAGzvWrhCYS+8lCS99j+ZRfRPKNANY65PeUvqiRs3ty7ru0Dns0fuOGdC8g7bqV8U
-      ZFnY40JgBjh3JtoXtI2VeTFwHbDGk=
+      b=ulWd9KPJwbAoo8uIIpUHjlhpJE8iDSONYJqQxdVn6qxXLmjeGLHvqq5ggGIkL3oBxpwqO
+      aEpR3iq+SmCAq0KgHOQtuZ1YG41TJaLOD8Cj5WdSu1luS9tNfwbwWK0RzchEJ0jeS0EaMc9
+      eU2XpmxVIP7X/H0kZ9XBkNRw6pIIjCo=
 domain:   example.com
 sel: dummy
 headers: From:To:Subject
-private: |
+privatekey: |
   -----BEGIN RSA PRIVATE KEY-----
   MIICXQIBAAKBgQDkHlOQoBTzWRiGs5V6NpP3idY6Wk08a5qhdR6wy5bdOKb2jLQi
   Y/J16JYi0Qvx/byYzCNb3W91y3FutACDfzwQ/BC/e/8uBsCR+yz1Lxj+PL6lHvqM
