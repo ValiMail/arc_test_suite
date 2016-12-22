@@ -1,0 +1,165 @@
+- AS valid
+  - 'h' must be correct scope - AAR(1):AMS(1):AS(1):AAR(2):AMS(2):ASB(2), for instance
+	  - must protect against messed up ordering
+	- *** signing calculation done correctly, bottom up - Section 5.4.2 of [RFC6376]
+
+- AMS valid
+	- header fields also signed in bottom up order?
+
+- AAR valid
+  - unique i= value
+  - i= at beginning
+	- result = (i=I;) ++ AR
+
+- non-well formed messages
+  - section 5.2.1, use 2nd level orderings(only for signing?) cv = fail
+
+
+- keys must be identical to DKIM KEYS
+
+- NA vs empty?
+
+
+- but receivers MUST be able to process the
+   header fields from wherever they are found in the message header.
+- ***Ordering amongst the individual ARC header fields and sets is
+   specified below and MUST be followed for proper canonicalized signing
+   and evaluation.
+
+
+HOW TO TEST?
+ - The ARC sets SHOULD be added at the top of a message header as it
+   transits MTAs that do authentication checks
+ - trace header fields, such as ARC, SHOULD be added at the top
+   of the email header fields
+ - section 5.2 - Set ordering, etc
+
+
+
+Assume failure + failure != success
+TESTS:
+  - cv=None
+	  * no ARC-Sets 1
+		* no ARC-Sets 2
+	- cv=Pass
+	  - i=1
+		  * pass 1
+			* pass 2
+			* pass 3
+		- i=2
+			* pass 1
+			* pass 2
+			* pass 3
+		- i=3
+		  * pass 1
+			* pass 2
+		-? i=10+
+		  * pass 1
+			* pass 2
+		- additional header fields
+		  - ?
+		- both a= sha-rsa1 && sha-rsa256 supported
+		  - ?
+    - canonicalization supported
+		  - ?
+		- AMS h=
+		  - may include duplicates
+			  - ?
+			- may include non-existant fields (but if they're then added, it will not verify)
+			  - ?
+			- whitespace can go on either side of ' : '
+			- case insensitive
+  - cv=Fail
+	  - invalid structured header syntax (rfc5322)
+		  - ?
+	  - invalid or missing i=values
+		  - duplicated i= values
+			  * duplicated AS i=
+				* duplicated AMS i= current
+				* duplicated AMS i= !current
+      -?-  (anything else?)
+	  - i=1 (all prototyped from cv=Pass, i=1, with single change)
+	    - AS cv's not correct
+		    * cv1 = Pass
+		  	* cv1 = Fail
+	    - AMS(1) invalid
+		  	- invalid a=
+				  * NA
+					* unknkown algorithm(not rsa-sha1 or rsa-sha256)
+		  	- invalid b=
+				  * NA
+					* not base64
+					- invalid value
+					  - ?
+					- when generating sig, what if there are duplicate headers?  what is ordering?
+		  	- invalid bh=
+				  * NA
+					* not base64
+					- invalid value
+					  - ?
+		  	- invalid c=
+				  * NA
+		  	  - non-relaxed canonicalization
+					  * simple
+						* simple/simple
+						* simple/relaxed
+						* relaxed/simple
+						* relaxed
+		  	- invalid d=
+				  * NA
+					- invalid format
+					  * not valid domain name
+						*? international domain not an A-label - Section 2.3 of [RFC5890]
+		  	- invalid h=
+				  * NA
+		      * includes AS headers
+				  * incorrect order (or should this be taken into acount in b= ?)
+					* includes AMS
+		  	- invalid s=
+				  * NA
+					*? international selector not an A-label - Section 2.3 of [RFC5890]
+		  	- invalid t=
+					* invalid format
+		  - AS(1) invalid
+		  	- invalid a= (algorithm)
+				  * NA
+					* unknkown algorithm(not rsa-sha1 or rsa-sha256)
+		  	- invalid b= (sig)
+				  * NA
+					* not base64
+					- invalid value
+					  - ?
+		  	- invalid cv= (chain)
+				  * NA
+					* invalid value
+		  	- invalid d= (domain)
+				  * NA
+					- invalid format
+					  * not valid domain name
+						*? international domain not an A-label - Section 2.3 of [RFC5890]
+		  	- invalid s= (selector)
+				  * NA
+					*? international selector not an A-label - Section 2.3 of [RFC5890]
+		  	- invalid t= (timestamp)
+				  * invalid format
+    - i=2 (all prototyped from cv=Pass, i=2, with single change)
+		  - duplicate i= values
+			  * duplicate AS i=
+				* duplicate AMS i=
+		  - AS cv's not correct
+        * cv1 = Pass
+		  	* cv1 = Fail
+			  * cv2 = None
+		  	* cv2 = Fail
+			- AMS(2) invalid
+			  - ?
+			- AS(1) invalid
+			  * NA
+			  - ?
+			- AS(2) invalid
+			  * NA
+			  - ?
+		- i=3 (all prototyped from cv=Pass, i=2, with single change)
+			  - ?
+    - i=10+ (all prototyped from cv=Pass, i=2, with single change)
+        - ?

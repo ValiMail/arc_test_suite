@@ -5,7 +5,6 @@
 import unittest
 import yaml
 import argparse
-import tempfile
 import subprocess, os
 
 from ddt import ddt, data
@@ -15,33 +14,34 @@ DEFAULT_DNS_PORT = 8053
 SIGN_TEST_FILE   = "arc-draft-sign-tests.yml"
 VERIFY_TEST_FILE = "arc-draft-verify-tests.yml"
 
-# TODO: cleanup sign_test, remove tempfiles?
-
 def verify_test(self, script, test_case, port):
-    with tempfile.NamedTemporaryFile(mode='w') as tmp, ArcTestResolver(test_case.txt_records, port):
-        tmp.write(test_case.test["message"])
-        tmp.seek(0)
-
-        proc = subprocess.Popen([script, tmp.name, str(port)], stdout=subprocess.PIPE)
+    with open('tmp/message.txt', 'w') as f:
+        f.write(test_case.test["message"])
+    with ArcTestResolver(test_case.txt_records, port):
+        proc = subprocess.Popen([script, 'tmp/message.txt', str(port)], stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
+
+    os.remove('tmp/message.txt')
 
     self.assertEqual(out.lower(), test_case.test["cv"].lower())
 
 
 def sign_test(self, script, test_case, port):
-    #print(test_case.privatekey)
-    with tempfile.NamedTemporaryFile(mode='w') as mtmp, tempfile.NamedTemporaryFile(mode='w') as pktmp:
-        mtmp.write(test_case.test["message"])
-        mtmp.seek(0)
-        pktmp.write(test_case.privatekey)
-        pktmp.seek(0)
-        with tempfile.NamedTemporaryFile(mode='w') as artmp, ArcTestResolver(test_case.txt_records, port):
-            artmp.write(test_case.test["auth-res"])
-            artmp.seek(0)
-            proc = subprocess.Popen([script, mtmp.name, str(port), pktmp.name, artmp.name,
-                                     test_case.sel, test_case.domain, test_case.headers, test_case.test["t"]],
-                                    stdout=subprocess.PIPE)
-            out  = proc.communicate()[0].decode("utf-8")
+    with open('tmp/message.txt', 'w') as f:
+        f.write(test_case.test["message"])
+    with open('tmp/privatekey.pem', 'w') as f:
+        f.write(test_case.privatekey)
+    with open('tmp/authres.txt', 'w') as f:
+        f.write(test_case.test["auth-res"])
+
+    with ArcTestResolver(test_case.txt_records, port):
+        proc = subprocess.Popen([script, 'tmp/message.txt', str(port), 'tmp/privatekey.pem', 'tmp/authres.txt',
+                                 test_case.sel, test_case.domain, test_case.headers, test_case.test["t"]],
+                                stdout=subprocess.PIPE)
+        out  = proc.communicate()[0].decode("utf-8")
+
+    for f in os.listdir('tmp/'):
+        os.remove('tmp/' + f)
 
     as_valid = ams_valid = aar_valid = False
     for sig in out.split("\n\n"):
