@@ -1,3 +1,5 @@
+TODO:
+
 - AS valid
   - 'h' must be correct scope - AAR(1):AMS(1):AS(1):AAR(2):AMS(2):ASB(2), for instance
 	  - must protect against messed up ordering
@@ -6,26 +8,20 @@
 - AMS valid
 	- header fields also signed in bottom up order?
 
-- AAR valid
-  - unique i= value
-  - i= at beginning
-	- result = (i=I;) ++ AR
-
-- non-well formed messages
-  - section 5.2.1, use 2nd level orderings(only for signing?) cv = fail
-
-
-- keys must be identical to DKIM KEYS
+- ordering if header exists more than once?
 
 - NA vs empty?
 
+- AMS keys must be identical to DKIM KEYS
+- additional DKIM sig options???
+  - l
+  - q
+	- x
+	- z
 
-- but receivers MUST be able to process the
-   header fields from wherever they are found in the message header.
 - ***Ordering amongst the individual ARC header fields and sets is
    specified below and MUST be followed for proper canonicalized signing
    and evaluation.
-
 
 HOW TO TEST?
  - The ARC sets SHOULD be added at the top of a message header as it
@@ -35,9 +31,12 @@ HOW TO TEST?
  - section 5.2 - Set ordering, etc
 
 
+- smarter integration of validation & signing tests
+
+- structured header stuff
 
 Assume failure + failure != success
-TESTS:
+VALIDATION TESTS:
   - cv=None
 	  * no ARC-Sets 1
 		* no ARC-Sets 2
@@ -46,6 +45,18 @@ TESTS:
 		  * pass 1
 			* pass 2
 			* pass 3
+			* additional irrelevant header fields
+			* a=sha-rsa1
+			* a=sha-rsa256
+			* canon body changes
+			* duplicate AMS header
+			* non-existant AMS header fields
+			* whitespace ' : ' h= 1
+			* whitespace ' : ' h= 2
+			* h= case insensitive
+			* AMS b= ignores whitespace
+			* bh= ignores whitespace
+			* AS b= ignores whitespace
 		- i=2
 			* pass 1
 			* pass 2
@@ -53,22 +64,9 @@ TESTS:
 		- i=3
 		  * pass 1
 			* pass 2
-		-? i=10+
+		-? i=5+
 		  * pass 1
 			* pass 2
-		- additional header fields
-		  - ?
-		- both a= sha-rsa1 && sha-rsa256 supported
-		  - ?
-    - canonicalization supported
-		  - ?
-		- AMS h=
-		  - may include duplicates
-			  - ?
-			- may include non-existant fields (but if they're then added, it will not verify)
-			  - ?
-			- whitespace can go on either side of ' : '
-			- case insensitive
   - cv=Fail
 	  - invalid structured header syntax (rfc5322)
 		  - ?
@@ -89,14 +87,19 @@ TESTS:
 		  	- invalid b=
 				  * NA
 					* not base64
+					- cant get key or is invalid
+					  * no key found
+						* not vaild dkim key
 					- invalid value
-					  - ?
-					- when generating sig, what if there are duplicate headers?  what is ordering?
+					  * modify signature
+						* modified headers
+					-? when generating sig, what if there are duplicate headers?  what is ordering?
 		  	- invalid bh=
 				  * NA
 					* not base64
 					- invalid value
-					  - ?
+					  * modify bh value
+						* modify body(non-canonically)
 		  	- invalid c=
 				  * NA
 		  	  - non-relaxed canonicalization
@@ -127,8 +130,16 @@ TESTS:
 		  	- invalid b= (sig)
 				  * NA
 					* not base64
+					- cant get key or is invalid
+					  * no key found
+						* not vaild dkim key
 					- invalid value
-					  - ?
+					  * modify signature
+						- modified headers
+						  - check each header that should be included
+							  * AAR(1)
+								* AMS(1)
+								* ASB(1)
 		  	- invalid cv= (chain)
 				  * NA
 					* invalid value
@@ -152,14 +163,56 @@ TESTS:
 			  * cv2 = None
 		  	* cv2 = Fail
 			- AMS(2) invalid
-			  - ?
+			  - chose ~3 ways of failing
+				  - ?
 			- AS(1) invalid
 			  * NA
-			  - ?
+			  - chose ~3 ways of failing
+				  - ?
 			- AS(2) invalid
 			  * NA
-			  - ?
-		- i=3 (all prototyped from cv=Pass, i=2, with single change)
-			  - ?
-    - i=10+ (all prototyped from cv=Pass, i=2, with single change)
-        - ?
+			  - chose ~3 ways of failing
+				  - ?
+		- i=3 (all prototyped from cv=Pass, i=3, with single change)
+			  - chose ~2 ways of failing
+				  - ?
+    - i=5+ (all prototyped from cv=Pass, i=5+, with single change)
+        - chose ~1 ways of failing
+				  - ?
+
+
+
+
+SIGNING TESTS:
+ - valid inputs
+   - i=0
+	   * simple test case, normal dkim headers
+		 * ^^^ + modified AMS headers
+		 * ^^^ + message permuted AMS headers
+		 * ^^^ + non canon modified body
+		 * ^^^ + duplicate headers
+		 * ^^^ + canon modified body
+		 * ^^^ + case changes for headers
+  - i=1
+	   * simple test case, normal dkim headers
+		 * ^^^ + modified AMS headers
+		 * ^^^ + message permuted AMS headers
+		 * ^^^ + non canon modified body
+		 * ^^^ + duplicate headers
+		 * ^^^ + canon modified body
+		 * ^^^ + case changes for headers
+		 * ^^^ + modified AS headers
+     - include VERIFICATION TEST SUITE
+	- i=2
+	   * simple test case, normal dkim headers
+	   - include VERIFICATION TEST SUITE
+	- i=3
+	   * simple test case, normal dkim headers
+	   - include VERIFICATION TEST SUITE
+	- i=5+
+	   * simple test case, normal dkim headers
+     - include VERIFICATION TEST SUITE
+
+ - invalid inputs (duplicate i= ?)
+   - section 5.2.1, use 2nd level orderings(only for signing?) cv = fail
+     - ?
