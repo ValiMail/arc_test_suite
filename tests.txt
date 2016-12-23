@@ -1,39 +1,28 @@
 TODO:
 
-- AS valid
-  - 'h' must be correct scope - AAR(1):AMS(1):AS(1):AAR(2):AMS(2):ASB(2), for instance
-	  - must protect against messed up ordering
-	- *** signing calculation done correctly, bottom up - Section 5.4.2 of [RFC6376]
+- re-order tests
 
-- AMS valid
-	- header fields also signed in bottom up order?
+- maybe better cannonicalization tests
 
-- ordering if header exists more than once?
+- valid format of dkim keys
 
-- NA vs empty?
+- structured header syntax
+  - tag length
 
-- AMS keys must be identical to DKIM KEYS
-- additional DKIM sig options???
-  - l
-  - q
-	- x
-	- z
+- http://dkim.org/pipermail/interop/2007q4/000330.html
+  - generic tag parsing tests
 
-- ***Ordering amongst the individual ARC header fields and sets is
-   specified below and MUST be followed for proper canonicalized signing
-   and evaluation.
+HOW?
+- dkim key size
+  - signers must use >= 1024?
 
-HOW TO TEST?
- - The ARC sets SHOULD be added at the top of a message header as it
-   transits MTAs that do authentication checks
- - trace header fields, such as ARC, SHOULD be added at the top
-   of the email header fields
- - section 5.2 - Set ordering, etc
+NEED CLARIFICATIONS:
+- arc sets with missing or invalid i= (ignored or invalid?)  not added to signature?
+-? canonicalization for AMS?
 
-
+TODO SUITE:
 - smarter integration of validation & signing tests
-
-- structured header stuff
+- i >= 2 tests
 
 Assume failure + failure != success
 VALIDATION TESTS:
@@ -45,18 +34,33 @@ VALIDATION TESTS:
 		  * pass 1
 			* pass 2
 			* pass 3
-			* additional irrelevant header fields
-			* a=sha-rsa1
+			* unknown AS tags(changes signature)
+			* dkim AS tags not implemented
+			* unknown AMS tags(changes signature)
+			* v= AMS tags(changes signature), but should have no other effect
+			* a=sha-rsa1(changes signature)
 			* a=sha-rsa256
 			* canon body changes
-			* duplicate AMS header
-			* non-existant AMS header fields
+			* additional irrelevant header fields
 			* whitespace ' : ' h= 1
 			* whitespace ' : ' h= 2
 			* h= case insensitive
 			* AMS b= ignores whitespace
 			* bh= ignores whitespace
 			* AS b= ignores whitespace
+			* AMS duplicate header bottom up
+			* AMS non-existant header fields
+			* AMS non-existant duplicate header fields
+			*? AS t= optional
+			*? AMS t= optional
+			* duplicate ARC set
+			* AMS l= implemented correctly?
+			* AS 512 key
+			* AS 1024 key
+			* AS 2048 key
+			* ARC Sets not found at top of message header
+			* optional ";" at end of tag-list
+			* optional
 		- i=2
 			* pass 1
 			* pass 2
@@ -72,17 +76,32 @@ VALIDATION TESTS:
 		  - ?
 	  - invalid or missing i=values
 		  - duplicated i= values
-			  * duplicated AS i=
-				* duplicated AMS i= current
-				* duplicated AMS i= !current
+			  * duplicated AS i= 1
+				* duplicated AMS i= 1
+			  * duplicated AS i= 2
+				*? missing i= value AS
+				*? missing i= value AMS
+				*? invalid i= value AS
+				*? invalid i= value AMS
       -?-  (anything else?)
+		- ARC Set mis-ordered
+		  * set 1 before set 2
+			* aar wrong place
+			* ams & as wrong order
 	  - i=1 (all prototyped from cv=Pass, i=1, with single change)
 	    - AS cv's not correct
 		    * cv1 = Pass
 		  	* cv1 = Fail
 	    - AMS(1) invalid
+			  - tag=value list
+			    * duplicate tag
+				  * case change on tag key
+				  * case change on tag value
+				  * add whitespace
+					* random semicolon
 		  	- invalid a=
 				  * NA
+					* empty
 					* unknkown algorithm(not rsa-sha1 or rsa-sha256)
 		  	- invalid b=
 				  * NA
@@ -108,24 +127,46 @@ VALIDATION TESTS:
 						* simple/relaxed
 						* relaxed/simple
 						* relaxed
+				  * invalid value
 		  	- invalid d=
 				  * NA
+					* empty
 					- invalid format
 					  * not valid domain name
 						*? international domain not an A-label - Section 2.3 of [RFC5890]
 		  	- invalid h=
 				  * NA
+					* empty
 		      * includes AS headers
+					* doesn't include FROM
 				  * incorrect order (or should this be taken into acount in b= ?)
 					* includes AMS
 		  	- invalid s=
 				  * NA
+					* empty
+					* invalid format? (anything except empty?)
 					*? international selector not an A-label - Section 2.3 of [RFC5890]
 		  	- invalid t=
+					* empty
 					* invalid format
+				- obtuse dkim stuff
+				  * q= != dns/txt
+					- x=
+					  * invalid format
+						* less than t
+				  -? z= (diagnostic field, who cares for now) (dkim-quoted-printable)
+					- l=
+					  * too long
 		  - AS(1) invalid
+			  - tag=value list
+			    * duplicate tag
+				  * case change on tag key
+				  * case change on tag value
+				  * add whitespace
+					* random semicolon
 		  	- invalid a= (algorithm)
 				  * NA
+					* empty
 					* unknkown algorithm(not rsa-sha1 or rsa-sha256)
 		  	- invalid b= (sig)
 				  * NA
@@ -145,13 +186,16 @@ VALIDATION TESTS:
 					* invalid value
 		  	- invalid d= (domain)
 				  * NA
+					* empty
 					- invalid format
 					  * not valid domain name
 						*? international domain not an A-label - Section 2.3 of [RFC5890]
 		  	- invalid s= (selector)
 				  * NA
+					* empty
 					*? international selector not an A-label - Section 2.3 of [RFC5890]
 		  	- invalid t= (timestamp)
+				  * empty
 				  * invalid format
     - i=2 (all prototyped from cv=Pass, i=2, with single change)
 		  - duplicate i= values
@@ -183,11 +227,14 @@ VALIDATION TESTS:
 
 
 
+assume rsa-sha256?
+assume signers not adding additional weird tags to AS & AMS
+assume no additional headers than ones specified
 SIGNING TESTS:
  - valid inputs
    - i=0
 	   * simple test case, normal dkim headers
-		 * ^^^ + modified AMS headers
+		 * ^^^ + modified AMS headers (?)
 		 * ^^^ + message permuted AMS headers
 		 * ^^^ + non canon modified body
 		 * ^^^ + duplicate headers
@@ -195,7 +242,7 @@ SIGNING TESTS:
 		 * ^^^ + case changes for headers
   - i=1
 	   * simple test case, normal dkim headers
-		 * ^^^ + modified AMS headers
+		 * ^^^ + modified AMS headers (?)
 		 * ^^^ + message permuted AMS headers
 		 * ^^^ + non canon modified body
 		 * ^^^ + duplicate headers
@@ -213,6 +260,8 @@ SIGNING TESTS:
 	   * simple test case, normal dkim headers
      - include VERIFICATION TEST SUITE
 
- - invalid inputs (duplicate i= ?)
-   - section 5.2.1, use 2nd level orderings(only for signing?) cv = fail
-     - ?
+ - invalid inputs (duplicate i= )
+   * duplicate i=1
+	 * duplicate i=1, t(arc seal 1)
+	 * duplicate i=2
+	 * duplicate i=2, t(arc seal 2)
