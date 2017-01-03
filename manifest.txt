@@ -202,8 +202,11 @@ VALIDATION TESTS:
 
 --- Chain Validation
   - cv=None
-	  * no ARC-Sets 1
-		* no ARC-Sets 2
+	  *+ empty (cv_empty)
+	  *+ no header (cv_no_header)
+		*+ no body (cv_no_body)
+	  *+ no ARC-Sets 1 (cv_base1)
+		*+ no ARC-Sets 2 (cv_base2)
 	- cv=Pass
 	  - i=1
 		  * pass 1
@@ -256,6 +259,10 @@ VALIDATION TESTS:
 		* not vaild dkim key
 	- record tags?  (p, s, t, n, k, ...)
 	-?
+
+
+--- System
+  -? invalid messages
 
 SIGNATURE TESTS:
   *** assume rsa-sha256?

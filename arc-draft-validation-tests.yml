@@ -1,35 +1,118 @@
 description: >-
-  dummy scenario
+  Chain Validation
 tests:
-  test1:
+  cv_empty:
     spec:        12/16
-    description: basic test
-    message:     >-
-                 Return-Path: <jqd@d1.example>
-                 Received: from [10.10.10.131] (w-x-y-z.dsl.static.isp.com [w.x.y.z])
-                     (authenticated bits=0)
-                     by segv.d1.example with ESMTP id t0FN4a8O084569;
-                     Thu, 14 Jan 2015 15:00:01 -0800 (PST)
-                     (envelope-from jqd@d1.example)
-                 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=d1.example;
-                     s=20130426; t=1421363082;
-                     bh=EoJqaaRvhrngQxmQ3VnRIIMRBgecuKf1pdkxtfGyWaU=;
-                     h=Message-ID:Date:From:MIME-Version:To:CC:Subject:Content-Type:
-                      Content-Transfer-Encoding;
-                     b=HxsvPubDE+R96v9dM9Y7V3dJUXvajd6rvF5ec5BPe/vpVBRJnD4I2weEIyYijrvQw
-                      bv9uUA1t94kMN0Q+haFo6hiQPnkuDxku5+oxyZWOqtNH7CTMgcBWWTp4QD4Gd3TRJl
-                      gotsX4RkbNcUhlfnoQ0p+CywWjieI8aR6eof6WDQ=
-                 Message-ID: <54B84785.1060301@d1.example>
-                 Date: Thu, 14 Jan 2015 15:00:01 -0800verify_test(script, test_case)
-                 From: John Q Doe <jqd@d1.example>
-                 To: arc@dmarc.org
-                 Subject: Example 1
-                 Hey gang,
-                 This is a test message.
-                 --J.
+    description: empty message
+    message:     |
+
+    cv:          None
+  cv_no_headers:
+    spec:        12/16
+    description: message with no headers
+    message:     |
+
+      Hey gang,
+      This is a test message.
+      --J.
+    cv:          None
+  cv_no_body:
+    spec:        12/16
+    description: message with no body
+    message:     |
+      MIME-Version: 1.0
+      Return-Path: <jqd@d1.example.org>
+      Received: by 10.157.14.6 with HTTP; Tue, 3 Jan 2017 12:22:54 -0800 (PST)
+      Message-ID: <54B84785.1060301@d1.example.org>
+      Date: Thu, 14 Jan 2015 15:00:01 -0800
+      From: John Q Doe <jqd@d1.example.org>
+      To: arc@dmarc.org
+      Subject: Example 1
+    cv:          None
+  cv_base1:
+    spec:        12/16
+    description: base test message1
+    message:     |
+      MIME-Version: 1.0
+      Return-Path: <jqd@d1.example.org>
+      Received: by 10.157.14.6 with HTTP; Tue, 3 Jan 2017 12:22:54 -0800 (PST)
+      Message-ID: <54B84785.1060301@d1.example.org>
+      Date: Thu, 14 Jan 2015 15:00:01 -0800
+      From: John Q Doe <jqd@d1.example.org>
+      To: arc@dmarc.org
+      Subject: Example 1
+
+      Hey gang,
+      This is a test message.
+      --J.
+    cv:          None
+  cv_base2:
+    spec:        12/16
+    description: base test message2
+    message:     |
+      MIME-Version: 1.0
+      Return-Path: <jqd@d1.example.org>
+      Received: by 10.157.52.162 with SMTP id g31csp5274520otc;
+              Tue, 3 Jan 2017 12:32:02 -0800 (PST)
+      X-Received: by 10.36.31.84 with SMTP id d81mr49584685itd.26.1483475522271;
+              Tue, 03 Jan 2017 12:32:02 -0800 (PST)
+      Message-ID: <C3A9E208-6B5D-4D9F-B4DE-9323946993AC@d1.example.org>
+      Date: Tue, 3 Jan 2017 12:31:41 -080
+      From: John Q Doe <jqd@d1.example.org>
+      To: arc@dmarc.org
+      Subject: Example 2
+      Content-Type: multipart/alternative; boundary=001a113e15fcdd0f9e0545366e8f
+
+      --001a113e15fcdd0f9e0545366e8f
+      Content-Type: text/plain; charset=UTF-8
+
+      This is a test message
+
+      --001a113e15fcdd0f9e0545366e8f
+      Content-Type: text/html; charset=UTF-8
+
+      <div dir="ltr">This is a test message</div>
+
+      --001a113e15fcdd0f9e0545366e8f--
+    cv:          None
+  cv_pass_i1_1:
+    spec:        12/16
+    description: passing message i=1 1
+    message:     |
+      MIME-Version: 1.0
+      Return-Path: <jqd@d1.example.org>
+      ARC-Seal: i=1; a=rsa-sha256; t=1421363107;
+          s=seal2015; d=example.org; cv=none;
+          b=pCw3Qxgfs9E1qnyNZ+cTTF3KHgAjWwZz++Rju0BceSiuwIg0Pkk+3RZH/kaiz61
+           TX6RVT6E4gs49Sstp41K7muj1OR5R6Q6llahLlQJZ/YfDZ3NImCU52gFWLUD7L69
+           EU8TzypfkUhscqXjOJgDwjIceBNNOfh3Jy+V8hQZrVFCw0A=
+      ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+          d=example.org; s=clochette; t=1421363105;
+          bh=FjQYm3HhXStuzauzV4Uc02o55EzATNfL4uBvEoy7k3s=;
+          h=List-Id:List-Unsubscribe:List-Archive:List-Post:
+           List-Help:List-Subscribe:Reply-To:DKIM-Signature;
+          b=Wb4EiVANwAX8obWwrRWpmlhxmdIvj0dv0psIkiaGOOug32iTAcc74/iWvlPXpF1F5
+           vYVF0mw5cmKOa824tKkUOOE3yinTAekqnly7GJuFCDeSA1fQHhStVV7BzAr3A+m4bw
+           a6RIDgr3rOPJil678dZTHfztFWyjwIUxB5Ajxj/M=
+      Received: from segv.d1.example (segv.d1.example [72.52.75.15])
+          by lists.example.org (8.14.5/8.14.5) with ESMTP id t0EKaNU9010123
+          for <arc@example.org>; Thu, 14 Jan 2015 15:01:30 -0800 (PST)
+          (envelope-from jqd@d1.example)
+      ARC-Authentication-Results: i=1; lists.example.org;
+          spf=pass smtp.mfrom=jqd@d1.example;
+          dkim=pass (1024-bit key) header.i=@d1.example;
+          dmarc=pass
+      Received: by 10.157.14.6 with HTTP; Tue, 3 Jan 2017 12:22:54 -0800 (PST)
+      Message-ID: <54B84785.1060301@d1.example.org>
+      Date: Thu, 14 Jan 2015 15:00:01 -0800
+      From: John Q Doe <jqd@d1.example.org>
+      To: arc@dmarc.org
+      Subject: Example 1
+
+      Hey gang,
+      This is a test message.
+      --J.
     cv:          None
 txt_records:
   dummy._domainkey.example.org: >-
     v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAg1i2lO83x/r58cbo/JSBwfZrrct6S/yi4L6GsG3wNgFE9lO3orzBwnAEJJM33WrvJfOWia1fAx64Vs1QEpYtLFCzyeIhDDMaHv/G8NgKPgnWK4gI8/x2Q2SYCmiqil66oHaSOC2phMDRI+c/Q35MlZbc2FqlgevpKzdCg+YE6mYA0XN7/tdQplbx4meLVsVPIL9QCP4yu8oBsNqcwyxkQafJucVyoZI+VEO+dySw3QXNdmJhr7y1hD1tCNqoAG0iphKQVXPXmGnGhaxaVU92Kq5UKL6/LiTZ1piqyJfJyZ/zCgH+mtY8MNk9f7LHpwFljI7TbYmr7MmV3d6xj3sghwIDAQAB
-comment: >-
-  This is a comment

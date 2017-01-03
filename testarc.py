@@ -12,9 +12,9 @@ from arcdns import ArcTestResolver
 
 DEFAULT_DNS_PORT = 8053
 SIGN_TEST_FILE   = "arc-draft-sign-tests.yml"
-VERIFY_TEST_FILE = "arc-draft-verify-tests.yml"
+VALIDATE_TEST_FILE = "arc-draft-validation-tests.yml"
 
-def verify_test(self, script, test_case, port):
+def validate_test(self, script, test_case, port):
     with open('tmp/message.txt', 'w') as f:
         f.write(test_case.test["message"])
     with ArcTestResolver(test_case.txt_records, port):
@@ -36,7 +36,7 @@ def sign_test(self, script, test_case, port):
 
     with ArcTestResolver(test_case.txt_records, port):
         proc = subprocess.Popen([script, 'tmp/message.txt', str(port), 'tmp/privatekey.pem', 'tmp/authres.txt',
-                                 test_case.sel, test_case.domain, test_case.headers, test_case.test["t"]],
+                                 test_case.sel, test_case.domain, test_case.headers, str(test_case.test["t"])],
                                 stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
 
@@ -67,7 +67,7 @@ def sign_test(self, script, test_case, port):
     self.assertTrue(as_valid)
     self.assertTrue(ams_valid)
 
-class ArcVerifyTestCase(object):
+class ArcValidateTestCase(object):
     def __init__(self, tid, test, txt_records):
         self.tid = tid
         self.test = test
@@ -96,7 +96,7 @@ def genTestClass(op, tests, script, port):
     class ArcTest(unittest.TestCase):
         @data(*tests)
         def test(self, test_case):
-            func = sign_test if op == "sign" else verify_test
+            func = sign_test if op == "sign" else validate_test
             func(self, script, test_case, port)
 
     return ArcTest
@@ -104,10 +104,10 @@ def genTestClass(op, tests, script, port):
 def main(op, script, test=None, port=DEFAULT_DNS_PORT, verbose=False):
     tests = []
 
-    if op == "verify":
-        scenarios = list(yaml.safe_load_all(open(VERIFY_TEST_FILE, 'rb')))
+    if op == "validate":
+        scenarios = list(yaml.safe_load_all(open(VALIDATE_TEST_FILE, 'rb')))
         for scenario in scenarios:
-            tests += [ArcVerifyTestCase(k, v, scenario["txt_records"]) for
+            tests += [ArcValidateTestCase(k, v, scenario["txt_records"]) for
                       (k, v) in scenario["tests"].items()]
     elif op == "sign":
         scenarios = list(yaml.safe_load_all(open(SIGN_TEST_FILE, 'rb')))
@@ -118,7 +118,8 @@ def main(op, script, test=None, port=DEFAULT_DNS_PORT, verbose=False):
     else:
         raise ValueError("invalid operation")
 
-    # use test variable here
+    if test:
+        tests = [t for t in tests if t.tid == test]
 
     testClass = genTestClass(op, tests, script, port)
     suite = unittest.TestLoader().loadTestsFromTestCase(testClass)
@@ -128,7 +129,7 @@ def main(op, script, test=None, port=DEFAULT_DNS_PORT, verbose=False):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run the ARC test suite in YAML format against an implementation.')
-    parser.add_argument('op', choices=["sign", "verify"], default="sign", help='Operation to test')
+    parser.add_argument('op', choices=["sign", "validate"], default="sign", help='Operation to test')
     parser.add_argument('script', help='A command line implementation of an arc signing or verification routine. The arguments to the signing script must be [messagefile dnsport selector domain privatekeyfile headers], the arguments to the verification script must be [messagefile dnsport].')
     parser.add_argument('-t', dest='test', metavar='TEST', required=False, help='Specific test to run')
     parser.add_argument('-p', dest='port', default=DEFAULT_DNS_PORT, metavar='port', required=False, help='Port to run stubbed dns server on')
