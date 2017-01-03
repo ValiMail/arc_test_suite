@@ -28,7 +28,7 @@ tests:
       Hey gang,
       This is a test message.
       --J.
-    t: '2000000000'
+    t: 2000000000
     auth-res:    |
       lists.example.org;
       spf=pass smtp.mfrom=jqd@d1.example;
