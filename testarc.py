@@ -14,19 +14,33 @@ DEFAULT_DNS_PORT = 8053
 SIGN_TEST_FILE   = "arc-draft-sign-tests.yml"
 VALIDATE_TEST_FILE = "arc-draft-validation-tests.yml"
 
-def validate_test(self, script, test_case, port):
+def validate_test(self, script, test_case, port, verbose=False):
+    if verbose:
+        print("\nTEST: %s" % test_case.tid)
+        print("DESC: %s" % test_case.test['description'])
+        print("MSG:")
+        print(test_case.test['message'])
+
     with open('tmp/message.txt', 'w') as f:
         f.write(test_case.test["message"])
     with ArcTestResolver(test_case.txt_records, port):
-        proc = subprocess.Popen([script, 'tmp/message.txt', str(port)], stdout=subprocess.PIPE)
+        proc = subprocess.Popen([script, 'tmp/message.txt', str(port), str(verbose)], stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
 
     os.remove('tmp/message.txt')
 
+    if verbose:
+        print("RESULT:")
     self.assertEqual(out.lower(), test_case.test["cv"].lower())
 
 
-def sign_test(self, script, test_case, port):
+def sign_test(self, script, test_case, port, verbose=False):
+    if verbose:
+        print("\nTEST: %s" % test_case.tid)
+        print("DESC: %s" % test_case.test['description'])
+        print("MSG:")
+        print(test_case.test['message'])
+
     with open('tmp/message.txt', 'w') as f:
         f.write(test_case.test["message"])
     with open('tmp/privatekey.pem', 'w') as f:
@@ -36,15 +50,22 @@ def sign_test(self, script, test_case, port):
 
     with ArcTestResolver(test_case.txt_records, port):
         proc = subprocess.Popen([script, 'tmp/message.txt', str(port), 'tmp/privatekey.pem', 'tmp/authres.txt',
-                                 test_case.sel, test_case.domain, test_case.headers, str(test_case.test["t"])],
+                                 test_case.sel, test_case.domain, test_case.headers, str(test_case.test["t"]), str(verbose)],
                                 stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
 
     for f in os.listdir('tmp/'):
         os.remove('tmp/' + f)
 
+    if verbose:
+        print("\nOutput ARC-Set:")
+        print(out)
+        print("Expected ARC-Set:")
+        print("ARC-Seal: %s" % test_case.test["AS"])
+        print("ARC-Message-Signature: %s" % test_case.test["AMS"])
+        print("ARC-Authentication-Results: %s" % test_case.test["AAR"])
+
     as_valid = ams_valid = aar_valid = False
-    print(out)
     for sig in out.split("\n\n"):
         sig = "".join(sig.split())
         (k, v) = sig.split(':', 1)
@@ -63,6 +84,9 @@ def sign_test(self, script, test_case, port):
             as_valid = (sig_res <= s1)
         else:
             continue
+
+    if verbose:
+        print("RESULT:")
 
     self.assertTrue(aar_valid)
     self.assertTrue(as_valid)
@@ -92,13 +116,13 @@ class ArcSignTestCase(object):
 
 # This is a little odd, but it lets us dynamically
 # create tests from the test file
-def genTestClass(op, tests, script, port):
+def genTestClass(op, tests, script, port, verbose=False):
     @ddt
     class ArcTest(unittest.TestCase):
         @data(*tests)
         def test(self, test_case):
             func = sign_test if op == "sign" else validate_test
-            func(self, script, test_case, port)
+            func(self, script, test_case, port, verbose)
 
     return ArcTest
 
@@ -122,7 +146,7 @@ def main(op, script, test=None, port=DEFAULT_DNS_PORT, verbose=False):
     if test:
         tests = [t for t in tests if t.tid == test]
 
-    testClass = genTestClass(op, tests, script, port)
+    testClass = genTestClass(op, tests, script, port, verbose)
     suite = unittest.TestLoader().loadTestsFromTestCase(testClass)
 
     v = 2 if verbose else 1

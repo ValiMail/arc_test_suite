@@ -5,5 +5,23 @@ test vs unmodified dkimpy
  - header order
 
 whitespace issues
- - '\r\n'
+ - '\r\n' - is normal in headers & body
  - whitespace in b
+ - what about aar?
+
+
+
+
+ams ambiguity(after canonicalization)
+
+
+tag ordering (does b= have to be at the end?, i= at the beginning?)
+
+whitespace & capitalization in h=
+
+additional or duplicate tags
+whitespace in bh=
+tag-value list whitespace
+
+
+cv, domain, selector, algorithm capitilization
