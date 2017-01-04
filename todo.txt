@@ -1,0 +1,9 @@
+better logging
+better error messages
+
+test vs unmodified dkimpy
+ - header order
+
+whitespace issues
+ - '\r\n'
+ - whitespace in b

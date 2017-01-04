@@ -44,20 +44,21 @@ def sign_test(self, script, test_case, port):
         os.remove('tmp/' + f)
 
     as_valid = ams_valid = aar_valid = False
+    print(out)
     for sig in out.split("\n\n"):
         sig = "".join(sig.split())
         (k, v) = sig.split(':', 1)
         sig_res = set(v.split(';'))
         if(k.lower() == "arc-authentication-results"):
-            s1 = test_case.test["AAR"].join(v.split())
+            s1 = "".join(test_case.test["AAR"].split())
             s1 = set(s1.split(';'))
             aar_valid = (sig_res <= s1)
         elif(k.lower() == "arc-message-signature"):
-            s1 = test_case.test["AMS"].join(v.split())
+            s1 = "".join(test_case.test["AMS"].split())
             s1 = set(s1.split(';'))
             ams_valid = (sig_res <= s1)
         elif(k.lower() == "arc-seal"):
-            s1 = test_case.test["AS"].join(v.split())
+            s1 = "".join(test_case.test["AS"].split())
             s1 = set(s1.split(';'))
             as_valid = (sig_res <= s1)
         else:
