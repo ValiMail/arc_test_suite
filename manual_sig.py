@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import base64
+import textwrap
+
 from dkim.crypto import (
     HASH_ALGORITHMS,
     parse_pem_private_key,
@@ -49,7 +51,7 @@ uEzxBDAr518Z8VFbR41in3W4Y3yCDgQlLlcETrS+zYcL
 -----END RSA PRIVATE KEY-----
 '''
 
-# body
+# body (manually canonicalized)
 body = b'''Hey gang,
 This is a test message.
 --J.
@@ -63,13 +65,15 @@ bh = base64.b64encode(h.digest())
 print("ams bh= ")
 print(bh)
 
-
 # ARC-Message-Signature b=
 
 d = b'example.org'
 ht = b'from:to:subject:arc-authentication-results'
 s = b'dummy'
 t = b'12345'
+i = 1
+
+fold = True
 
 auth_res = b'i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
 
@@ -78,7 +82,7 @@ amsh = [
   (b'to', b'arc@dmarc.org'),
   (b'subject', b'Example 1'),
   (b'arc-authentication-results', auth_res),
-  (b'arc-message-signature', b'a=rsa-sha256; b=; bh=%s; d=%s; h=%s; i=1; s=%s; t=%s' % (bh, d, ht, s, t))
+  (b'arc-message-signature', b'a=rsa-sha256; b=; bh=%s; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (bh, d, ht, i, s, t))
 ]
 
 
@@ -87,26 +91,28 @@ h = hasher()
 h = HashThrough(hasher())
 
 h.update(b"\r\n".join([x + b":" + y for (x,y) in amsh]))
-print("sign ams hashed: %r" % h.hashed())
+print("\nsign ams hashed: %r" % h.hashed())
 
 pk = parse_pem_private_key(private)
 sig2 = RSASSA_PKCS1_v1_5_sign(h, pk)
-b = base64.b64encode(bytes(sig2)).decode('utf-8').encode('utf-8')
+b = base64.b64encode(bytes(sig2))
+if fold:
+  b = b[:70] + b" " + b[70:142] + b" " + b[142:]
 print("ams b= ")
 print(b)
 
 
-pk = parse_public_key(base64.b64decode(public))
-signature = base64.b64decode(b)
-ams_valid = RSASSA_PKCS1_v1_5_verify(h, signature, pk)
-print("ams sig valid: %r" % ams_valid)
+#pk = parse_public_key(base64.b64decode(public))
+#signature = base64.b64decode(b)
+#ams_valid = RSASSA_PKCS1_v1_5_verify(h, signature, pk)
+#print("ams sig valid: %r" % ams_valid)
 
 # ARC-Seal b=
 
 arsh = [
   (b'arc-authentication-results', auth_res),
-  (b'arc-message-signature', b'a=rsa-sha256; b=%s; bh=%s; d=%s; h=%s; i=1; s=%s; t=%s' % (b, bh, d, ht, s, t)),
-  (b'arc-seal', b'a=rsa-sha256; b=; cv=none; d=%s; i=1; s=%s; t=%s' % (d, s, t))
+  (b'arc-message-signature', b'a=rsa-sha256; b=%s; bh=%s; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (b, bh, d, ht, i, s, t)),
+  (b'arc-seal', b'a=rsa-sha256; b=; cv=none; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
 ]
 
 hasher = HASH_ALGORITHMS[b'rsa-sha256']
@@ -114,7 +120,7 @@ h = hasher()
 h = HashThrough(hasher())
 
 h.update(b"\r\n".join([x + b":" + y for (x,y) in arsh]))
-print("sign ars hashed: %r" % h.hashed())
+print("\nsign ars hashed: %r" % h.hashed())
 
 pk = parse_pem_private_key(private)
 sig2 = RSASSA_PKCS1_v1_5_sign(h, pk)
@@ -122,6 +128,6 @@ b = base64.b64encode(bytes(sig2))
 print("arsh b=")
 print(b)
 
-signature = base64.b64decode(b)
-ams_valid = RSASSA_PKCS1_v1_5_verify(h, signature, pk)
-print("arsh sig valid: %r" % ams_valid)
+#signature = base64.b64decode(b)
+#ams_valid = RSASSA_PKCS1_v1_5_verify(h, signature, pk)
+#print("arsh sig valid: %r" % ams_valid)
