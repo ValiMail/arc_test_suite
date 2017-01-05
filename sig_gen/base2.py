@@ -33,18 +33,26 @@ ams_tmp = b'''ARC-Message-Signature: a=rsa-sha256;
     i=1; s=dummy; t=12345'''
 
 # data
-body = b'''Hey gang,
-This is a test message.
---J.
+body = b'''--001a113e15fcdd0f9e0545366e8f
+Content-Type: text/plain; charset=UTF-8
+
+This is a test message
+
+--001a113e15fcdd0f9e0545366e8f
+Content-Type: text/html; charset=UTF-8
+
+<div dir="ltr">This is a test message</div>
+
+--001a113e15fcdd0f9e0545366e8f--
 '''.replace(b'\n', b'\r\n')
 
 auth_res = b'i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
 
 sig_head = [
-    (b'from', b'John Q Doe <jqd@d1.example.org>'),
+    (b'from', b'Gene Q Doe <gqd@d1.example.org>'),
     (b'to', b'arc@dmarc.org'),
-    (b'date', b'Thu, 14 Jan 2015 15:00:01 -0800'),
-    (b'subject', b'Example 1'),
+    (b'date', b'Thu, 5 Jan 2017 14:39:01 -0800'),
+    (b'subject', b'Example 2'),
     (b'mime-version', b'1.0'),
     (b'arc-authentication-results', auth_res)
 ]

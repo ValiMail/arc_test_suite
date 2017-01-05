@@ -1,5 +1,5 @@
 TODO:
-- maybe better cannonicalization tests
+- more cannonicalization tests
 - valid format of dkim keys
 - http://dkim.org/pipermail/interop/2007q4/000330.html
 
@@ -10,7 +10,6 @@ HOW?
 NEED CLARIFICATIONS:
 - arc sets with missing or invalid i= (ignored or invalid?)  not added to signature?
 - is t optional?
--? canonicalization for AMS?
 
 
 VALIDATION TESTS:
@@ -209,8 +208,8 @@ VALIDATION TESTS:
 		*+ no ARC-Sets 2 (cv_base2)
 	- cv=Pass
 		- i=1
-			* pass 1
-			* pass 2
+			*+ pass 1 (cv_pass_i1_1)
+			*+ pass 2 (cv_pass_i1_2)
 		- i=2
 			* pass 1
 			* pass 2
