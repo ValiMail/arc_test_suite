@@ -50,6 +50,22 @@ tests:
     spec:        12/16
     description: base test message2
     message:     |
+      ARC-Seal: a=rsa-sha256;
+          b=ujk93rIGBZNPklGtmfnfocNvI2mU3OhnRq1ujpZTijeHswB3Gh1Pzx25KwvFZ56u74wXFX
+          TeNFkFgq2rce6/JnJ4B1SBwMoIxtqCTi1DcFbOD6pW5lSADERZDDv3N5Z1xCuwWj2u87pKJG
+          kPaDUFWbOl+X14jU7f3a9XnZh7FHw=; cv=none; d=example.org; i=1; s=dummy;
+          t=12345
+      ARC-Message-Signature: a=rsa-sha256;
+          b=aHfjYd84tmqd6nApu4mmmxbR6ZRLwgqN5Acppn4jj3Dfij0WRHLpe22E30AiJ1fyyRyKS0
+          zZmOfhcYA+5B2IJv91EjUzP3Vt1gW5UqjhYMkeJl4NCBdn0xBdn49fBX9w0PbC7AZjW3tok0
+          ZEuORs3bB9rnoh1BSU+OM7+HnxxRo=;
+          bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
+          d=example.org; h=from:to:subject:arc-authentication-results; i=1;
+          s=dummy; t=12345
+      ARC-Authentication-Results: i=1; lists.example.org;
+          spf=pass smtp.mfrom=jqd@d1.example;
+          dkim=pass (1024-bit key) header.i=@d1.example;
+          dmarc=pass
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       Received: by 10.157.52.162 with SMTP id g31csp5274520otc;
@@ -116,6 +132,8 @@ tests:
       This is a test message.
       --J.
     cv:          Pass
-txt_records:
+txt-records:
   dummy._domainkey.example.org: >-
-    v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkHlOQoBTzWRiGs5V6NpP3idY6Wk08a5qhdR6wy5bdOKb2jLQiY/J16JYi0Qvx/byYzCNb3W91y3FutACDfzwQ/BC/e/8uBsCR+yz1Lxj+PL6lHvqMKrM3rG4hstT5QjvHO9PzoxZyVYLzBfO2EeC3Ip3G+2kryOTIKT+l/K4w3QIDAQAB
+    v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkHlOQoBTzWRiGs5V6NpP3id
+    Y6Wk08a5qhdR6wy5bdOKb2jLQiY/J16JYi0Qvx/byYzCNb3W91y3FutACDfzwQ/BC/e/8uBsCR+yz1Lx
+    j+PL6lHvqMKrM3rG4hstT5QjvHO9PzoxZyVYLzBfO2EeC3Ip3G+2kryOTIKT+l/K4w3QIDAQAB
