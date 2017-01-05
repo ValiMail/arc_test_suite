@@ -73,7 +73,7 @@ s = b'dummy'
 t = b'12345'
 i = 1
 
-fold = True
+fold = False
 
 auth_res = b'i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
 

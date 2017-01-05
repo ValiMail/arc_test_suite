@@ -50,7 +50,7 @@ def sign_test(self, script, test_case, port, verbose=False):
 
     with ArcTestResolver(test_case.txt_records, port):
         proc = subprocess.Popen([script, 'tmp/message.txt', str(port), 'tmp/privatekey.pem', 'tmp/authres.txt',
-                                 test_case.sel, test_case.domain, test_case.headers, str(test_case.test["t"]), str(verbose)],
+                                 test_case.sel, test_case.domain, test_case.test["sig-headers"], str(test_case.test["t"]), str(verbose)],
                                 stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
 
@@ -102,12 +102,11 @@ class ArcValidateTestCase(object):
         return ""
 
 class ArcSignTestCase(object):
-    def __init__(self, tid, test, domain, sel, headers, privatekey, txt_records):
+    def __init__(self, tid, test, domain, sel, privatekey, txt_records):
         self.tid = tid
         self.test = test
         self.domain = domain
         self.sel = sel
-        self.headers = headers
         self.privatekey = privatekey
         self.txt_records = txt_records
 
@@ -132,13 +131,13 @@ def main(op, script, test=None, port=DEFAULT_DNS_PORT, verbose=False):
     if op == "validate":
         scenarios = list(yaml.safe_load_all(open(VALIDATE_TEST_FILE, 'rb')))
         for scenario in scenarios:
-            tests += [ArcValidateTestCase(k, v, scenario["txt_records"]) for
+            tests += [ArcValidateTestCase(k, v, scenario["txt-records"]) for
                       (k, v) in scenario["tests"].items()]
     elif op == "sign":
         scenarios = list(yaml.safe_load_all(open(SIGN_TEST_FILE, 'rb')))
         for scenario in scenarios:
-            tests += [ArcSignTestCase(k, v, scenario["domain"], scenario["sel"], scenario["headers"],
-                                      scenario["privatekey"], scenario["txt_records"]) for
+            tests += [ArcSignTestCase(k, v, scenario["domain"], scenario["sel"],
+                                      scenario["privatekey"], scenario["txt-records"]) for
                       (k, v) in scenario["tests"].items()]
     else:
         raise ValueError("invalid operation")

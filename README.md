@@ -1,7 +1,8 @@
+# ARC Test Suite
+
 This is an informal schema for the open source test suites for the [Authenticated Recieved Chain(ARC)](https://tools.ietf.org/html/draft-ietf-dmarc-arc-protocol-01) protocol, illustrated with examples.  This was prototyped from [the OpenSPF Test Suite](http://www.openspf.org/Test_Suite/Schema), and consists of two suites, one for the generation of the ARC header fields, the other for their validation.
 
-Their syntax is YAML. The top level object is a "scenario". A file can consist of multiple scenarios separated by '---' on a line by itself. Lexical comments are introduced by '#' and continue to the end of a line. Lexical comments are ignored. There are also comment fields which are part of a scenario, and used for purposes such as automating the annotated RFC.
-
+Their syntax is YAML. The top level object is a "scenario". A file can consist of multiple scenarios separated by '---' on a line by itself. Lexical comments are introduced by '#' and continue to the end of a line. Lexical comments are ignored. There are also comment fields which are part of a scenario. DKIM records, private keys, domains, and selectors are shared acrtoss scenarios.
 
 ## Example Validation Scenario
 
@@ -34,16 +35,17 @@ comment: >-
 ```
 
 ## Header Format Standardization
-There is explicit ambiguity & indeterminism supported by the ARC & DKIM specs with respect to the format of signature headers.  Implementors are free to add aditional tags, whitespace, and to arbitrarily order tags, etc.  This degree of variability makes it impossible to predict message signatures from inputs.  Therefore, for the purposeses of the signing section of this test suite, we assume the signing implementer uses a standardized header format for both ARC-Message-Signature, and ARC-Seal header fields:
-```
- - All tags are ordered alphabetically by key
- - All tag keys are lowercase
- - All tag values are lowercase except for b= and bh=
- - There is no whitespace(newlines, crlf, spaces) asside from exactly one space after separator semi-colons
- - There is no trailing semi-colon
- - The ARC-Seal tag set will be exactly - (a, b, cv, d, i, s, t)
- - The ARC-Message-Signature tag set will be exactly - (a, b, b, bh, d, h, i, s, t)
-```
+
+There is an explicit ambiguity & indeterminism supported by the ARC & DKIM specs with respect to the format of generated signature headers.  Implementors are free to add aditional tags, whitespace, and to arbitrarily order tags, etc.  This degree of variability makes it impossible to predict message signatures from inputs.  Therefore, for the purposeses of the signing section of this test suite, we assume the signing implementer generates a standardized header format for both ARC-Message-Signature, and ARC-Seal header fields:
+
+* All tags are ordered alphabetically by key
+* All tag keys are lowercase
+* All tag values are lowercase except for b= and bh=
+* There is no whitespace(newlines, crlf, spaces) asside from exactly one space after separator semi-colons
+* There is no trailing semi-colon
+* The ARC-Seal tag set will be exactly - (a, b, cv, d, i, s, t)
+* The ARC-Message-Signature tag set will be exactly - (a, b, b, bh, d, h, i, s, t)
+
 
 ## Example Signing Scenario
 
@@ -53,7 +55,7 @@ description: >-
 tests:
   test1:
     spec:        12/16
-    description: basic signing test
+    description: basic test
     message:     |
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
@@ -67,24 +69,26 @@ tests:
       Hey gang,
       This is a test message.
       --J.
-    t: 12345
+    t:           12345
+    sig-headers: from:to:subject
     auth-res:    |
       lists.example.org;
       spf=pass smtp.mfrom=jqd@d1.example;
       dkim=pass (1024-bit key) header.i=@d1.example;
       dmarc=pass
     AS:          |
-      a=rsa-sha256; b=IaZ4npLgFgc9i3JDL6oFfcVQ7iQSqG/FwG/yxWuU9AXQo+Ok/XQFeAWw
-      ggU7R4EoHtMJx8EPeZUn6phEeSKV9OEBzYOHwIsOlwROiMrJWZLou2BWmZLGa9aEPeBcwU6D
-      A+irfTr1mZ5QpUMnNWS1fSfXr6F75PMKzIAC+2x6kZA=;
+      a=rsa-sha256; b=oXNsU/I3fVAFVMIhssuTgCkdSqw6tLBI9w9c+izOlrVQElsVxarVCmhH
+      7NGae7CyqDQMYxEFfrqjzSxsu6G9yhqxsge574oHCvZgx8VLkFAa16hrBe0M+YPauA0TCkMm
+      zGPLTDJVtblJ5qZApAuIizX8smdreZJVS3BAv7FpnmQ=;
       cv=none; d=example.org; i=1; s=dummy; t=12345
     AMS:         |
       a=rsa-sha256;
-      b=PPmj0EZEUoVzNwRTVP+XHllkfcG6A25l499LkWaI3D7SOeFA5DuPKnCFT9RwHXDaJc8Ee2
-      3e18MOYEJ2xE4jrk2pSu65vpLMZYJ1DCcaYk3cXfHTcTDeZ3I+xjfQs0GdKR9YhHO0VBNUeM
-      7HDAXXx6oZCbuKeM6NKHMq0uLDKus=;
-      bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; d=example.org;
-      h=from:to:subject:arc-authentication-results; i=1; s=dummy; t=12345
+      b=aHfjYd84tmqd6nApu4mmmxbR6ZRLwgqN5Acppn4jj3Dfij0WRHLpe22E30AiJ1fyyRyKS0
+      zZmOfhcYA+5B2IJv91EjUzP3Vt1gW5UqjhYMkeJl4NCBdn0xBdn49fBX9w0PbC7AZjW3tok0
+      ZEuORs3bB9rnoh1BSU+OM7+HnxxRo=;
+      bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
+      d=example.org; h=from:to:subject:arc-authentication-results; i=1;
+      s=dummy; t=12345
     AAR:         |
       i=1; lists.example.org;
       spf=pass smtp.mfrom=jqd@d1.example;
@@ -92,7 +96,6 @@ tests:
       dmarc=pass
 domain:     example.org
 sel:        dummy
-headers:    from:to:subject
 privatekey: |
   -----BEGIN RSA PRIVATE KEY-----
   MIICXQIBAAKBgQDkHlOQoBTzWRiGs5V6NpP3idY6Wk08a5qhdR6wy5bdOKb2jLQi
@@ -109,7 +112,7 @@ privatekey: |
   o7DUw1/hz2Ck4N5JrgUCQQCyKveNvjzkkd8HjYs0SwM0fPjK16//5qDZ2UiDGnOe
   uEzxBDAr518Z8VFbR41in3W4Y3yCDgQlLlcETrS+zYcL
   -----END RSA PRIVATE KEY-----
-txt_records:
+txt-records:
   dummy._domainkey.example.org: |
     v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDkHlOQoBTzWRiGs5V6NpP3idY6Wk08a5qhdR6wy5bdOKb2jLQiY/J16JYi0Qvx/byYzCNb3W91y3FutACDfzwQ/BC/e/8uBsCR+yz1Lxj+PL6lHvqMKrM3rG4hstT5QjvHO9PzoxZyVYLzBfO2EeC3Ip3G+2kryOTIKT+l/K4w3QIDAQAB
 comment: >-
