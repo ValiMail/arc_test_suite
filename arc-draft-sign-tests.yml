@@ -23,26 +23,26 @@ tests:
       spf=pass smtp.mfrom=jqd@d1.example;
       dkim=pass (1024-bit key) header.i=@d1.example;
       dmarc=pass
+    AS:          |
+      a=rsa-sha256; b=IaZ4npLgFgc9i3JDL6oFfcVQ7iQSqG/FwG/yxWuU9AXQo+Ok/XQFeAWw
+      ggU7R4EoHtMJx8EPeZUn6phEeSKV9OEBzYOHwIsOlwROiMrJWZLou2BWmZLGa9aEPeBcwU6D
+      A+irfTr1mZ5QpUMnNWS1fSfXr6F75PMKzIAC+2x6kZA=;
+      cv=none; d=example.org; i=1; s=dummy; t=12345
+    AMS:         |
+      a=rsa-sha256;
+      b=PPmj0EZEUoVzNwRTVP+XHllkfcG6A25l499LkWaI3D7SOeFA5DuPKnCFT9RwHXDaJc8Ee2
+      3e18MOYEJ2xE4jrk2pSu65vpLMZYJ1DCcaYk3cXfHTcTDeZ3I+xjfQs0GdKR9YhHO0VBNUeM
+      7HDAXXx6oZCbuKeM6NKHMq0uLDKus=;
+      bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; d=example.org;
+      h=from:to:subject:arc-authentication-results; i=1; s=dummy; t=12345
     AAR:         |
       i=1; lists.example.org;
       spf=pass smtp.mfrom=jqd@d1.example;
       dkim=pass (1024-bit key) header.i=@d1.example;
       dmarc=pass
-    AMS:         |
-      i=1; a=rsa-sha256; d=example.org; s=dummy; t=12345;
-      h=From:To:Subject:arc-authentication-results;
-      bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=;
-      b=Z69MQ8vGBL+mmtBowRjyFm9KMh/xnpln+5stQYa4c8lJumFG6A+scMuhecKQse4E9xXKyF
-       fq241Zdck5HThx8Hu1WofXdv3/L9U2jmuosqvzh8eQOntq1lqrjfa3+32cd1Y7PM3uUQxZZB
-       kPWNWwGtucJ6dhoKfN3AYE1iURkw8=
-    AS:          |
-      i=1; cv=none; a=rsa-sha256; d=example.org; s=dummy; t=12345;
-      b=qTlorfsZ+b4gKRtEt+nfqWJCePZfkCZyfnceexK39KnwGCXoSiBnFCoYvqVIKTGcxDOYHV
-       N4dghwUzRp7DZrAbc2GVvcaD8wMBvw6MkxZdpjKrwRMcQL+39t2a4NwmEBtvrniqs2Z3fVL7
-       Udge85O+Kkb56SWhJd8cYMzP/sHos=
-domain:   example.org
-sel: dummy
-headers: From:To:Subject
+domain:     example.org
+sel:        dummy
+headers:    from:to:subject
 privatekey: |
   -----BEGIN RSA PRIVATE KEY-----
   MIICXQIBAAKBgQDkHlOQoBTzWRiGs5V6NpP3idY6Wk08a5qhdR6wy5bdOKb2jLQi
