@@ -31,7 +31,7 @@ def validate_test(self, script, test_case, port, verbose=False):
 
     if verbose:
         print("RESULT:")
-    self.assertEqual(out.lower(), test_case.test["cv"].lower())
+    self.assertEqual(out.lower(), test_case.test["cv"].lower(), test_case.tid)
 
 
 def sign_test(self, script, test_case, port, verbose=False):
@@ -88,9 +88,9 @@ def sign_test(self, script, test_case, port, verbose=False):
     if verbose:
         print("RESULT:")
 
-    self.assertTrue(aar_valid)
-    self.assertTrue(as_valid)
-    self.assertTrue(ams_valid)
+    self.assertTrue(aar_valid, test_case.tid)
+    self.assertTrue(as_valid, test_case.tid)
+    self.assertTrue(ams_valid, test_case.tid)
 
 class ArcValidateTestCase(object):
     def __init__(self, tid, test, txt_records):

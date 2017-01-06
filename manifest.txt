@@ -90,58 +90,57 @@ VALIDATION TESTS:
 			- ?
 		- tag=value list
 			- pass
-				* optional ";" at end of tag-list
-				* unknown tags(changes signature, but isnt invalid)
-				* v= AMS tags(changes signature), but should have no other effect
+				* optional ";" at end of tag-list (ams_format_tags_trail_sc)
+				* unknown tags(changes signature, but isnt invalid) (ams_format_tags_unknown)
 				*? dkim AS tags not implemented
 			- fail
-				* duplicate tag
-				* case change on tag key
-				* case change on tag value
-				* add whitespace
-				* random semicolon
+				* duplicate tag (ams_format_tags_dup)
+				* case change on tag key (ams_format_tags_key_case)
+				* case change on tag value (ams_format_tags_val_case)
+				* add whitespace (ams_format_tags_wsp)
+				* random semicolon (ams_format_tags_sc)
 	- fields
 		- i=
-			* duplicated AMS i= 1
+			* duplicated AMS i= 1 (ams_fields_i_dup)
 			*? missing i= value AMS
 			*? invalid i= value AMS
 		- a=
 			- pass
 			- fail
-				* NA
-				* empty
-				* unknkown algorithm(not rsa-sha1 or rsa-sha256	)
+				* NA (ams_fields_a_na)
+				* empty (ams_fields_a_empty)
+				* unknkown algorithm(not rsa-sha1 or rsa-sha256	) (ams_fields_a_unknown)
 		- b=
 			- pass
-				* ignores whitespace
+				* ignores whitespace (ams_fields_b_ignores_wsp)
 			- fail
-				* NA
-				* not base64
+				* NA (ams_fields_b_na)
+				* not base64 (ams_fields_b_base64)
 				- invalid value
-					* modify signature
-					* modified headers
+					* modify signature (ams_fields_b_mod_sig)
+					* modified headers (ams_fields_b_mod_headers)
 				-? when generating sig, what if there are duplicate headers?  what is ordering?
 		- bh=
 			- pass
-				* ignores whitespace
-				* canonical body changes
+				* ignores whitespace (ams_fields_bh_ignores_wsp)
+				*? canonical body changes
 			- fail
-				* NA
-				* not base64
+				* NA (ams_fields_bh_na)
+				* empty (ams_fields_bh_empty)
+				* not base64 (ams_fields_bh_base64)
 				- invalid value
-					* modify bh value
-					* modify body(non-canonically)
+					* modify bh value (ams_fields_bh_mod_sig)
+					* modify body(non-canonically) (ams_fields_bh_mod_bod)
 		- c=
 			- pass
 			- fail
-				* NA
+				* NA (ams_fields_c_na)
+				* empty (ams_fields_c_)
 				- non-relaxed canonicalization
-					* simple
-					* simple/simple
-					* simple/relaxed
-					* relaxed/simple
-					* relaxed
-				* invalid value
+					* simple/simple (ams_fields_c_)
+					* simple/relaxed (ams_fields_c_)
+					* relaxed/simple (ams_fields_c_)
+				* invalid value (ams_fields_c_)
 		- d=
 			- pass
 			- fail
@@ -201,15 +200,15 @@ VALIDATION TESTS:
 
 --- Chain Validation
 	- cv=None
-		*+ empty (cv_empty)
-		*+ no header (cv_no_header)
-		*+ no body (cv_no_body)
-		*+ no ARC-Sets 1 (cv_base1)
-		*+ no ARC-Sets 2 (cv_base2)
+		* empty (cv_empty)
+		* no header (cv_no_header)
+		* no body (cv_no_body)
+		* no ARC-Sets 1 (cv_base1)
+		* no ARC-Sets 2 (cv_base2)
 	- cv=Pass
 		- i=1
-			*+ pass 1 (cv_pass_i1_1)
-			*+ pass 2 (cv_pass_i1_2)
+			* pass 1 (cv_pass_i1_1)
+			* pass 2 (cv_pass_i1_2)
 		- i=2
 			* pass 1
 			* pass 2
@@ -223,13 +222,13 @@ VALIDATION TESTS:
 	- cv=Fail
 		- i=1
 			- AMS(1)
-				* NA
-				* invalid
+				* NA (cv_fail_i1_ams_na)
+				* invalid (cv_fail_i1_ams_invalid)
 			- AS(1)
-				* NA
-				* cv = Pass
-				* cv = Fail
-				* invalid
+				* NA (cv_fail_i1_as_na)
+				* cv = Pass (cv_fail_i1_as_pass)
+				* cv = Fail (cv_fail_i1_as_fail)
+				* invalid (cv_fail_i1_as_invalid)
 		- i=2
 			- duplicate i= values
 				* duplicate AS i=
