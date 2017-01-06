@@ -65,13 +65,13 @@ i = 1
 # headers
 ht = b":".join([x[0] for x in sig_head])
 
-amsh = (lambda bh: sig_head +
-    [(b'arc-message-signature', b'a=rsa-sha256; b=; bh=%s; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (bh, d, ht, i, s, t))])
+ams = b'a=rsa-sha256; b=; bh=; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (d, ht, i, s, t)
+amsh = (lambda bh: sig_head + [(b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh))])
 
 arsh = lambda b, bh: [
-  (b'arc-authentication-results', auth_res),
-  (b'arc-message-signature', b'a=rsa-sha256; b=%s; bh=%s; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (b, bh, d, ht, i, s, t)),
-  (b'arc-seal', b'a=rsa-sha256; b=; cv=none; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
+    (b'arc-authentication-results', auth_res),
+    (b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh).replace(b'b=', b'b=' + b)),
+    (b'arc-seal', b'a=rsa-sha256; b=; cv=none; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
 ]
 
 sig_gen(public, private, body, amsh, arsh, fold=True, verbose=True, as_tmp=as_tmp, ams_tmp=ams_tmp)

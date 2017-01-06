@@ -11,8 +11,8 @@ from ddt import ddt, data
 from arcdns import ArcTestResolver
 
 DEFAULT_DNS_PORT = 8053
-SIGN_TEST_FILE   = "arc-draft-sign-tests.yml"
-VALIDATE_TEST_FILE = "arc-draft-validation-tests.yml"
+SIGN_TEST_FILE   = "tests/arc-draft-sign-tests.yml"
+VALIDATE_TEST_FILE = "tests/arc-draft-validation-tests.yml"
 
 def validate_test(self, script, test_case, port, verbose=False):
     if verbose:
@@ -23,7 +23,7 @@ def validate_test(self, script, test_case, port, verbose=False):
 
     with open('tmp/message.txt', 'w') as f:
         f.write(test_case.test["message"])
-    with ArcTestResolver(test_case.txt_records, port):
+    with ArcTestResolver(test_case.txt_records, port, verbose):
         proc = subprocess.Popen([script, 'tmp/message.txt', str(port), str(verbose)], stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
 
@@ -48,7 +48,7 @@ def sign_test(self, script, test_case, port, verbose=False):
     with open('tmp/authres.txt', 'w') as f:
         f.write(test_case.test["auth-res"])
 
-    with ArcTestResolver(test_case.txt_records, port):
+    with ArcTestResolver(test_case.txt_records, port, verbose):
         proc = subprocess.Popen([script, 'tmp/message.txt', str(port), 'tmp/privatekey.pem', 'tmp/authres.txt',
                                  test_case.sel, test_case.domain, test_case.test["sig-headers"], str(test_case.test["t"]), str(verbose)],
                                 stdout=subprocess.PIPE)

@@ -23,36 +23,49 @@ uEzxBDAr518Z8VFbR41in3W4Y3yCDgQlLlcETrS+zYcL
 '''
 
 as_tmp = b'''ARC-Seal: a=rsa-sha256;
-    b=%b; cv=none; d=example.org; i=1; s=invalid;
-    t=12345'''
+    b=%b; cv=pass; d=example.org; i=2; s=dummy;
+    t=12346'''
 
 ams_tmp = b'''ARC-Message-Signature: a=rsa-sha256;
     b=%b;
     bh=%bh; c=relaxed/relaxed;
     d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-    i=1; s=dummy; t=12345'''
+    i=2; s=dummy; t=12346'''
 
 # data
-body = b'''Hey gang,
-This is a test message.
---J.
+body = b'''--001a113e15fcdd0f9e0545366e8f
+Content-Type: text/plain; charset=UTF-8
+
+This is a test message
+
+--001a113e15fcdd0f9e0545366e8f
+Content-Type: text/html; charset=UTF-8
+
+<div dir="ltr">This is a test message</div>
+
+--001a113e15fcdd0f9e0545366e8f--
 '''.replace(b'\n', b'\r\n')
 
-auth_res = b'i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
+auth_res1 = b'i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
+auth_res2 = b'i=2; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
 
 sig_head = [
-    (b'from', b'John Q Doe <jqd@d1.example.org>'),
+    (b'from', b'Gene Q Doe <gqd@d1.example.org>'),
     (b'to', b'arc@dmarc.org'),
-    (b'date', b'Thu, 14 Jan 2015 15:00:01 -0800'),
-    (b'subject', b'Example 1'),
+    (b'date', b'Thu, 5 Jan 2017 14:39:01 -0800'),
+    (b'subject', b'Example 2'),
     (b'mime-version', b'1.0'),
-    (b'arc-authentication-results', auth_res)
+    (b'arc-authentication-results', auth_res1)
 ]
 
 d = b'example.org'
 s = b'dummy'
-t = b'12345'
-i = 1
+t = b'12346'
+i = 2
+
+ams1 = b"a=rsa-sha256; b=SMBCg/tHQkIAIzx7OFir0bMhCxk/zaMOx1nyOSAviXW88ERohOFOXIkBVGe74xfJDSh9ou ryKgNA4XhUt4EybBXOn1dlrMA07dDIUFOUE7n+8QsvX1Drii8aBIpiu+O894oBEDSYcd1R+z sZIdXhOjB/Lt4sTE1h5IT2p3UctgY=; bh=dHN66dCNljBC18wb03I1K6hlBvV0qqsKoDsetl+jxb8=; c=relaxed/relaxed; d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results; i=1; s=dummy; t=12345"
+
+as1 = b"a=rsa-sha256; b=RkKDOauVsqcsTEFv6NVE6J0sxj8LUE4kfwRzs0CvMg/+KOqRDQoFxxJsJkI77EHZqcSgwr QKpt6aKsl2zyUovVhAppT65S0+vo+h3utd3f8jph++1uiAUhVf57PihDC/GcdhyRGa6YNQGh GoArSHaJKb06/qF5OBif8o9lmRC8E=; cv=none; d=example.org; i=1; s=dummy; t=12345"
 
 # headers
 ht = b":".join([x[0] for x in sig_head])
@@ -61,9 +74,12 @@ ams = b'a=rsa-sha256; b=; bh=; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' 
 amsh = (lambda bh: sig_head + [(b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh))])
 
 arsh = lambda b, bh: [
-    (b'arc-authentication-results', auth_res),
+    (b'arc-authentication-results', auth_res1),
+    (b'arc-message-signature', ams1),
+    (b'arc-seal', as1),
+    (b'arc-authentication-results', auth_res2),
     (b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh).replace(b'b=', b'b=' + b)),
-    (b'arc-seal', b'a=rsa-sha256; b=; cv=none; d=%s; i=%i; s=invalid; t=%s' % (d, i, t))
+    (b'arc-seal', b'a=rsa-sha256; b=; cv=pass; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
 ]
 
 sig_gen(public, private, body, amsh, arsh, fold=True, verbose=True, as_tmp=as_tmp, ams_tmp=ams_tmp)

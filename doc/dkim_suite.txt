@@ -1,3 +1,5 @@
+Found this floating around online, although I don't think it was ever implemented.  Useful reference.
+
 DKIM Validation Suite - Test Plan
 #################################
 

@@ -1,6 +1,6 @@
 # ARC Test Suite
 
-This is an informal schema for the open source test suites for the [Authenticated Recieved Chain(ARC)](https://tools.ietf.org/html/draft-ietf-dmarc-arc-protocol-01) protocol, illustrated with examples.  This was prototyped from [the OpenSPF Test Suite](http://www.openspf.org/Test_Suite/Schema), and consists of two suites, one for the generation of the ARC header fields, the other for their validation.
+This is an informal schema for the open source test suites for the [Authenticated Recieved Chain(ARC)](https://tools.ietf.org/html/draft-ietf-dmarc-arc-protocol-01) protocol, illustrated with examples.  This was prototyped from [the OpenSPF Test Suite](http://www.openspf.org/Test_Suite/Schema), and consists of two suites, one for the generation of ARC header fields, the other for their validation.
 
 Their syntax is YAML. The top level object is a "scenario". A file can consist of multiple scenarios separated by '---' on a line by itself. Lexical comments are introduced by '#' and continue to the end of a line. Lexical comments are ignored. There are also comment fields which are part of a scenario. DKIM records, private keys, domains, and selectors are shared across scenarios.
 
@@ -46,6 +46,7 @@ There is an explicit ambiguity & indeterminism supported by the ARC & DKIM specs
 * The ARC-Seal tag set will be exactly - (a, b, cv, d, i, s, t)
 * The ARC-Message-Signature tag set will be exactly - (a, b, b, bh, d, h, i, s, t)
 
+We also assume that the signing algorithm is rsa-sha256.
 
 ## Example Signing Scenario
 
