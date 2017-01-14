@@ -161,6 +161,7 @@ VALIDATION TESTS:
 					* not valid domain name (ams_fields_d_invalid)					
 		- h=
 			- pass
+				* empty (ams_fields_h_empty)			
 				* whitespace ' : ' h= 1 (ams_fields_h_cws1)
 				* whitespace ' : ' h= 1 (ams_fields_h_cws2)
 				* h= case insensitive (ams_fields_h_case)
@@ -168,13 +169,11 @@ VALIDATION TESTS:
 				* non-existant header fields (ams_fields_h_non_existant)
 				*	non-existant duplicate header fields (ams_fields_h_non_existant_dup)
 				* missing hdr-name (ams_fields_h_mis_hdr)
-				* includes AMS (ams_fields_h_includes_ams)				
+				* includes AMS (ams_fields_h_includes_ams)
 			- fail
 				* NA (ams_fields_h_na)
-				* empty (ams_fields_h_empty)
 				* invalid hdr-name (ams_fields_h_inv_hdr)
 				* duplicate header not bottom up (ams_fields_h_dup2)
-				* doesn't include FROM (ams_fields_h_no_from)
 				* incorrect order (ams_fields_h_order)
 				* signing missing header is then added (ams_fields_h_empty_added)
 				* includes AS headers (ams_fields_h_includes_as)

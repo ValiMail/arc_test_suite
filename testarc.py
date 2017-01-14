@@ -31,6 +31,7 @@ def validate_test(self, script, test_case, port, verbose=False):
 
     if verbose:
         print("RESULT:")
+
     self.assertEqual(out.lower(), test_case.test["cv"].lower(), test_case.tid)
 
 

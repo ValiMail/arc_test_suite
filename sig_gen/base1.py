@@ -23,7 +23,7 @@ uEzxBDAr518Z8VFbR41in3W4Y3yCDgQlLlcETrS+zYcL
 '''
 
 as_tmp = b'''ARC-Seal: a=rsa-sha256;
-    b=%b; cv=none; d=example.org; i=1; s=invalid;
+    b=%b; cv=none; d=example.org; i=1; s=dummy;
     t=12345'''
 
 ams_tmp = b'''ARC-Message-Signature: a=rsa-sha256;
@@ -46,7 +46,7 @@ sig_head = [
     (b'date', b'Thu, 14 Jan 2015 15:00:01 -0800'),
     (b'subject', b'Example 1'),
     (b'mime-version', b'1.0'),
-    (b'arc-authentication-results', auth_res)
+    (b'arc-authentication-results', auth_res)    
 ]
 
 d = b'example.org'
@@ -63,7 +63,7 @@ amsh = (lambda bh: sig_head + [(b'arc-message-signature', ams.replace(b'bh=', b'
 arsh = lambda b, bh: [
     (b'arc-authentication-results', auth_res),
     (b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh).replace(b'b=', b'b=' + b)),
-    (b'arc-seal', b'a=rsa-sha256; b=; cv=none; d=%s; i=%i; s=invalid; t=%s' % (d, i, t))
+    (b'arc-seal', b'a=rsa-sha256; b=; cv=none; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
 ]
 
 sig_gen(public, private, body, amsh, arsh, fold=True, verbose=True, as_tmp=as_tmp, ams_tmp=ams_tmp)

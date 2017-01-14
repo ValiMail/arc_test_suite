@@ -534,9 +534,9 @@ tests:
     message:     |
       MIME-Version: 1.0
       ARC-Seal: a=rsa-sha256;
-          b=1w9mg/9XeHgJvtZt66/dshZNwyHxFDPIwvUTD3saVJpv6i9kQwGPP2/wfZIYq/fqidGFwP
-          j4YXIXsDCyyV18kFVPR3aj+mFYJfasldIyCr3J0qIYGGsZwTdcBTpmq9Vof+/homARJGnhxj
-          Ar4MVGqgJFbvJWjMGqqj9iwZ1YP40=; cv=pass; d=example.org; i=5; s=dummy;
+          b=0Kw2RaoquhI2id5WxefhIq+DMaZGXa0iEtjT7oRpCpLhLxH0sofldiwSpVJMh1qZo5k7pk
+          JW/uah4CWdln95BAm3AikTH7Bu0gM6To4qzCgFKulTbnvRK3Q7jT4xflPf8M4PAkw3OAN2+k
+          d4dsvyOoo3ait+oNeXyFAEuZ4RoD8=; cv=pass; d=example.org; i=5; s=dummy;
           t=12349
       ARC-Message-Signature: a=rsa-sha256;
           b=j50SIOsFwO/hXR//iEpwzqDIVtC4qwIdReAesDFZaTvfxzYB6TshuR7u7LqE8PjsUNz6CX
@@ -544,7 +544,7 @@ tests:
           ygbRURxwTz42PatPu9LNGo2QUwaNU=;
           bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
           d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-          i=5; s=dummy; t=12349
+          i=5; s=dummy; t=12349      
       ARC-Authentication-Results: i=5; lists.example.org;
           spf=pass smtp.mfrom=jqd@d1.example;
           dkim=pass (1024-bit key) header.i=@d1.example;
@@ -1449,17 +1449,17 @@ tests:
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       ARC-Seal: a=rsa-sha256;
-          b=dOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ
-          7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn
-          QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy;
+          b=OeNJ7p2NdW3mKv4hyenx+QbRuqqq8iwGAyY1WVX/EJiPHS2vNB5lEI/YmVB3diTkKPHWe8
+          ZOq18DTVtOVuahLqM7s/4K/gvx3zal0vcedPL/mtRW4A1Ct0/wyLuFADX2HZ815cELx81SuX
+          3fEbbym1br+0JArsz6n8798lidnWY=; cv=none; d=example.org; i=1; s=dummy;
           t=12345
       ARC-Message-Signature: a=rsa-sha256;
-          b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm
-          9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE
-          cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=;
+          b=NOLE9bNh30qiTx35h5yKbHlDPahxvhXUWjv8Yiy5L7Ks3NNznK54dmUPZ4D/80tkRYiil0
+          8sCqFTh7OH5ZTXXEfArxBMQQl3DAqTjOJQ1c3jPYwaDliWqCLLueSsH+ovaFGRGNPm2O41o0
+          J8xUmyji1bXXLKMinB+Adv9ALXsw8=;
           bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ= ; c=relaxed/relaxed;
           d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-          i=1; s=dummy; t=12345
+          i=1; s=dummy; t=12345      
       ARC-Authentication-Results: i=1; lists.example.org;
           spf=pass smtp.mfrom=jqd@d1.example;
           dkim=pass (1024-bit key) header.i=@d1.example;
@@ -1490,17 +1490,17 @@ tests:
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       ARC-Seal: a=rsa-sha256;
-          b=dOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ
-          7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn
-          QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy;
+          b=CcoQW04QZ7n7OTPACcP26R0vJtjEwVmcFpj4+PJnvT1kVeOMfcqwt7FEGlCjeJ0QIYMeNW
+          TY6kND0fe0WJDVnWvhCyeOb5JjwllbJJ/ThP74I5UPgQ0Cwp1h/O9HIrUJkrje6HQ3nD6Dok
+          la2keL/t4R7YtMyAmn9sPWuAOwSrE=; cv=none; d=example.org; i=1; s=dummy;
           t=12345
       ARC-Message-Signature: a=rsa-sha256;
-          b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm
-          9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE
-          cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=;
-          bh = KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
+          b=KLZ8Io9rZzsWt0Q/Mrx8sYO7HPLptFwGoCdabHuyrQsek+1c5yo5tOQidcTc8ksw5PoAZH
+          PNOIoyGVte9jMk0LdA1IYjjvvUmEANMZCJf0wm66exDWJ30xMrgbosLN2XvsRk3BDkoCg2AY
+          HkR11isMdIhrefd7AHw9YEDTnohQw=;
+          bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c = relaxed/relaxed;
           d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-          i=1; s=dummy; t=12345
+          i=1; s=dummy; t=12345      
       ARC-Authentication-Results: i=1; lists.example.org;
           spf=pass smtp.mfrom=jqd@d1.example;
           dkim=pass (1024-bit key) header.i=@d1.example;
@@ -1572,17 +1572,17 @@ tests:
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       ARC-Seal: a=rsa-sha256;
-          b=CIYn9ruvq+FVCg2gjhKBUsMTKsmFBi8QErIfNBkhtBwJDDHUnOBIG2Fx4O6YsPQY0fRvEB
-          uFFeEmEUgr+ZIhPo6pLCUcUXpsVEbHryy60Yqff8PKJN4oi6X3P0zSaNU2HhWC4IF+IQZaZc
-          puG2tjuw2klGAvHN11dIhHdVa+ocU=; cv=none; d=example.org; i=1; s=dummy;
+          b=hnT0gH/efgds1eGi2XgAPK5ts+d6QZHc910SN6Xpr1TmDPXpNoRlq8F4eeMTj8VMgLWOza
+          HeMe4quPmcWlZm0vRkiUxK3Q9HJlclElB9ehd+qPKzE92zWdSnkQN3kpyoA9mSAn6eTUmX9d
+          ZFCA8DnXTQSl3T7V4GWwO9byXtHmg=; cv=none; d=example.org; i=1; s=dummy;
           t=12345
       ARC-Message-Signature: a=rsa-sha256;
-          b=mbxNMS00Oydj/7uQ8pLJsVA22RlGp+Fv26kwJeVC8CScpUtu1OmG4ZrzwzCiUw0dSXHRY/
-          FvMcHpVSdmVrw80dC9+PHI0qz7IapvWqjO4hr4GiZH6EccUV9NytPfQqnSBKesXoEYv/A+/A
-          sKFYn4JddonOYft/N99ZseXBOBHpA=;
+          b=jHH5JVvEmO5RMAl5NlbOHuIgc72768gwRv2MjCvgh83McNt2Ogx7yFZTPfcyO9F0jT5EIz
+          bOzMeH+vIBJjJZz1/FVpBUxXJ7Ir5jQ6rjDGCvztrqeSMkhyF2pdiGIQPn6HuA0qDjMY6IfM
+          wGoYUNqNE0+2s5p+DuxXMbT0tZBv4=;
           bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
           d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-          i=1; s=dummy; t=12345; x=flarp
+          i=1; s=dummy; t=12345; w=flarp      
       ARC-Authentication-Results: i=1; lists.example.org;
           spf=pass smtp.mfrom=jqd@d1.example;
           dkim=pass (1024-bit key) header.i=@d1.example;
@@ -2422,9 +2422,9 @@ tests:
           dmarc=pass
       Received: by 10.157.14.6 with HTTP; Tue, 3 Jan 2017 12:22:54 -0800 (PST)
       Message-ID: <54B84785.1060301@d1.example.org>
-      Date    : Thu, 14 Jan 2015 15:00:01 -0800
-      From    : John Q Doe <jqd@d1.example.org>
-      To  :   arc@dmarc.org
+      Date:  Thu, 14 Jan 2015 15:00:01 -0800
+      From:  John Q Doe <jqd@d1.example.org>
+      To:   arc@dmarc.org
       Subject: Example 1
 
       Hey gang,
@@ -3450,6 +3450,47 @@ tests:
       This is a test message.
       --J.
     cv:          Fail
+  ams_fields_h_empty:
+    spec:        12/16
+    description: ams h= empty
+    message:     |
+      MIME-Version: 1.0
+      Return-Path: <jqd@d1.example.org>
+      ARC-Seal: a=rsa-sha256;
+          b=V/iPFUptKaruDTBpwKcf5i6nu54GxrG3ss2bfPqqT3I5MGMyRmtE+J0kOVtU9qtHIhXUng
+          Iezv5+gCOIf2jP1eYGvhN2Wmkf2zsShG6+Rfpnp9fih71C1f6fh6Qp4tTUhB6ww4ZOTKtVdv
+          H0C2s/5in4RLMxS0FUWge8CvlTnGs=; cv=none; d=example.org; i=1; s=dummy;
+          t=12345
+      ARC-Message-Signature: a=rsa-sha256;
+          b=ex6hirqdOz1yO1SZE3ALisw3dj1La5L4qHcv8/ttCs1qGajzw0zEtUyMnskTPQnt9cxxF3
+          T74KRXlPVN/4Aqn+K/Q4NHtOW9vyuLt9ek9Vm6/xvZ10KTMrxv24u0eLnsigC6NfablL4wAM
+          epZDlyjf/HPBd0yVLQL8yFDtQ5fE0=;
+          bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
+          d=example.org; h=;
+          i=1; s=dummy; t=12345      
+      ARC-Authentication-Results: i=1; lists.example.org;
+          spf=pass smtp.mfrom=jqd@d1.example;
+          dkim=pass (1024-bit key) header.i=@d1.example;
+          dmarc=pass
+      Received: from segv.d1.example (segv.d1.example [72.52.75.15])
+          by lists.example.org (8.14.5/8.14.5) with ESMTP id t0EKaNU9010123
+          for <arc@example.org>; Thu, 14 Jan 2015 15:01:30 -0800 (PST)
+          (envelope-from jqd@d1.example)
+      Authentication-Results: lists.example.org;
+          spf=pass smtp.mfrom=jqd@d1.example;
+          dkim=pass (1024-bit key) header.i=@d1.example;
+          dmarc=pass
+      Received: by 10.157.14.6 with HTTP; Tue, 3 Jan 2017 12:22:54 -0800 (PST)
+      Message-ID: <54B84785.1060301@d1.example.org>
+      Date: Thu, 14 Jan 2015 15:00:01 -0800
+      From: John Q Doe <jqd@d1.example.org>
+      To: arc@dmarc.org
+      Subject: Example 1
+
+      Hey gang,
+      This is a test message.
+      --J.
+    cv:          Pass    
   ams_fields_h_cws1:
     spec:        12/16
     description: ams h= colon folding whitspace ignored
@@ -3498,14 +3539,14 @@ tests:
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       ARC-Seal: a=rsa-sha256;
-          b=HeAHrCcfQ9XYUUL0gxZCjPolVGfP64qmy/s4dbULBVXGME5b0zSMriM5luvxwMb4zte4SQ
-          dkHz2MT2hCdqv2yix4Kg6wiz+W9lJafI3Jo2fHERuMlLzTFB5P1xczeMqOZY0rWv5AqzjCdb
-          Jz3aiF583a8MFgtBR8ZnQnVMicQPE=; cv=none; d=example.org; i=1; s=dummy;
+          b=0+WA3Dpt9Y1lJ5wkoOZsh6KXEQFv0YE+ykvXAdS5t1toEui1UWzLyKWxSD/H/Xc6eCaQZM
+          ji4IxybZ4OrIdV0yRe1fGqYN/bJ3KnkuzrHpaikXRWxXdX8tiIu5+I+HmERxuGzGqHdNv2zj
+          5L8PNAsGs4LDg3xQXEe3FQAvis9OA=; cv=none; d=example.org; i=1; s=dummy;
           t=12345
       ARC-Message-Signature: a=rsa-sha256;
-          b=e9vIrsF4yTA3EuUx1mTPiPPI6Qj0PdnqrniKNQcprZJXziv+d86M/90+eq/9SMtB1qY9aO
-          dujN32AeXHJJIFTozAF+jWMdoN4MBJ0MZDKGkpbRhaRwt+EEG5CnkQPhbECc0xlx6dzczCya
-          G4qYtLzfktVTbHu3tZFbderAWlFas=;
+          b=Lq5Sy1R3C0RaTxKWfggKBJ2MOdgAHeFy1nELK1c+CFnxdvSL+OxuvSxk8HYv7YMJDTR4Na
+          1D5GaFedB1uYVQsz1T5e3p9B+54W4bObByD14WvTGKV3ys8FlOf4MdRIlD4o6N3INfHrNbYX
+          zwPKjkoYbteAEQ/kTpjESOpm131io=;
           bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
           d=example.org; h=from : to : date : subject : mime-version :
           arc-authentication-results;
@@ -3581,14 +3622,14 @@ tests:
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       ARC-Seal: a=rsa-sha256;
-          b=eurPXrOEWtyouwrE8KqhHPVzJJQ32ZgHA+kMNq2NYQnzM8uoBynfzV2y2xIfhuznxcwADA
-          /Yef1X/+bBjNTuvUBEf1vZ36Mu8vIqP3J6GYk004pS9h7lD5WJm6CJjyXAjuX8I1cRNkCnlD
-          zi2NI0nA0j6ROwFZ/g+qCiAa03UCc=; cv=none; d=example.org; i=1; s=dummy;
+          b=tv8fgth8OQw5DylJlW253wBM12VcMvjFLj+TwonVXPiSPJ1hV7F24q0rgmYeVhSBK/+4Ou
+          kPW3e9oqILXx95sXrE4fiiz46//FtZK7z0YVzy/B3QpR7fGxzzA5uVoUh4WNd0oQEejwDKss
+          ILrzkyu6fDUZ1kLeKyk3clE7b/NJo=; cv=none; d=example.org; i=1; s=dummy;
           t=12345
       ARC-Message-Signature: a=rsa-sha256;
-          b=MKKt1PxjNjruYrRtHQLNVrx5DPLJ1pRM+6XBmFvFOUmoYPXAfuC5IYFX4eDH/MVTkVPQ4t
-          0omcekzKIMF8wflOGIC8UrqfFdeneAt7ECrVeRVDcwoXxy+cKKDW9/6qQW9HrPsEpvpykEue
-          t4e5/b08CxCsy4a9vF0YWQ2gvvo7M=;
+          b=rGZpmx8nA8Fe0yQ319Ns+DPmwx9ToC7Z5Ba5NNGYtmXF87xboR0Cy7yxlJ2ek6j8WqCRXI
+          jKV32tgZBXu5upoveTLBGzSe+NPTL2SkU2nFnktJjjPwTiPAYyXVBY1Uy7uSv9dT+wfB4Hvg
+          Hm/nSrzqTBOxPsND1F1b2rzE1elQo=;
           bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
           d=example.org; h=from:to:to:date:subject:mime-version:arc-authentication-results;
           i=1; s=dummy; t=12345
@@ -3834,61 +3875,21 @@ tests:
       This is a test message.
       --J.
     cv:          Fail
-  ams_fields_h_empty:
-    spec:        12/16
-    description: ams h= empty
-    message:     |
-      MIME-Version: 1.0
-      Return-Path: <jqd@d1.example.org>
-      ARC-Seal: a=rsa-sha256;
-          b=EdgkW/Rb08N/bwPfUJGadKRsUHqdEaMtPLoVgtW3WUCfIJ1b8xsGEmF8jS8FxGTftogUmy
-          19dQV3k4sgFBjGDJmDlvS2WX6Z6uC6cgeNImmxY4aqwZssVk7ZotZvlxyGuF8yqy4tz+KhgG
-          nuXMbs1zjsULhzyVEnINHg6OUWg6o=; cv=none; d=example.org; i=1; s=dummy;
-          t=12345
-      ARC-Message-Signature: a=rsa-sha256;
-          b=iHWjylQx7oo21FJQRRl3/nTu4bbCbkZO+qSOoRRGLim94zlFLGLJnG/W5oVjgBegmvuqd5
-          +SsYUvxhAJ6EdGgts4mRORqVNu9b8AGEJjhmqVbQdCSQ85IArn3vAGst4LNIKCOqVgpUg0x0
-          q5rH5j0hsDhZR7Komn2ZWn9viBmsg=;
-          bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
-          d=example.org; h=; i=1; s=dummy; t=12345
-      ARC-Authentication-Results: i=1; lists.example.org;
-          spf=pass smtp.mfrom=jqd@d1.example;
-          dkim=pass (1024-bit key) header.i=@d1.example;
-          dmarc=pass
-      Received: from segv.d1.example (segv.d1.example [72.52.75.15])
-          by lists.example.org (8.14.5/8.14.5) with ESMTP id t0EKaNU9010123
-          for <arc@example.org>; Thu, 14 Jan 2015 15:01:30 -0800 (PST)
-          (envelope-from jqd@d1.example)
-      Authentication-Results: lists.example.org;
-          spf=pass smtp.mfrom=jqd@d1.example;
-          dkim=pass (1024-bit key) header.i=@d1.example;
-          dmarc=pass
-      Received: by 10.157.14.6 with HTTP; Tue, 3 Jan 2017 12:22:54 -0800 (PST)
-      Message-ID: <54B84785.1060301@d1.example.org>
-      Date: Thu, 14 Jan 2015 15:00:01 -0800
-      From: John Q Doe <jqd@d1.example.org>
-      To: arc@dmarc.org
-      Subject: Example 1
-
-      Hey gang,
-      This is a test message.
-      --J.
-    cv:          Fail
   ams_fields_h_dup2:
     spec:        12/16
-    description: ams h= with duplicated header not correct order
+    description: ams h= with duplicated header not correct order(bottom up)
     message:     |
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       ARC-Seal: a=rsa-sha256;
-          b=eurPXrOEWtyouwrE8KqhHPVzJJQ32ZgHA+kMNq2NYQnzM8uoBynfzV2y2xIfhuznxcwADA
-          /Yef1X/+bBjNTuvUBEf1vZ36Mu8vIqP3J6GYk004pS9h7lD5WJm6CJjyXAjuX8I1cRNkCnlD
-          zi2NI0nA0j6ROwFZ/g+qCiAa03UCc=; cv=none; d=example.org; i=1; s=dummy;
+          b=tv8fgth8OQw5DylJlW253wBM12VcMvjFLj+TwonVXPiSPJ1hV7F24q0rgmYeVhSBK/+4Ou
+          kPW3e9oqILXx95sXrE4fiiz46//FtZK7z0YVzy/B3QpR7fGxzzA5uVoUh4WNd0oQEejwDKss
+          ILrzkyu6fDUZ1kLeKyk3clE7b/NJo=; cv=none; d=example.org; i=1; s=dummy;
           t=12345
       ARC-Message-Signature: a=rsa-sha256;
-          b=MKKt1PxjNjruYrRtHQLNVrx5DPLJ1pRM+6XBmFvFOUmoYPXAfuC5IYFX4eDH/MVTkVPQ4t
-          0omcekzKIMF8wflOGIC8UrqfFdeneAt7ECrVeRVDcwoXxy+cKKDW9/6qQW9HrPsEpvpykEue
-          t4e5/b08CxCsy4a9vF0YWQ2gvvo7M=;
+          b=rGZpmx8nA8Fe0yQ319Ns+DPmwx9ToC7Z5Ba5NNGYtmXF87xboR0Cy7yxlJ2ek6j8WqCRXI
+          jKV32tgZBXu5upoveTLBGzSe+NPTL2SkU2nFnktJjjPwTiPAYyXVBY1Uy7uSv9dT+wfB4Hvg
+          Hm/nSrzqTBOxPsND1F1b2rzE1elQo=;
           bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
           d=example.org; h=from:to:to:date:subject:mime-version:arc-authentication-results;
           i=1; s=dummy; t=12345
@@ -3908,55 +3909,14 @@ tests:
       Message-ID: <54B84785.1060301@d1.example.org>
       Date: Thu, 14 Jan 2015 15:00:01 -0800
       From: John Q Doe <jqd@d1.example.org>
-      To: evil_morty@dmarc.org
+      To: evil_morty@dmarc.org      
       To: morty@dmarc.org
       Subject: Example 1
 
       Hey gang,
       This is a test message.
       --J.
-    cv:          Fail
-  ams_fields_no_from:
-    spec:        12/16
-    description: ams h= doesnt include from
-    message:     |
-      MIME-Version: 1.0
-      Return-Path: <jqd@d1.example.org>
-      ARC-Seal: a=rsa-sha256;
-          b=wjrxhKYh27K4F6aABbZPrmsej2MGOQ0t3fjPGK2xI5T67ej1ThA54liZt5+kfARYJmOH2c
-          Rqhi3D0D4IKfJeEdvg0sIKyzfFsfmPGBWz1KIkTErqZzX/JtVBHBizqYzLfcaVAsAMn+k/M0
-          2ZzElWW0sn1nfe1UDOSWi7D3X1Uds=; cv=none; d=example.org; i=1; s=dummy;
-          t=12345
-      ARC-Message-Signature: a=rsa-sha256;
-          b=QcuMAulbUCBEjLdUugJ5F/26iQh2HUfyq9us57uRzTRobjIhssLZlj68h/3/bh1dTckG7x
-          LMRQQNgU+H3qIhwWi1sdCRGkwvoktKRgwgwK6jsvKtdTqV7SJINYe3ZM5zeEPU9S3DarLGv+
-          zDFvoE64cbeeFxO77YCKXgsivj+v4=;
-          bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
-          d=example.org; h=to:date:subject:mime-version:arc-authentication-results;
-          i=1; s=dummy; t=12345
-      ARC-Authentication-Results: i=1; lists.example.org;
-          spf=pass smtp.mfrom=jqd@d1.example;
-          dkim=pass (1024-bit key) header.i=@d1.example;
-          dmarc=pass
-      Received: from segv.d1.example (segv.d1.example [72.52.75.15])
-          by lists.example.org (8.14.5/8.14.5) with ESMTP id t0EKaNU9010123
-          for <arc@example.org>; Thu, 14 Jan 2015 15:01:30 -0800 (PST)
-          (envelope-from jqd@d1.example)
-      Authentication-Results: lists.example.org;
-          spf=pass smtp.mfrom=jqd@d1.example;
-          dkim=pass (1024-bit key) header.i=@d1.example;
-          dmarc=pass
-      Received: by 10.157.14.6 with HTTP; Tue, 3 Jan 2017 12:22:54 -0800 (PST)
-      Message-ID: <54B84785.1060301@d1.example.org>
-      Date: Thu, 14 Jan 2015 15:00:01 -0800
-      From: John Q Doe <jqd@d1.example.org>
-      To: arc@dmarc.org
-      Subject: Example 1
-
-      Hey gang,
-      This is a test message.
-      --J.
-    cv:          Fail
+    cv:          Fail  
   ams_fields_h_order:
     spec:        12/16
     description: ams h= mis ordered
@@ -4185,17 +4145,17 @@ tests:
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       ARC-Seal: a=rsa-sha256;
-          b=N5KnB9NBsUBsHPeMd8LJhacCFj1B7Ug/e/uVkRakkRS7qpfGiy4GjZjdS0KqrRGAKBa5s4
-          5Za2zURGoJeAVke7kcKfEf2MptAmydzCOcIJjW/3YYwv2fRfMJaZ/cuaa/khk9dZaDM+4nC+
-          7EUbmwlvbZBqY6FVZkijaM2wOOFkc=; cv=none; d=example.org; i=1; s=dummy;
+          b=rx+UjBcicBZ6s5/J7S5oMw3YVWAWg+q4Sb4XqR0tMmhOyhjLq7702sEFlEDHJjdTuTVMg+
+          c2qwv/XucEGW8/i4AMzNgkzpwk1Icsr0GHGbR7Jm8V+k6Z08tvQ4x1UaYgrTKmSQeyKq8rQQ
+          rRdzsqqX73OFp/cKLa42T3JVTrQpc=; cv=none; d=example.org; i=1; s=dummy;
           t=12345
       ARC-Message-Signature: a=rsa-sha256;
-          b=FYXj67A5w89gTUQmqX0Ezuwu+EYx/lbvr9v9DZnQyfAZlQ+GeDF74RQwzznANr7ul2MB+U
-          W2ad1FYdnM143ug2zarJWU1AmSU7vaUdyb1W50y8d0213U4nW6Kx/92qHnbNuVftNtPipO/u
-          mkUSz6qb5B0Izcn7mL5HhrnO1WwNQ=;
+          b=iRbmo9I0Qn8ZELD2xJ754eoEATUfoRxli5qMUi3AQTwGLHU6oaLFsAP7JDYjRm6al3XGp8
+          73NpnbncM6dnqlBvKK5OmekgztBKiyo7w0Uj6NZbq2KJXYiVW2vAbVkNwy4vPNhMHVTbD/xB
+          PWROiovFOL0q2mHDT1KKLiSzEfrWA=;
           bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
           d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-          i=1; s=dummy
+          i=1; s=dummy      
       ARC-Authentication-Results: i=1; lists.example.org;
           spf=pass smtp.mfrom=jqd@d1.example;
           dkim=pass (1024-bit key) header.i=@d1.example;
@@ -4482,10 +4442,10 @@ tests:
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       ARC-Seal: a=rsa-sha256;
-          b=CQfExyKL/1QJcyZmjgKBcHVmD6mHRuR54NsXlgEVTsK1ddPtzhqDzvYdwtq3VEpLdfpFda
-          DLUcI8Ik+fBSI+nSXJ8c3MdIaGU9rWDN/icOAKRfN+u08F79mFcf5Tbxb/2QfR62k2gWwf7I
-          1kZ9CLYuq6FcMuxqntgm+Qrt+EkmQ=; cv=none; d=example.org; i=1; s=dummy;
-          t=12345; x=catparty
+          b=FriX6cOxgBHhZwNYHn0KXSWVqwHPNV6sRAKUy9iN1OqwvAK9USwMsg/P08yXrUH8LRaijm
+          msJjp0KUFYiffoQrhsxHwv1hJIGceJZB7lOFeZn7Z5aym4eBp7q7idwNyIaGKL7E0WzVkeAT
+          RQ5LhtOInN23gugfmW6z8MUUvow5Y=; cv=none; d=example.org; i=1; s=dummy;
+          t=12345; w=catparty
       ARC-Message-Signature: a=rsa-sha256;
           b=SMBCg/tHQkIAIzx7OFir0bMhCxk/zaMOx1nyOSAviXW88ERohOFOXIkBVGe74xfJDSh9ou
           ryKgNA4XhUt4EybBXOn1dlrMA07dDIUFOUE7n+8QsvX1Drii8aBIpiu+O894oBEDSYcd1R+z
@@ -4929,13 +4889,13 @@ tests:
 
       --001a113e15fcdd0f9e0545366e8f--
     cv:          Fail
-  as_format_a_sha1:
+  as_fields_a_sha1:
     spec:        12/16
     description: as a= is sha1
     message:     |
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
-      ARC-Seal: a=rsa-sha256;
+      ARC-Seal: a=rsa-sha1;
           b=4aSdpG91pnuWdSUXPchtTfnFSWkenWJh1zIKLwT2EVkCNJ+/5clRA5sFonDxmdOrcEgzrh
           jiJuxnZVYXdIkvW9rMe5BOG5walucWYuNkuO7ph0kRX8DRITxwiZYhFgk8OkCITDYNF6h5vr
           rMF5vOKCaWnpiGTUlPqBOgakyN9F0=; cv=none; d=example.org; i=1; s=dummy;
@@ -4984,7 +4944,7 @@ tests:
 
       --001a113e15fcdd0f9e0545366e8f--
     cv:          Pass
-  as_format_a_na:
+  as_fields_a_na:
     spec:        12/16
     description: as a= not avaliable
     message:     |
@@ -5039,7 +4999,7 @@ tests:
 
       --001a113e15fcdd0f9e0545366e8f--
     cv:          Fail
-  as_format_a_empty:
+  as_fields_a_empty:
     spec:        12/16
     description: as a= is empty
     message:     |
@@ -5094,7 +5054,7 @@ tests:
 
       --001a113e15fcdd0f9e0545366e8f--
     cv:          Fail
-  as_format_a_unknown:
+  as_fields_a_unknown:
     spec:        12/16
     description: as a= unknown
     message:     |
@@ -5149,7 +5109,7 @@ tests:
 
       --001a113e15fcdd0f9e0545366e8f--
     cv:          Fail
-  as_format_b_ignores_wsp:
+  as_fields_b_ignores_wsp:
     spec:        12/16
     description: as b= ignores whitespace
     message:     |
@@ -5429,7 +5389,7 @@ tests:
     message:     |
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
-      ARC-Seal   :   a=rsa-sha256;
+      ARC-Seal:   a=rsa-sha256;
           b=RkKDOauVsqcsTEFv6NVE6J0sxj8LUE4kfwRzs0CvMg/+KOqRDQoFxxJsJkI77EHZqcSgwr
           QKpt6aKsl2zyUovVhAppT65S0+vo+h3utd3f8jph++1uiAUhVf57PihDC/GcdhyRGa6YNQGh
           GoArSHaJKb06/qF5OBif8o9lmRC8E=; cv=none; d=example.org; i=1; s=dummy;
@@ -5640,49 +5600,7 @@ tests:
       Hey gang,
       This is a test message.
       --J.
-    cv:          Pass
-  as_fields_b_col_wsp:
-    spec:        12/16
-    description: as b= canonicalization colon whitespace removed
-    message:     |
-      MIME-Version: 1.0
-      Return-Path: <jqd@d1.example.org>
-      ARC-Seal  :   a=rsa-sha256;
-          b=dOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ
-          7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn
-          QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy;
-          t=12345
-      ARC-Message-Signature: a=rsa-sha256;
-          b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm
-          9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE
-          cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=;
-          bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
-          d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-          i=1; s=dummy; t=12345
-      ARC-Authentication-Results: i=1; lists.example.org;
-          spf=pass smtp.mfrom=jqd@d1.example;
-          dkim=pass (1024-bit key) header.i=@d1.example;
-          dmarc=pass
-      Received: from segv.d1.example (segv.d1.example [72.52.75.15])
-          by lists.example.org (8.14.5/8.14.5) with ESMTP id t0EKaNU9010123
-          for <arc@example.org>; Thu, 14 Jan 2015 15:01:30 -0800 (PST)
-          (envelope-from jqd@d1.example)
-      Authentication-Results: lists.example.org;
-          spf=pass smtp.mfrom=jqd@d1.example;
-          dkim=pass (1024-bit key) header.i=@d1.example;
-          dmarc=pass
-      Received: by 10.157.14.6 with HTTP; Tue, 3 Jan 2017 12:22:54 -0800 (PST)
-      Message-ID: <54B84785.1060301@d1.example.org>
-      Date : Thu, 14 Jan 2015 15:00:01 -0800
-      From : John Q Doe <jqd@d1.example.org>
-      To : arc@dmarc.org
-      Subject: Example 1
-
-      Hey gang,
-      This is a test message.
-      --J.
-    cv:          Pass
-    
+    cv:          Pass    
   as_fields_b_512:
     spec:        12/16
     description: as b= with 512 bit key
@@ -6614,7 +6532,7 @@ tests:
 
       --001a113e15fcdd0f9e0545366e8f--
     cv:          Fail
-  as_format_s_empty:
+  as_fields_s_empty:
     spec:        12/16
     description: as s= empty
     message:     |
@@ -6671,7 +6589,7 @@ tests:
     cv:          Fail    
   as_fields_t_na:
     spec:        12/16
-    description: as t= na
+    description: as t= na 
     message:     |
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
@@ -6722,7 +6640,7 @@ tests:
       <div dir="ltr">This is a test message</div>
 
       --001a113e15fcdd0f9e0545366e8f--
-    cv:          Pass
+    cv:          Fail
   as_fields_t_empty:
     spec:        12/16
     description: as t= empty
@@ -7071,7 +6989,7 @@ tests:
 
       --001a113e15fcdd0f9e0545366e8f
       Content-Type: text/html; charset=UTF-8
-1
+
       <div dir="ltr">This is a test message</div>
 
       --001a113e15fcdd0f9e0545366e8f--
