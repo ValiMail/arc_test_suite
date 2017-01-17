@@ -34,6 +34,9 @@ VALIDATION TESTS:
 		- i=
 			* duplicated AS i= 1 (as_fields_i_dup)
 			* duplicated AS i= 2 (as_fields_i_dup2)
+			* missing AS i= (as_fields_i_missing)
+			* missing AS i=0 (as_fields_i_malformed1)
+			* missing AS i=a (as_fields_i_malformed2)									
 		- a=
 			- pass
 				* a=sha-rsa1(changes signature) (as_fields_a_sha1)
@@ -133,10 +136,15 @@ VALIDATION TESTS:
 				* ignores whitespace (ams_fields_bh_ignores_wsp)
 				- cannonicalization
           - body (ams bh=)
-        	  * eol whitespace stripped (ams_fields_bh_eol_wsp)
-        		* inline whitespace reduced (ams_fields_bh_inl_wsp)
-        		* ignore empty lines at end of body (ams_fields_bh_end_lines)
-        		* add CRLF at end if non existant (ams_fields_bh_trail_crlf)
+					  - simple
+						  * base (ams_fields_bh_sim_base)
+          		* inline whitespace not reduced (ams_fields_bh_sim_inl_wsp)
+          		* ignore empty lines at end of body (ams_fields_bh_sim_end_lines)							
+						- relaxed 
+          	  * eol whitespace stripped (ams_fields_bh_rel_eol_wsp)
+          		* inline whitespace reduced (ams_fields_bh_rel_inl_wsp)
+          		* ignore empty lines at end of body (ams_fields_bh_rel_end_lines)
+          		* add CRLF at end if non existant (ams_fields_bh_rel_trail_crlf)						
 			- fail
 				* NA (ams_fields_bh_na)
 				* empty (ams_fields_bh_empty)
@@ -290,14 +298,20 @@ SIGNATURE TESTS:
 			- i=2 (i2_base_fail)
 	  - malformed
 		  - duplicate i=
-			  * fully duplicate set
-				* identical i, sorted by t
-				* identical t, sorted by header set
+			  * fully duplicate set (duplicate_arc_set)
+			  * fully duplicate instance (duplicate_as)
+				* identical i, sorted by t (duplicate_as_i1)
+				* identical i, sorted by t (duplicate_as_i2)				
+				* identical t, sorted alphabetically (duplicate_as_i_t1)
+				* identical t, sorted alphabetically (duplicate_as_i_t2)				
 			- incomplete arc set
 			  * missing as
 				* missing ams
 				* missing aar
-			*? invalid i=
+			- invalid i=
+			  * ignore i=0
+				* ignore i=
+				* ignore i=a
 
 
 

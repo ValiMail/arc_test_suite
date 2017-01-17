@@ -81,13 +81,13 @@ def sig_gen(public, private, body, amsh, arsh, fold=False, verbose=False, as_tmp
     #print("arsh sig valid: %r" % ams_valid)
 
     if as_tmp:
-        sb = sb[:70] + b"\n    " + sb[70:142] + b"\n    " + sb[142:214]# + b"\n    " + sb[214:286] + b"\n    " + msb[286:]
+        sb = sb[:70] + b"\n      " + sb[70:142] + b"\n      " + sb[142:214]# + b"\n    " + sb[214:286] + b"\n    " + msb[286:]
         res = as_tmp.replace(b'%b', sb)
         print(res.decode('utf-8'))
 
     if ams_tmp:
         msb = msb.replace(b' ', b'')
-        msb = msb[:70] + b"\n    " + msb[70:142] + b"\n    " + msb[142:214]# + b"\n    " + msb[214:286] + b"\n    " + msb[286:]
+        msb = msb[:70] + b"\n      " + msb[70:142] + b"\n      " + msb[142:214]# + b"\n    " + msb[214:286] + b"\n    " + msb[286:]
         res = ams_tmp.replace(b'%bh', bh)
         res = res.replace(b'%b', msb)
         print(res.decode('utf-8'))
