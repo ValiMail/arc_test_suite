@@ -24,7 +24,7 @@ uEzxBDAr518Z8VFbR41in3W4Y3yCDgQlLlcETrS+zYcL
 
 as_tmp = b'''    AS:          |
       a=rsa-sha256;
-      b=%b; cv=fail; d=example.org; i=2; s=dummy;
+      b=%b; cv=pass; d=example.org; i=2; s=dummy;
       t=12346'''
 
 ams_tmp = b'''    AMS:         |
@@ -61,7 +61,6 @@ ams1 = b'''a=rsa-sha256; b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3u
 
 as1 = b'''a=rsa-sha256; b=dOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ 7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy; t=12345'''
 
-
 # headers
 ht = b":".join([x[0] for x in sig_head])
 
@@ -74,7 +73,7 @@ arsh = lambda b, bh: [
     (b'arc-seal', as1),
     (b'arc-authentication-results', auth_res2),
     (b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh).replace(b'b=', b'b=' + b)),
-    (b'arc-seal', b'a=rsa-sha256; b=; cv=fail; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
+    (b'arc-seal', b'a=rsa-sha256; b=; cv=pass; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
 ]
 
 sig_gen(public, private, body, amsh, arsh, fold=False, verbose=True, as_tmp=as_tmp, ams_tmp=ams_tmp)
