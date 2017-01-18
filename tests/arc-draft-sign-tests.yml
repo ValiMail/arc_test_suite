@@ -1623,7 +1623,7 @@ tests:
       bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
       d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
       i=2; s=dummy; t=12346
-  AAR:         |
+    AAR:         |
       i=2; lists.example.org;
       spf=pass smtp.mfrom=jqd@d1.example;
       dkim=pass (1024-bit key) header.i=@d1.example;
@@ -1776,13 +1776,13 @@ tests:
       ARC-Seal: a=rsa-sha256;
           b=dOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ
           7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn
-          QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=; s=dummy;
-          t=12345					
+          QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy;
+          t=12345
       ARC-Seal: a=rsa-sha256;
           b=dOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ
           7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn
-          QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy;
-          t=12345
+          QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=; s=dummy;
+          t=12345					          
       ARC-Message-Signature: a=rsa-sha256;
           b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm
           9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE
@@ -1859,14 +1859,14 @@ tests:
           cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=;
           bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
           d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-          i=1; s=dummy; t=12345
+          i=0; s=dummy; t=12345
       ARC-Message-Signature: a=rsa-sha256;
           b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm
           9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE
           cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=;
           bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
           d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-          i=0; s=dummy; t=12345					
+          i=1; s=dummy; t=12345          
       ARC-Authentication-Results: i=1; lists.example.org;
           spf=pass smtp.mfrom=jqd@d1.example;
           dkim=pass (1024-bit key) header.i=@d1.example;
