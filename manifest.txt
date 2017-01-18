@@ -265,7 +265,8 @@ VALIDATION TESTS:
 		* not vaild dkim key (public_key_invalid)
 
 --- System
-	* fully duplicate ARC set (arc_set_duplicate)
+	-? permuted arc headers (header_order1)
+	-? permuted arc headers (header_order2)	
 	-? entirely invalid emails
 
 
@@ -296,7 +297,7 @@ SIGNATURE TESTS:
 		- invalid
 		  - i=1 (i1_base_fail)
 			- i=2 (i2_base_fail)
-	  - malformed
+	  - malformed ( THESE TESTS ARE LIKELY INCORRECT, THE SPEC NEEDS REVISION )
 		  - duplicate i=
 			  * fully duplicate set (duplicate_arc_set)
 			  * fully duplicate instance (duplicate_as)
@@ -305,13 +306,14 @@ SIGNATURE TESTS:
 				* identical t, sorted alphabetically (duplicate_as_i_t1)
 				* identical t, sorted alphabetically (duplicate_as_i_t2)				
 			- incomplete arc set
-			  * missing as
-				* missing ams
-				* missing aar
+			  * missing as (missing_as)
+				* missing ams (missing_ams)
+				* missing aar (missing_aar)
 			- invalid i=
-			  * ignore i=0
-				* ignore i=
-				* ignore i=a
+				* ignore i NA  (invalid_i_na)				
+				* ignore i=  (invalid_i_missing)			
+			  * ignore i=0 (invalid_i_range)
+				* ignore i=a (invalid_i_invalid)
 
 
 
