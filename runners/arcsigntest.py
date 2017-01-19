@@ -4,7 +4,7 @@ import sys
 import logging
 from dnslib.server import DNSRecord
 
-sys.path.append('../skit/dkimpy/gene')
+sys.path.append('../dkimpy')
 import dkim
 
 if len(sys.argv) != 10:

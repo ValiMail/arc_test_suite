@@ -35,8 +35,8 @@ VALIDATION TESTS:
 			* duplicated AS i= 1 (as_fields_i_dup)
 			* duplicated AS i= 2 (as_fields_i_dup2)
 			* missing AS i= (as_fields_i_missing)
-			* missing AS i=0 (as_fields_i_malformed1)
-			* missing AS i=a (as_fields_i_malformed2)									
+			? missing AS i=0 (as_fields_i_malformed1)
+			? missing AS i=a (as_fields_i_malformed2)									
 		- a=
 			- pass
 				* a=sha-rsa1(changes signature) (as_fields_a_sha1)
