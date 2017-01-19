@@ -155,7 +155,7 @@ def main(op, script, test=None, port=DEFAULT_DNS_PORT, verbose=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run the ARC test suite in YAML format against an implementation.')
     parser.add_argument('op', choices=["sign", "validate"], default="sign", help='Operation to test')
-    parser.add_argument('script', help='A command line implementation of an arc signing or verification routine. The arguments to the signing script must be [messagefile dnsport selector domain privatekeyfile headers], the arguments to the verification script must be [messagefile dnsport].')
+    parser.add_argument('script', help='A command line implementation of an arc signing or verification routine. The arguments to the signing script must be [messagefile dnsport privatekeyfile authresfile selector domain headers timestamp verbose], the arguments to the verification script must be [messagefile dnsport verbose].')
     parser.add_argument('-t', dest='test', metavar='TEST', required=False, help='Specific test to run')
     parser.add_argument('-p', dest='port', default=DEFAULT_DNS_PORT, metavar='port', required=False, help='Port to run stubbed dns server on')
     parser.add_argument('-v', dest='verbose', action='store_true', required=False, help='verbose')

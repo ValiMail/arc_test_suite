@@ -4,6 +4,8 @@ This is an informal schema for the open source test suites for the [Authenticate
 
 Their syntax is YAML. The top level object is a "scenario". A file can consist of multiple scenarios separated by '---' on a line by itself. Lexical comments are introduced by '#' and continue to the end of a line. Lexical comments are ignored. There are also comment fields which are part of a scenario. DKIM records, private keys, domains, and selectors are shared across scenarios.
 
+The signing suite explicitly does not thoroughly test chain validation to avoid reimplementation of the validation test suite.
+
 ## Example Validation Scenario
 
 ```
@@ -47,8 +49,6 @@ There is an explicit ambiguity & indeterminism supported by the ARC & DKIM specs
 * The ARC-Message-Signature tag set will be exactly - (a, b, b, bh, d, h, i, s, t)
 
 We also assume that the signing algorithm is rsa-sha256.
-
-One additional note, the signing tests explicitly do not thoroughly test chain validate to avoid reimplementation of the validation test suite.
 
 ## Example Signing Scenario
 
