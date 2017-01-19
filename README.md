@@ -48,6 +48,8 @@ There is an explicit ambiguity & indeterminism supported by the ARC & DKIM specs
 
 We also assume that the signing algorithm is rsa-sha256.
 
+One additional note, the signing tests explicitly do not thoroughly test chain validate to avoid reimplementation of the validation test suite.
+
 ## Example Signing Scenario
 
 ```

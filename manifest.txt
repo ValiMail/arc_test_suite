@@ -297,7 +297,7 @@ SIGNATURE TESTS:
 		- invalid
 		  - i=1 (i1_base_fail)
 			- i=2 (i2_base_fail)
-	  - malformed ( THESE TESTS ARE LIKELY INCORRECT, THE SPEC NEEDS REVISION )
+	  -? malformed ( THESE TESTS ARE LIKELY INCORRECT, THE SPEC NEEDS REVISION )
 		  - duplicate i=
 			  * fully duplicate set (duplicate_arc_set)
 			  * fully duplicate instance (duplicate_as)
