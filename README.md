@@ -125,4 +125,4 @@ comment: >-
 ```
 
 ## Running the Suite
-Included is an example python harness for running the test suite.  The harness takes as input the suite to run(sign/validate), and a command line tool which performs the operation.  A DNS server with the key records is started on a local port during suite execution.  More details are provided in testarc.py.
+Included is an example python harness for running the test suite.  The harness takes as input the suite to run(sign/validate), and a command line tool which performs the operation.  A DNS server with the key records is started on a local port during suite execution.  More details are provided by ./testarc.py -h
