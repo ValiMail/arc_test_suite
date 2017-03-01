@@ -161,6 +161,9 @@ OVERVIEW:
   This script can run either the signing or validation test suites against
   an ARC implementation, given a command line wrapper for this logic.
 
+DEPENDENCIES:
+  specified in requirements.txt
+
 DNS:
   During execution of the script a DNS server is started on a local port and
   this port is passed to the runner.  This server hosts the key files needed
