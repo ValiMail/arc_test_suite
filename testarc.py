@@ -3,7 +3,7 @@
 # Run the ARC test suite in YAML format against an implementation
 #
 # DEPENDENCIES:
-#  ddt, yaml, dnslib
+#  ddt, pyyaml, dnslib
 #
 
 import unittest
@@ -160,9 +160,6 @@ desc = '''
 OVERVIEW:
   This script can run either the signing or validation test suites against
   an ARC implementation, given a command line wrapper for this logic.
-
-DEPENDENCIES:
-  ddt, yaml, dnslib
 
 DNS:
   During execution of the script a DNS server is started on a local port and
