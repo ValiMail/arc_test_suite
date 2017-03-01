@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
 # Run the ARC test suite in YAML format against an implementation
+#
+# DEPENDENCIES:
+#  ddt, yaml, dnslib
+#
 
 import unittest
 import yaml
@@ -152,10 +156,64 @@ def main(op, script, test=None, port=DEFAULT_DNS_PORT, verbose=False):
     v = 2 if verbose else 1
     unittest.TextTestRunner(verbosity=v).run(suite)
 
+desc = '''
+OVERVIEW:
+  This script can run either the signing or validation test suites against
+  an ARC implementation, given a command line wrapper for this logic.
+
+DEPENDENCIES:
+  ddt, yaml, dnslib
+
+DNS:
+  During execution of the script a DNS server is started on a local port and
+  this port is passed to the runner.  This server hosts the key files needed
+  for ARC signature validation.  There are two suggested methods of routing
+  DNS traffic to this server:
+  1. Stub out your dns calls.  You can see this in practice in
+    runners/validatedkimpy.py
+  2. OS level DNS rerouting. On *nix, prepending 'nameserver 127.0.0.1' to
+    /etc/resolv.conf will check localhost:53 for DNS traffic.  You'll also
+    need to pass -p 53 to the script, and run with sudo(to access port 53).
+    This is only temporary and an be reverted once you're done.
+  Something like this is necessary to correctly use this script.
+
+VALIDATION:
+  Running './testarc.py validate script' will call script once for each
+  test case in the validation suite with the following arguments:
+  >>> script messagefile dnsport verbose
+  messagefile - a path to the message being validated
+  dnsport     - a dns server will be running on locaclhost:dnsport
+  verbose     - True/False, if the -v flag is passed to ./testarc.py
+
+  The script is expected to return Pass/Fail/None, depending on the ARC
+  validation status of the message.  If this matches the value in the
+  suite, the test passes.
+
+SIGNING:
+  Running './testarc.py sign script' will call script once for each
+  test case in the signing suite with the following arguments:
+  >>> script messagefile dnsport privatekeyfile authresfile selector domain headers timestamp verbose
+  messagefile    - a path to the message being validated
+  dnsport        - a dns server will be running on locaclhost:dnsport
+  privatekeyfile - the private key used to sign the message
+  authresfile    - an Authenticatio-Results header value
+  selector       - the signing selector
+  domain         - the signing domain
+  headers        - a colon separated list of headers to sign
+  timestamp      - a simulated unix timestamp to sign the message with
+  verbose        - True/False, if the -v flag is passed to ./testarc.py
+
+  The script is expected to return the ARC-Authentication-Results,
+  ARC-Seal, and ARC-Message-Signature of the signature, on successive lines.
+  These are matched up to permutaion(of both headers & tags) to the results
+  in the test suite.
+'''
+
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Run the ARC test suite in YAML format against an implementation.')
-    parser.add_argument('op', choices=["sign", "validate"], default="sign", help='Operation to test')
-    parser.add_argument('script', help='A command line implementation of an arc signing or verification routine. The arguments to the signing script must be [messagefile dnsport privatekeyfile authresfile selector domain headers timestamp verbose], the arguments to the verification script must be [messagefile dnsport verbose].')
+    parser = argparse.ArgumentParser(description=desc, formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('op', choices=["sign", "validate"], default="sign", help='Suite to test')
+    parser.add_argument('script', help='A command line implementation of an arc signing or verification routine')
     parser.add_argument('-t', dest='test', metavar='TEST', required=False, help='Specific test to run')
     parser.add_argument('-p', dest='port', default=DEFAULT_DNS_PORT, metavar='port', required=False, help='Port to run stubbed dns server on')
     parser.add_argument('-v', dest='verbose', action='store_true', required=False, help='verbose')

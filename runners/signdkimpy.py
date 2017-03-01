@@ -3,14 +3,12 @@
 import sys
 import logging
 from dnslib.server import DNSRecord
-
-sys.path.append('../dkimpy')
 import dkim
 
 if len(sys.argv) != 10:
     print("Usage: arcsigntest.py messagefile dnsport privatekeyfile authresfile selector domain headers timestamp verbose", file=sys.stderr)
     sys.exit(1)
-    
+
 def arctestdns(name):
     try:
         q = DNSRecord.question(name.decode("utf-8"), "TXT")

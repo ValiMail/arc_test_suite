@@ -47,8 +47,7 @@ There is an explicit ambiguity & indeterminism supported by the ARC & DKIM specs
 * There is no trailing semi-colon
 * The ARC-Seal tag set will be exactly - (a, b, cv, d, i, s, t)
 * The ARC-Message-Signature tag set will be exactly - (a, b, b, bh, d, h, i, s, t)
-
-We also assume that the signing algorithm is rsa-sha256.
+* ARC-Seal & ARC-Message-Signature a=rsa-sha256
 
 ## Example Signing Scenario
 
@@ -124,3 +123,6 @@ txt-records:
 comment: >-
   This is a comment
 ```
+
+## Running the Suite
+Included is an example python harness for running the test suite.  The harness takes as input the suite to run(sign/validate), and a command line tool which performs the operation.  A DNS server with the key records is started on a local port during suite execution.  More details are provided in testarc.py.

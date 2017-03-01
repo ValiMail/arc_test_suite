@@ -3,8 +3,6 @@
 import sys
 import logging
 from dnslib.server import DNSRecord
-
-sys.path.append('../dkimpy')
 import dkim
 
 if len(sys.argv) != 4:
