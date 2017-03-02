@@ -215,7 +215,7 @@ if __name__ == '__main__':
     parser.add_argument('op', choices=["sign", "validate"], default="sign", help='Suite to test')
     parser.add_argument('script', help='A command line implementation of an arc signing or verification routine')
     parser.add_argument('-t', dest='test', metavar='TEST', required=False, help='Specific test to run')
-    parser.add_argument('-p', dest='port', default=DEFAULT_DNS_PORT, metavar='port', required=False, help='Port to run stubbed dns server on')
+    parser.add_argument('-p', dest='port', default=DEFAULT_DNS_PORT, metavar='port', required=False, help='Port to run stubbed dns server on', type=int)
     parser.add_argument('-v', dest='verbose', action='store_true', required=False, help='verbose')
 
     args = parser.parse_args()
