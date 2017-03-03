@@ -29,7 +29,7 @@ def validate_test(self, script, test_case, port, verbose=False):
         f.write(test_case.test["message"])
     with ArcTestResolver(test_case.txt_records, port, verbose):
         proc = subprocess.Popen([script, 'tmp/message.txt', str(port), str(verbose)], stdout=subprocess.PIPE)
-        out  = proc.communicate()[0].decode("utf-8")
+        out  = proc.communicate()[0].decode("utf-8").strip()
 
     os.remove('tmp/message.txt')
 
