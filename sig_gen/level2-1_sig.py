@@ -21,17 +21,28 @@ o7DUw1/hz2Ck4N5JrgUCQQCyKveNvjzkkd8HjYs0SwM0fPjK16//5qDZ2UiDGnOe
 uEzxBDAr518Z8VFbR41in3W4Y3yCDgQlLlcETrS+zYcL
 -----END RSA PRIVATE KEY-----
 '''
+
+sig_head = [
+    (b'mime-version', b'1.0'),
+    (b'date', b'Thu, 14 Jan 2015 15:00:01 -0800'),    
+    (b'from', b'John Q Doe <jqd@d1.example.org>'),
+    (b'to', b'arc@dmarc.org'),        
+    (b'subject', b'Example 1'),
+]
+
+h = b":".join([x[0] for x in sig_head])
+
 as_tmp = b'''    AS:          |
       a=rsa-sha256;
-      b=%b; cv=pass; d=example.org; i=3; s=dummy;
+      b=%b; cv=fail; d=example.org; i=3; s=dummy;
       t=12347'''
 
 ams_tmp = b'''    AMS:         |
       a=rsa-sha256;
       b=%b;
       bh=%bh; c=relaxed/relaxed;
-      d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results;
-      i=3; s=dummy; t=12347'''
+      d=example.org; h=;
+      i=3; s=dummy; t=12347'''.replace(b'h=;', b'h=' + h + b';')
 
 # data
 body = b'''Hey gang,
@@ -43,32 +54,20 @@ auth_res1 = b'i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=p
 auth_res2 = b'i=2; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
 auth_res3 = b'i=3; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
 
-sig_head = [
-    (b'from', b'John Q Doe <jqd@d1.example.org>'),
-    (b'to', b'arc@dmarc.org'),
-    (b'date', b'Thu, 14 Jan 2015 15:00:01 -0800'),
-    (b'subject', b'Example 1'),
-    (b'mime-version', b'1.0'),
-    (b'arc-authentication-results', auth_res1)
-]
-
 d = b'example.org'
 s = b'dummy'
 t = b'12347'
 i = 3
 
-ams1 = b'''a=rsa-sha256; b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm 9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed; d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results; i=1; s=dummy; t=12345'''
-
 as1 = b'''a=rsa-sha256; b=fOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ 7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy; t=12345'''
 
-ams2 = b"a=rsa-sha256; b=2cDGNznUmp4YSSThCe9nrQIH2Gpd5qPFw3OU8sWFzZgEQ5UZtaVQifVUXUrsSyEzjro3Ul YPPDx+C1K+LbKRlOZ06il4ws2zlPafsrx1piKsKSCUq0KjFs01hYCDBa3tfdyITSfoWu2HHY pCjrhPMPH1jruIdBV/5Gk2Fvy+mW8=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed; d=example.org; h=from:to:date:subject:mime-version:arc-authentication-results; i=2; s=dummy; t=12346"
+ams1 = b'''a=rsa-sha256; b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm 9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed; d=example.org; h=mime-version:date:from:to:subject; i=1; s=dummy; t=12345'''
 
-as2 = b"a=rsa-sha256; b=IAqZJ5HwfNxxsrn9R4ayQgiu9RibPKEUVevbt7XFTkSh1baJ533D2Z6IZ2NaBreUhDBb2e K9Gtcv+eyUhWkD8VTmE6fq/F8CDIK3ScIiJykF8hNL1wpa/mGwWWwBnkozIJGAbTAAX7AgnH knAehnSW99TeU0lmib0XmOt4TN3sY=; cv=pass; d=example.org; i=2; s=dummy; t=12346"
+as2 = b'''a=rsa-sha256; b=rOfjske1NJtykYwgODc8BxJOW5Df1E2LLPasFXs0x00QIXX7SDUsEzD4u2IdtN0kNNJBPS IcfjOy4TaHEPkULPubiJG4fEx87iyAMCiVRraaMXabqxgg4IHpieNdl4tNMO1GkGHwG760+5 DmvXc4BINugnX66Z+sL0y0z3THR3A=; cv=pass; d=example.org; i=2; s=dummy; t=12346'''        
+ams2 = b'''a=rsa-sha256; b=UaNJhLFAa56Gpc+wKk0SL2Jq/LJgT9CYSZl59wcGYkpG0D5bjhDdj3qers6hD+3BpljNgn mFxq8zWssoPon3ydvTSCSjVwPRNgLol9zBP+FZo/QGQQbj74ZcGv04jOVe8TKDTFSaVe41L7 mH16ZdoLgRdSa2Ys+p9f0+DVFYTO4=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed; d=example.org; h=mime-version:date:from:to:subject; i=2; s=dummy; t=12346'''
 
-# headers
-ht = b":".join([x[0] for x in sig_head])
 
-ams = b'a=rsa-sha256; b=; bh=; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (d, ht, i, s, t)
+ams = b'a=rsa-sha256; b=; bh=; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (d, h, i, s, t)
 amsh = (lambda bh: sig_head + [(b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh))])
 
 arsh = lambda b, bh: [

@@ -2,6 +2,7 @@
 
 import base64
 import textwrap
+import os
 
 from dkim.crypto import (
     HASH_ALGORITHMS,
@@ -80,14 +81,19 @@ def sig_gen(public, private, body, amsh, arsh, fold=False, verbose=False, as_tmp
     #ams_valid = RSASSA_PKCS1_v1_5_verify(h, signature, pk)
     #print("arsh sig valid: %r" % ams_valid)
 
+    accum = ''
     if as_tmp:
-        sb = sb[:70] + b"\n    " + sb[70:142] + b"\n    " + sb[142:214]# + b"\n    " + sb[214:286] + b"\n    " + msb[286:]
+        sb = sb[:70] + b"\n      " + sb[70:142] + b"\n      " + sb[142:214]# + b"\n    " + sb[214:286] + b"\n    " + msb[286:]
         res = as_tmp.replace(b'%b', sb)
+        accum = res
         print(res.decode('utf-8'))
 
     if ams_tmp:
         msb = msb.replace(b' ', b'')
-        msb = msb[:70] + b"\n    " + msb[70:142] + b"\n    " + msb[142:214]# + b"\n    " + msb[214:286] + b"\n    " + msb[286:]
+        msb = msb[:70] + b"\n      " + msb[70:142] + b"\n      " + msb[142:214]# + b"\n    " + msb[214:286] + b"\n    " + msb[286:]
         res = ams_tmp.replace(b'%bh', bh)
         res = res.replace(b'%b', msb)
+        accum += b"\n" + res
         print(res.decode('utf-8'))
+
+    os.system(b'echo "' + accum + b'" | pbcopy')

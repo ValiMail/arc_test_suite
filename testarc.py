@@ -50,11 +50,9 @@ def sign_test(self, script, test_case, port, verbose=False):
         f.write(test_case.test["message"])
     with open('tmp/privatekey.pem', 'w') as f:
         f.write(test_case.privatekey)
-    with open('tmp/authres.txt', 'w') as f:
-        f.write(test_case.test["auth-res"])
 
     with ArcTestResolver(test_case.txt_records, port, verbose):
-        proc = subprocess.Popen([script, 'tmp/message.txt', str(port), 'tmp/privatekey.pem', 'tmp/authres.txt',
+        proc = subprocess.Popen([script, 'tmp/message.txt', str(port), 'tmp/privatekey.pem', test_case.test["srv-id"],
                                  test_case.sel, test_case.domain, test_case.test["sig-headers"], str(test_case.test["t"]), str(verbose)],
                                 stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
@@ -89,10 +87,10 @@ def sign_test(self, script, test_case, port, verbose=False):
             as_valid = (sig_res <= s1)
         else:
             continue
-
+        
     if verbose:
         print("RESULT:")
-
+        
     self.assertTrue(aar_valid, test_case.tid)
     self.assertTrue(as_valid, test_case.tid)
     self.assertTrue(ams_valid, test_case.tid)
@@ -196,7 +194,7 @@ SIGNING:
   messagefile    - a path to the message being validated
   dnsport        - a dns server will be running on locaclhost:dnsport
   privatekeyfile - the private key used to sign the message
-  authresfile    - an Authenticatio-Results header value
+  authserv-id    - the authserv-id of the Authentication-Results headers to prefix
   selector       - the signing selector
   domain         - the signing domain
   headers        - a colon separated list of headers to sign

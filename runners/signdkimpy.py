@@ -6,7 +6,7 @@ from dnslib.server import DNSRecord
 import dkim
 
 if len(sys.argv) != 10:
-    print("Usage: arcsigntest.py messagefile dnsport privatekeyfile authresfile selector domain headers timestamp verbose", file=sys.stderr)
+    print("Usage: arcsigntest.py messagefile dnsport privatekeyfile authserv-id selector domain headers timestamp verbose", file=sys.stderr)
     sys.exit(1)
 
 def arctestdns(name):
@@ -22,15 +22,21 @@ def arctestdns(name):
 
 if(sys.argv[9].lower() == 'true'):
     logging.basicConfig(level=10)
-
-with open(sys.argv[1],'rb') as mf, open(sys.argv[3],'rb') as pkf, open(sys.argv[4],'rb') as arf:
+    
+with open(sys.argv[1],'rb') as mf, open(sys.argv[3],'rb') as pkf:
     message    = mf.read()
     privatekey = pkf.read()
-    authres    = arf.read().replace(b'\n', b' ')
+
+    # temporary hack
+    srv_id = sys.argv[4]
+    parts = message.split(b'MIME')
+    message = b'MIME' + parts[1]
+    
+    authres = parts[0].replace(b'Authentication-Results: ', b'').replace(b"\n", b"\r\n")
 
     cv, results, comment = dkim.arc_verify(message, dnsfunc=arctestdns)
     sig = dkim.arc_sign(message, sys.argv[5].encode(), sys.argv[6].encode(),
                         privatekey, authres, cv, include_headers=sys.argv[7].encode().split(b':'),
                         timestamp=sys.argv[8], standardize=True)
-
+    
 sys.stdout.write(b"\n".join(sig).decode('utf-8'))

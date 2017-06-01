@@ -22,6 +22,16 @@ uEzxBDAr518Z8VFbR41in3W4Y3yCDgQlLlcETrS+zYcL
 -----END RSA PRIVATE KEY-----
 '''
 
+sig_head = [
+    (b'mime-version', b'1.0'),
+    (b'date', b'Thu, 14 Jan 2015 15:00:01 -0800'),    
+    (b'from', b'John Q Doe <jqd@d1.example.org>'),
+    (b'to', b'arc@dmarc.org'),        
+    (b'subject', b'Example 1'),
+]
+
+h = b":".join([x[0] for x in sig_head])
+
 as_tmp = b'''    AS:          |
       a=rsa-sha256;
       b=%b; cv=none; d=example.org; i=1; s=dummy;
@@ -31,8 +41,8 @@ ams_tmp = b'''    AMS:         |
       a=rsa-sha256;
       b=%b;
       bh=%bh; c=relaxed/relaxed;
-      d=example.org; h=from:to:to:date:subject:mime-version:arc-authentication-results;
-      i=1; s=dummy; t=12345'''
+      d=example.org; h=;
+      i=1; s=dummy; t=12345'''.replace(b'h=;', b'h=' + h + b';')
 
 # data
 body = b'''Hey gang,
@@ -40,30 +50,18 @@ This is a test message.
 --J.
 '''.replace(b'\n', b'\r\n')
 
-auth_res = b'i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
-
-sig_head = [
-    (b'from', b'John Q Doe <jqd@d1.example.org>'),
-    (b'to', b'arc@dmarc.org'),        
-    (b'date', b'Thu, 14 Jan 2015 15:00:01 -0800'),
-    (b'subject', b'Example 1'),
-    (b'mime-version', b'1.0'),
-    (b'arc-authentication-results', auth_res)
-]
-
 d = b'example.org'
 s = b'dummy'
 t = b'12345'
 i = 1
 
 # headers
-ht = b":".join([x[0] for x in sig_head])
-
-ams = b'a=rsa-sha256; b=; bh=; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (d, ht, i, s, t)
+aar = b"i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass"
+ams = b'a=rsa-sha256; b=; bh=; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (d, h, i, s, t)
 amsh = (lambda bh: sig_head + [(b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh))])
 
 arsh = lambda b, bh: [
-    (b'arc-authentication-results', auth_res),
+    (b'arc-authentication-results', aar),
     (b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh).replace(b'b=', b'b=' + b)),
     (b'arc-seal', b'a=rsa-sha256; b=; cv=none; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
 ]

@@ -2,318 +2,323 @@ TODO:
 
 V2:
   - public key parsing & tag tests  (p, s, t, n, k, ...)
-	- dns failure tests
+  - dns failure tests
   - better testing of tag & header syntax(unicode, other malformed possibilities?)
   - dkim tags (z, x, l, q, ...)
-	- qp-section, dkim-quoted-printable format
-	- international domains & selector not an A-label - Section 2.3 of [RFC5890]
+  - qp-section, dkim-quoted-printable format
+  - international domains & selector not an A-label - Section 2.3 of [RFC5890]
 
 HOW?
 - dkim key size
-	- signers must use >= 1024?
+  - signers must use >= 1024?
 - ordering & placement of fields
 
 VALIDATION TESTS:
 
 --- Arc Seal
-	- format
-		- tag=value list
-			- pass
-			  * whitespace around ; (as_format_sc_wsp)
-				* whitespace around = (as_format_eq_wsp)
-				* optional ";" at end of tag-list (as_format_tags_trail_sc)
-				* unknown tags(changes signature, but isnt invalid) (as_format_tags_unknown)
-			- fail
-			  * invalid tag key (as_format_inv_tag_key)
-				* duplicate tag (as_format_tags_dup)
-				* case change on tag key (as_format_tags_key_case)
-				* case change on tag value (as_format_tags_val_case)
-				* add whitespace (as_format_tags_wsp)
-				* random semicolon (as_format_tags_sc)
-	- fields
-		- i=
-			* duplicated AS i= 1 (as_fields_i_dup)
-			* duplicated AS i= 2 (as_fields_i_dup2)
-			* missing AS i= (as_fields_i_missing)
-			? missing AS i=0 (as_fields_i_malformed1)
-			? missing AS i=a (as_fields_i_malformed2)									
-		- a=
-			- pass
-				* a=sha-rsa1(changes signature) (as_fields_a_sha1)
-			- fail
-				* NA (as_fields_a_na)
-				* empty (as_fields_a_empty) BREAKS_DNS_SERVER
-				* unknkown algorithm(not rsa-sha1 or rsa-sha256) (as_fields_a_unknown)
-		- b=
-			- pass
-				* ignores whitespace (as_fields_b_ignores_wsp)
-				- key size
-  				* signed with 512 key (as_fields_b_512)
-  				* signed with 1024 key (as_fields_b_1024)
-  				* signed with 2048 key (as_fields_b_2048)
+  - format
+    - tag=value list
+      - pass
+        * whitespace around ; (as_format_sc_wsp)
+        * whitespace around = (as_format_eq_wsp)
+        * optional ";" at end of tag-list (as_format_tags_trail_sc)
+        * unknown tags(changes signature, but isnt invalid) (as_format_tags_unknown)
+      - fail
+        * invalid tag key (as_format_inv_tag_key)
+        * duplicate tag (as_format_tags_dup)
+        * case change on tag key (as_format_tags_key_case)
+        * case change on tag value (as_format_tags_val_case)
+        * add whitespace (as_format_tags_wsp)
+        * random semicolon (as_format_tags_sc)
+  - fields
+    - i=
+      * duplicated AS i= 1 (as_fields_i_dup)
+      * duplicated AS i= 2 (as_fields_i_dup2)
+      * missing AS i= (as_fields_i_missing)
+      ? missing AS i=0 (as_fields_i_malformed1)
+      ? missing AS i=a (as_fields_i_malformed2)                 
+    - a=
+      - pass
+        * a=sha-rsa1(changes signature) (as_fields_a_sha1)
+      - fail
+        * NA (as_fields_a_na)
+        * empty (as_fields_a_empty) BREAKS_DNS_SERVER
+        * unknkown algorithm(not rsa-sha1 or rsa-sha256) (as_fields_a_unknown)
+    - b=
+      - pass
+        * ignores whitespace (as_fields_b_ignores_wsp)
+        - key size
+          * signed with 512 key (as_fields_b_512)
+          * signed with 1024 key (as_fields_b_1024)
+          * signed with 2048 key (as_fields_b_2048)
         - cannonicalization
-        	  * header fields case insensitive (as_fields_b_head_case)
-        		* header field lines unfolded (as_fields_b_head_unfold)
-        		* eol whitespace stripped (as_fields_b_eol_wsp)
-        		* inline whitespace reduced (as_fields_b_inl_wsp)
-        		* whitespace surrounding colon stripped	(as_fields_b_col_wsp)					
-			- fail
-				* NA (as_fields_b_na)
-				* empty (as_fields_b_empty)
-				* not base64 (as_fields_b_base64)
-				- invalid value
-					* modify signature (as_fields_b_mod_sig)
-					- modified headers
-						- check each header that should be included
-							* AAR(1) (as_fields_b_aar1)
-							* AMS(1) (as_fields_b_ams1)
-							* ASB(1) (as_fields_b_asb1)
-		- cv=
-			- fail
-				* NA (as_fields_cv_na)
-				* empty (as_fields_cv_empty)
-				* invalid value (as_fields_cv_invalid)
-		- d=
-			- fail
-				* NA (as_fields_d_na)
-				* empty (as_fields_d_empty)
-				- invalid format
-					* not valid domain name (as_fields_d_invalid)					
-		- s=
-			- fail
-				* NA (as_fields_s_na)
-				* empty (as_fields_s_empty)
-		- t=
-			- pass
-				* NA (as_fields_t_na)
-			- fail
-				* empty (as_fields_t_empty)
-				* invalid format (as_fields_t_invalid)
+            * header fields case insensitive (as_fields_b_head_case)
+            * header field lines unfolded (as_fields_b_head_unfold)
+            * eol whitespace stripped (as_fields_b_eol_wsp)
+            * inline whitespace reduced (as_fields_b_inl_wsp)
+            * whitespace surrounding colon stripped (as_fields_b_col_wsp)         
+      - fail
+        * NA (as_fields_b_na)
+        * empty (as_fields_b_empty)
+        * not base64 (as_fields_b_base64)
+        - invalid value
+          * modify signature (as_fields_b_mod_sig)
+          - modified headers
+            - check each header that should be included
+              * AAR(1) (as_fields_b_aar1)
+              * AMS(1) (as_fields_b_ams1)
+              * ASB(1) (as_fields_b_asb1)
+    - cv=
+      - fail
+        * NA (as_fields_cv_na)
+        * empty (as_fields_cv_empty)
+        * invalid value (as_fields_cv_invalid)
+    - d=
+      - fail
+        * NA (as_fields_d_na)
+        * empty (as_fields_d_empty)
+        - invalid format
+          * not valid domain name (as_fields_d_invalid)         
+    - s=
+      - fail
+        * NA (as_fields_s_na)
+        * empty (as_fields_s_empty)
+    - t=
+      - pass
+        * NA (as_fields_t_na)
+      - fail
+        * empty (as_fields_t_empty)
+        * invalid format (as_fields_t_invalid)
 
 --- Arc Message Signature
-	- format
-		- tag=value list
-			- pass
-			  * whitespace around ; (ams_format_sc_wsp)
-				* whitespace around = (ams_format_eq_wsp)			
-				* optional ";" at end of tag-list (ams_format_tags_trail_sc)
-				* unknown tags(changes signature, but isnt invalid) (ams_format_tags_unknown)
-			- fail
-			  * invalid tag key (ams_format_inv_tag_key)			
-				* duplicate tag (ams_format_tags_dup)
-				* case change on tag key (ams_format_tags_key_case)
-				* case change on tag value (ams_format_tags_val_case)
-				* add whitespace (ams_format_tags_wsp)
-				* random semicolon (ams_format_tags_sc)
-	- fields
-		- i=
-			* duplicated AMS i= 1 (ams_fields_i_dup)
-		- a=
-			- pass
-				* a=sha-rsa1(changes signature) (ams_fields_a_sha1)
-			- fail
-				* NA (ams_fields_a_na)
-				* empty (ams_fields_a_empty)
-				* unknkown algorithm(not rsa-sha1 or rsa-sha256	) (ams_fields_a_unknown)
-		- b=
-			- pass
-				* ignores whitespace (ams_fields_b_ignores_wsp)
+  - format
+    - tag=value list
+      - pass
+        * whitespace around ; (ams_format_sc_wsp)
+        * whitespace around = (ams_format_eq_wsp)     
+        * optional ";" at end of tag-list (ams_format_tags_trail_sc)
+        * unknown tags(changes signature, but isnt invalid) (ams_format_tags_unknown)
+      - fail
+        * invalid tag key (ams_format_inv_tag_key)      
+        * duplicate tag (ams_format_tags_dup)
+        * case change on tag key (ams_format_tags_key_case)
+        * case change on tag value (ams_format_tags_val_case)
+        * add whitespace (ams_format_tags_wsp)
+        * random semicolon (ams_format_tags_sc)
+  - fields
+    - i=
+      * duplicated AMS i= 1 (ams_fields_i_dup)
+    - a=
+      - pass
+        * a=sha-rsa1(changes signature) (ams_fields_a_sha1)
+      - fail
+        * NA (ams_fields_a_na)
+        * empty (ams_fields_a_empty)
+        * unknkown algorithm(not rsa-sha1 or rsa-sha256 ) (ams_fields_a_unknown)
+    - b=
+      - pass
+        * ignores whitespace (ams_fields_b_ignores_wsp)
         - cannonicalization
-        	  * header fields case insensitive (ams_fields_b_head_case)
-        		* header field lines unfolded (ams_fields_b_head_unfold)
-        		* eol whitespace stripped (ams_fields_b_eol_wsp)
-        		* inline whitespace reduced (ams_fields_b_inl_wsp)
-        		* whitespace surrounding colon stripped	(ams_fields_b_col_wsp)	
-			- fail
-				* NA (ams_fields_b_na)
-				* empty (ams_fields_b_empty)
-				* not base64 (ams_fields_b_base64)
-				- invalid value
-					* modify signature (ams_fields_b_mod_sig)
-					* modified headers (ams_fields_b_mod_headers)
-		- bh=
-			- pass
-				* ignores whitespace (ams_fields_bh_ignores_wsp)
-				- cannonicalization
+            * header fields case insensitive (ams_fields_b_head_case)
+            * header field lines unfolded (ams_fields_b_head_unfold)
+            * eol whitespace stripped (ams_fields_b_eol_wsp)
+            * inline whitespace reduced (ams_fields_b_inl_wsp)
+            * whitespace surrounding colon stripped (ams_fields_b_col_wsp)  
+      - fail
+        * NA (ams_fields_b_na)
+        * empty (ams_fields_b_empty)
+        * not base64 (ams_fields_b_base64)
+        - invalid value
+          * modify signature (ams_fields_b_mod_sig)
+          * modified headers (ams_fields_b_mod_headers)
+    - bh=
+      - pass
+        * ignores whitespace (ams_fields_bh_ignores_wsp)
+        - cannonicalization
           - body (ams bh=)
-					  - simple
-						  * base (ams_fields_bh_sim_base)
-          		* inline whitespace not reduced (ams_fields_bh_sim_inl_wsp)
-          		* ignore empty lines at end of body (ams_fields_bh_sim_end_lines)							
-						- relaxed 
-          	  * eol whitespace stripped (ams_fields_bh_rel_eol_wsp)
-          		* inline whitespace reduced (ams_fields_bh_rel_inl_wsp)
-          		* ignore empty lines at end of body (ams_fields_bh_rel_end_lines)
-          		* add CRLF at end if non existant (ams_fields_bh_rel_trail_crlf)						
-			- fail
-				* NA (ams_fields_bh_na)
-				* empty (ams_fields_bh_empty)
-				* not base64 (ams_fields_bh_base64)
-				- invalid value
-					* modify bh value (ams_fields_bh_mod_sig)
-					* modify body(non-canonically) (ams_fields_bh_mod_bod)
-		- c=
-			- fail
-				* NA (ams_fields_c_na)
-				* empty (ams_fields_c_empty)
-				- non-relaxed canonicalization
-					* simple/simple (ams_fields_c_ss)
-					* simple/relaxed (ams_fields_c_sr)
-					* relaxed/simple (ams_fields_c_rs)
-				* invalid value (ams_fields_c_invalid)
-		- d=
-			- fail
-				* NA (ams_fields_d_na)
-				* empty (ams_fields_d_empty)
-				- invalid format
-					* not valid domain name (ams_fields_d_invalid)					
-		- h=
-			- pass
-				* empty (ams_fields_h_empty)			
-				* whitespace ' : ' h= 1 (ams_fields_h_cws1)
-				* whitespace ' : ' h= 1 (ams_fields_h_cws2)
-				* h= case insensitive (ams_fields_h_case)
-				* duplicate header bottom up (ams_fields_h_dup1)
-				* non-existant header fields (ams_fields_h_non_existant)
-				*	non-existant duplicate header fields (ams_fields_h_non_existant_dup)
-				* missing hdr-name (ams_fields_h_mis_hdr)
-				* includes AMS (ams_fields_h_includes_ams)
-			- fail
-				* NA (ams_fields_h_na)
-				* invalid hdr-name (ams_fields_h_inv_hdr)
-				* duplicate header not bottom up (ams_fields_h_dup2)
-				* incorrect order (ams_fields_h_order)
-				* signing missing header is then added (ams_fields_h_empty_added)
-				* includes AS headers (ams_fields_h_includes_as)
-		- s=
-			- fail
-				* NA (ams_fields_s_na)
-				* empty (ams_fields_s_empty) BREAKS_DNS_SERVER			
-		- t=
-			- pass
-				* NA (ams_fields_t_na)
-			- fail
-				* empty (ams_fields_t_empty)
-				* invalid format (ams_fields_t_invalid)
-		-(V2?) dkim stuff
-			* q= != dns/txt
-			- x=
-				* invalid format
-				* less than t
-			-? z= (diagnostic field, who cares for now) (dkim-quoted-printable)
-			- l=
-				* too long
-				*? implemented correctly?
+            - simple
+              * base (ams_fields_bh_sim_base)
+              * inline whitespace not reduced (ams_fields_bh_sim_inl_wsp)
+              * ignore empty lines at end of body (ams_fields_bh_sim_end_lines)             
+            - relaxed 
+              * eol whitespace stripped (ams_fields_bh_rel_eol_wsp)
+              * inline whitespace reduced (ams_fields_bh_rel_inl_wsp)
+              * ignore empty lines at end of body (ams_fields_bh_rel_end_lines)
+              * add CRLF at end if non existant (ams_fields_bh_rel_trail_crlf)            
+      - fail
+        * NA (ams_fields_bh_na)
+        * empty (ams_fields_bh_empty)
+        * not base64 (ams_fields_bh_base64)
+        - invalid value
+          * modify bh value (ams_fields_bh_mod_sig)
+          * modify body(non-canonically) (ams_fields_bh_mod_bod)
+    - c=
+      - fail
+        * NA (ams_fields_c_na)
+        * empty (ams_fields_c_empty)
+        - non-relaxed canonicalization
+          * simple/simple (ams_fields_c_ss)
+          * simple/relaxed (ams_fields_c_sr)
+          * relaxed/simple (ams_fields_c_rs)
+        * invalid value (ams_fields_c_invalid)
+    - d=
+      - fail
+        * NA (ams_fields_d_na)
+        * empty (ams_fields_d_empty)
+        - invalid format
+          * not valid domain name (ams_fields_d_invalid)          
+    - h=
+      - pass
+        * empty (ams_fields_h_empty)      
+        * whitespace ' : ' h= 1 (ams_fields_h_cws1)
+        * whitespace ' : ' h= 1 (ams_fields_h_cws2)
+        * h= case insensitive (ams_fields_h_case)
+        * duplicate header bottom up (ams_fields_h_dup1)
+        * non-existant header fields (ams_fields_h_non_existant)
+        * non-existant duplicate header fields (ams_fields_h_non_existant_dup)
+        * missing hdr-name (ams_fields_h_mis_hdr)
+        * includes AMS (ams_fields_h_includes_ams)
+      - fail
+        * NA (ams_fields_h_na)
+        * invalid hdr-name (ams_fields_h_inv_hdr)
+        * duplicate header not bottom up (ams_fields_h_dup2)
+        * incorrect order (ams_fields_h_order)
+        * signing missing header is then added (ams_fields_h_empty_added)
+        * includes AS headers (ams_fields_h_includes_as)
+    - s=
+      - fail
+        * NA (ams_fields_s_na)
+        * empty (ams_fields_s_empty) BREAKS_DNS_SERVER      
+    - t=
+      - pass
+        * NA (ams_fields_t_na)
+      - fail
+        * empty (ams_fields_t_empty)
+        * invalid format (ams_fields_t_invalid)
+    -(V2?) dkim stuff
+      * q= != dns/txt
+      - x=
+        * invalid format
+        * less than t
+      -? z= (diagnostic field, who cares for now) (dkim-quoted-printable)
+      - l=
+        * too long
+        *? implemented correctly?
 
 --- Chain Validation
-	- cv=None
-		* empty (cv_empty)
-		* no header (cv_no_header)
-		* no body (cv_no_body)
-		* no ARC-Sets 1 (cv_base1)
-		* no ARC-Sets 2 (cv_base2)
-	- cv=Pass
-		- i=1
-			* pass 1 (cv_pass_i1_1)
-			* pass 2 (cv_pass_i1_2)
-		- i=2
-			* pass 1 (cv_pass_i2_1)
-			* pass 2 (cv_pass_i2_2)
-			* AMS(1) invalid (cv_pass_i2_1_ams1_invalid)
-		- i=3
-			* pass 1 (cv_pass_i3_1)
-		- i=4
-			* pass 1 (cv_pass_i4_1)
-		- i=5
-			* pass 1 (cv_pass_i5_1)
-	- cv=Fail
-		- i=1
-			- AMS(1)
-				* NA (cv_fail_i1_ams_na)
-				* invalid (cv_fail_i1_ams_invalid)
-			- AS(1)
-				* NA (cv_fail_i1_as_na)
-				* cv = Pass (cv_fail_i1_as_pass)
-				* cv = Fail (cv_fail_i1_as_fail)
-				* invalid (cv_fail_i1_as_invalid)
-		- i=2
-			- AMS(2)
-				* NA (cv_fail_i2_ams_na)
-				* invalid (cv_fail_i2_ams_invalid)
-			- AS(1)
-				* NA (cv_fail_i2_as1_na)
-				* invalid (cv_fail_i2_as1_invalid)
-				* cv1 = Pass (cv_fail_i2_as1_pass)
-				* cv1 = Fail (cv_fail_i2_as1_fail)
-			- AS(2)
-				* NA (cv_fail_i2_as2_na)
-				* invalid (cv_fail_i2_as2_invalid)
-				* cv2 = None (cv_fail_i2_as2_none)
-				* cv2 = Fail (cv_fail_i2_as2_fail)
+  - cv=None
+    * empty (cv_empty)
+    * no header (cv_no_header)
+    * no body (cv_no_body)
+    * no ARC-Sets 1 (cv_base1)
+    * no ARC-Sets 2 (cv_base2)
+  - cv=Pass
+    - i=1
+      * pass 1 (cv_pass_i1_1)
+      * pass 2 (cv_pass_i1_2)
+    - i=2
+      * pass 1 (cv_pass_i2_1)
+      * pass 2 (cv_pass_i2_2)
+      * AMS(1) invalid (cv_pass_i2_1_ams1_invalid)
+    - i=3
+      * pass 1 (cv_pass_i3_1)
+    - i=4
+      * pass 1 (cv_pass_i4_1)
+    - i=5
+      * pass 1 (cv_pass_i5_1)
+  - cv=Fail
+    - i=1
+      - AMS(1)
+        * NA (cv_fail_i1_ams_na)
+        * invalid (cv_fail_i1_ams_invalid)
+      - AS(1)
+        * NA (cv_fail_i1_as_na)
+        * cv = Pass (cv_fail_i1_as_pass)
+        * cv = Fail (cv_fail_i1_as_fail)
+        * invalid (cv_fail_i1_as_invalid)
+    - i=2
+      - AMS(2)
+        * NA (cv_fail_i2_ams_na)
+        * invalid (cv_fail_i2_ams_invalid)
+      - AS(1)
+        * NA (cv_fail_i2_as1_na)
+        * invalid (cv_fail_i2_as1_invalid)
+        * cv1 = Pass (cv_fail_i2_as1_pass)
+        * cv1 = Fail (cv_fail_i2_as1_fail)
+      - AS(2)
+        * NA (cv_fail_i2_as2_na)
+        * invalid (cv_fail_i2_as2_invalid)
+        * cv2 = None (cv_fail_i2_as2_none)
+        * cv2 = Fail (cv_fail_i2_as2_fail)
 
 --- Arc Authentication Results
   * missing (aar_missing)
-	* missing i= (aar_i_missing)
-	* wrong i= (aar_i_wrong)
-	* i= not prefixed (aar_i_not_prefix)
-	* i= not prefixed (aar_i_no_semi)	
-	* missing (i=2) (aar2_missing)
+  * missing i= (aar_i_missing)
+  * wrong i= (aar_i_wrong)
+  * i= not prefixed (aar_i_not_prefix)
+  * i= not prefixed (aar_i_no_semi) 
+  * missing (i=2) (aar2_missing)
 
 --- Public Key Tests
-	- cant get key or is invalid
-		* no key found (public_key_na)
-		* not vaild dkim key (public_key_invalid)
+  - cant get key or is invalid
+    * no key found (public_key_na)
+    * not vaild dkim key (public_key_invalid)
 
 --- System
-	-? permuted arc headers (header_order1)
-	-? permuted arc headers (header_order2)	
-	-? entirely invalid emails
+  -? permuted arc headers (header_order1)
+  -? permuted arc headers (header_order2) 
+  -? entirely invalid emails
 
 
 SIGNATURE TESTS:
-  - message body
-	  * eol whitespace stripped (message_body_eol_wsp)
+  - body canonicalization
+    * eol whitespace stripped (message_body_eol_wsp)
     * inline whitespace reduced (message_body_inl_wsp)
     * ignore empty lines at end of body (message_body_end_lines)
     * add CRLF at end if non existant (message_body_trail_crlf
   - non-seal headers
-		* header fields names case insensitive (headers_field_name_case)
+    * header fields names case insensitive (headers_field_name_case)
     * header field lines unfolded (headers_field_unfold)
     * eol whitespace stripped (headers_eol_wsp)
     * inline whitespace reduced (headers_inl_wsp)
     * whitespace surrounding colon stripped (headers_col_wsp)
-  - sig_headers list
-		* AMS header order (header_order)
-		* duplicate headers ord1 (header_dup_ord1)
-		* duplicate headers ord2 (header_dup_ord2)
-		* duplicate sig headers supplied once (sig_header_dup_once)						
-		* duplicate sig headers supplied twice (sig_header_dup_twice)
-		* non-existant headers (header_non)	
   - seal headers
-	  - valid
-		  - i=0 (i0_base)		
-		  - i=1 (i1_base)
-			- i=2 (i2_base)
-		- invalid
-		  - i=1 (i1_base_fail)
-			- i=2 (i2_base_fail)
-	  -? malformed ( THESE TESTS ARE LIKELY INCORRECT, THE SPEC NEEDS REVISION )
-		  - duplicate i=
-			  * fully duplicate set (duplicate_arc_set)
-			  * fully duplicate instance (duplicate_as)
-				* identical i, sorted by t (duplicate_as_i1)
-				* identical i, sorted by t (duplicate_as_i2)				
-				* identical t, sorted alphabetically (duplicate_as_i_t1)
-				* identical t, sorted alphabetically (duplicate_as_i_t2)				
-			- incomplete arc set
-			  * missing as (missing_as)
-				* missing ams (missing_ams)
-				* missing aar (missing_aar)
-			- invalid i=
-				* ignore i NA  (invalid_i_na)				
-				* ignore i=  (invalid_i_missing)			
-			  * ignore i=0 (invalid_i_range)
-				* ignore i=a (invalid_i_invalid)
+    - valid
+      - i=0 (i0_base)   
+      - i=1 (i1_base)
+      - i=2 (i2_base)
+    - invalid
+      - i=1 (i1_base_fail)
+      - i=2 (i2_base_fail)
+
+
+    # These tests are currently on holed unti a better way to approach them is found
+    - sig_headers list
+      * AMS header order (header_order)
+      * duplicate headers ord1 (header_dup_ord1)
+      * duplicate headers ord2 (header_dup_ord2)
+      * duplicate sig headers supplied once (sig_header_dup_once)           
+      * duplicate sig headers supplied twice (sig_header_dup_twice)
+      * non-existant headers (header_non) 
+
+
+    -? malformed ( THESE TESTS ARE NOT YET IMPLEMENTED, THE SPEC NEEDS REVISION )
+      - duplicate i=
+        - fully duplicate set (duplicate_arc_set)
+        - fully duplicate instance (duplicate_as)
+        - identical i, sorted by t (duplicate_as_i1)
+        - identical i, sorted by t (duplicate_as_i2)        
+        - identical t, sorted alphabetically (duplicate_as_i_t1)
+        - identical t, sorted alphabetically (duplicate_as_i_t2)        
+      - incomplete arc set
+        - missing as (missing_as)
+        - missing ams (missing_ams)
+        - missing aar (missing_aar)
+      - invalid i=
+        - ignore i NA  (invalid_i_na)       
+        - ignore i=  (invalid_i_missing)      
+        - ignore i=0 (invalid_i_range)
+        - ignore i=a (invalid_i_invalid)
 
 
 
