@@ -260,6 +260,7 @@ VALIDATION TESTS:
   * missing (i=2) (aar2_missing)
 
 --- Public Key Tests
+  * differing AMS & AS keys (ams_as_diff_s_d)
   - cant get key or is invalid
     * no key found (public_key_na)
     * not vaild dkim key (public_key_invalid)
