@@ -36,7 +36,10 @@ comment: >-
   This is a comment
 ```
 
-## Header Format Standardization
+## Signing Cannonicalization
+All tests in the signing test suite are generated using the relaxed/relaxed cannonicalization rules.
+
+## Signing Header Format Standardization
 
 There is an explicit ambiguity & indeterminism supported by the ARC & DKIM specs with respect to the format of generated signature headers.  Implementors are free to add additional tags, whitespace, and to arbitrarily order tags, etc.  This degree of variability makes it impossible to predict message signatures from inputs.  Therefore, for the purposes of the signing section of this test suite, we assume the signing implementer generates a standardized header format for both ARC-Message-Signature, and ARC-Seal header fields:
 

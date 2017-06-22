@@ -156,10 +156,11 @@ VALIDATION TESTS:
       - fail
         * NA (ams_fields_c_na)
         * empty (ams_fields_c_empty)
-        - non-relaxed canonicalization
-          * simple/simple (ams_fields_c_ss)
-          * simple/relaxed (ams_fields_c_sr)
+        - various canonicalizations respected
+          * relaxed/relaxed (ams_fields_c_rr)                    
           * relaxed/simple (ams_fields_c_rs)
+          * simple/relaxed (ams_fields_c_sr)          
+          * simple/simple (ams_fields_c_ss)
         * invalid value (ams_fields_c_invalid)
     - d=
       - fail
