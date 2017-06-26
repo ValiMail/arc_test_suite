@@ -3318,8 +3318,7 @@ tests:
           htsrMDLw5TJeZdiCqgXhQZmSEzR+KEdnu2oidezrK/hUzYPlKdO59EQgGIiDAmIRoKZ6+rGV
           fUCltnyjA07a9KpIpeXRKT3WDCE6A=; cv=none; d=example.org; i=1; s=dummy;
           t=12345
-      ARC-Message-Signature: a=rsa-sha256;
-          b=RWHWmB6euT01CXN0PJKCrmmoPPGc+pxxurfyJBjnNzkTizZKD7XwHLqTuNPaRG7PULU6ffq8FQ7IivdffwqXNj4L3ttpKNIjfsndMFvn5lpKZGfvJZfjTmbTJMhF4CCJZZm7l1xy7LbYMaMb12WY47vXOe9RNjW7jQyw8iqctcA=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=simple/relaxed; d=example.org; h=From:To:Date:Subject:MIME-Version:ARC-Authentication-Results; i=1; s=dummy; t=12345      
+      ARC-Message-Signature: a=rsa-sha256; b=RWHWmB6euT01CXN0PJKCrmmoPPGc+pxxurfyJBjnNzkTizZKD7XwHLqTuNPaRG7PULU6ffq8FQ7IivdffwqXNj4L3ttpKNIjfsndMFvn5lpKZGfvJZfjTmbTJMhF4CCJZZm7l1xy7LbYMaMb12WY47vXOe9RNjW7jQyw8iqctcA=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=simple/relaxed; d=example.org; h=From:To:Date:Subject:MIME-Version:ARC-Authentication-Results; i=1; s=dummy; t=12345
       ARC-Authentication-Results: i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass
       Received: from segv.d1.example (segv.d1.example [72.52.75.15])
           by lists.example.org (8.14.5/8.14.5) with ESMTP id t0EKaNU9010123
@@ -3351,8 +3350,7 @@ tests:
           3hvKRsVy1fMeIus2RVBg88zwfjyRMsJBC+zKV8oONpIcxriN8imZcaeWdcfsghbAFBM3viCE
           MdvebSvInMfz0vZsD1DJBYTjPel8w=; cv=none; d=example.org; i=1; s=dummy;
           t=12345
-      ARC-Message-Signature: a=rsa-sha256;
-          b=fv7KIaPfZRTQynzpQ7Gkg3thdZn78iGc5L1hTQoWrY1nSaE3pqQTHsGDW7+FRquewwFoakGLSERxBnC67Sdvw9Exv+/CEs/spqRrDjNygkCf/BIZcURb2nXXFHqPy31X6r2bufWKj6Lbo+5MCyaS2tWkV+KoZhUpolYSo0CoGfk=; bh=hhFbTjokraRYc/Af+8v4zyKm/9ApHGkBSLO129NtPbo=; c=simple/simple; d=example.org; h=From:To:Date:Subject:MIME-Version:ARC-Authentication-Results; i=1; s=dummy; t=12345
+      ARC-Message-Signature: a=rsa-sha256; b=fv7KIaPfZRTQynzpQ7Gkg3thdZn78iGc5L1hTQoWrY1nSaE3pqQTHsGDW7+FRquewwFoakGLSERxBnC67Sdvw9Exv+/CEs/spqRrDjNygkCf/BIZcURb2nXXFHqPy31X6r2bufWKj6Lbo+5MCyaS2tWkV+KoZhUpolYSo0CoGfk=; bh=hhFbTjokraRYc/Af+8v4zyKm/9ApHGkBSLO129NtPbo=; c=simple/simple; d=example.org; h=From:To:Date:Subject:MIME-Version:ARC-Authentication-Results; i=1; s=dummy; t=12345
       ARC-Authentication-Results: i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass
       Received: from segv.d1.example (segv.d1.example [72.52.75.15])
           by lists.example.org (8.14.5/8.14.5) with ESMTP id t0EKaNU9010123
