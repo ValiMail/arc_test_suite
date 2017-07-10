@@ -56,7 +56,7 @@ def sign_test(self, script, test_case, port, verbose=False):
                                  test_case.sel, test_case.domain, test_case.test["sig-headers"], str(test_case.test["t"]), str(verbose)],
                                 stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
-
+        
     for f in os.listdir('tmp/'):
         os.remove('tmp/' + f)
 
@@ -69,24 +69,29 @@ def sign_test(self, script, test_case, port, verbose=False):
         print("ARC-Authentication-Results: %s" % test_case.test["AAR"])
 
     as_valid = ams_valid = aar_valid = False
-    for sig in out.split("\n\n"):
-        sig = "".join(sig.split())
-        (k, v) = sig.split(':', 1)
-        sig_res = set(v.split(';'))
-        if(k.lower() == "arc-authentication-results"):
-            s1 = "".join(test_case.test["AAR"].split())
-            s1 = set(s1.split(';'))
-            aar_valid = (sig_res <= s1)
-        elif(k.lower() == "arc-message-signature"):
-            s1 = "".join(test_case.test["AMS"].split())
-            s1 = set(s1.split(';'))
-            ams_valid = (sig_res <= s1)
-        elif(k.lower() == "arc-seal"):
-            s1 = "".join(test_case.test["AS"].split())
-            s1 = set(s1.split(';'))
-            as_valid = (sig_res <= s1)
-        else:
-            continue
+    if out == "":
+        aar_valid = test_case.test["AAR"] == ""
+        ams_valid = test_case.test["AMS"] == ""
+        as_valid  = test_case.test["AS"]  == ""        
+    else:
+        for sig in out.split("\n\n"):
+            sig = "".join(sig.split())
+            (k, v) = sig.split(':', 1)
+            sig_res = set(v.split(';'))                    
+            if(k.lower() == "arc-authentication-results"):
+                s1 = "".join(test_case.test["AAR"].split())
+                s1 = set(s1.split(';'))
+                aar_valid = (sig_res <= s1)
+            elif(k.lower() == "arc-message-signature"):
+                s1 = "".join(test_case.test["AMS"].split())
+                s1 = set(s1.split(';'))
+                ams_valid = (sig_res <= s1)
+            elif(k.lower() == "arc-seal"):
+                s1 = "".join(test_case.test["AS"].split())
+                s1 = set(s1.split(';'))
+                as_valid = (sig_res <= s1)
+            else:
+                continue
         
     if verbose:
         print("RESULT:")

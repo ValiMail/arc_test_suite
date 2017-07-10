@@ -3,6 +3,7 @@
 import sys
 import logging
 from dnslib.server import DNSRecord
+from authheaders import authenticate_message
 import dkim
 
 if len(sys.argv) != 10:
@@ -27,16 +28,9 @@ with open(sys.argv[1],'rb') as mf, open(sys.argv[3],'rb') as pkf:
     message    = mf.read()
     privatekey = pkf.read()
 
-    # temporary hack
-    srv_id = sys.argv[4]
-    parts = message.split(b'MIME')
-    message = b'MIME' + parts[1]
-    
-    authres = parts[0].replace(b'Authentication-Results: ', b'').replace(b"\n", b"\r\n")
-
-    cv, results, comment = dkim.arc_verify(message, dnsfunc=arctestdns)
+    srv_id = sys.argv[4]    
     sig = dkim.arc_sign(message, sys.argv[5].encode(), sys.argv[6].encode(),
-                        privatekey, authres, cv, include_headers=sys.argv[7].encode().split(b':'),
+                        privatekey, srv_id, include_headers=sys.argv[7].encode().split(b':'),
                         timestamp=sys.argv[8], standardize=True)
     
 sys.stdout.write(b"\n".join(sig).decode('utf-8'))

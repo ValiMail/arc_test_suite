@@ -34,7 +34,7 @@ h = b":".join([x[0] for x in sig_head])
 
 as_tmp = b'''    AS:          |
       a=rsa-sha256;
-      b=%b; cv=fail; d=example.org; i=3; s=dummy;
+      b=%b; cv=pass; d=example.org; i=3; s=dummy;
       t=12347'''
 
 ams_tmp = b'''    AMS:         |
@@ -50,18 +50,18 @@ This is a test message.
 --J.
 '''.replace(b'\n', b'\r\n')
 
-auth_res1 = b'i=1; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
-auth_res2 = b'i=2; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
-auth_res3 = b'i=3; lists.example.org; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
+auth_res1 = b'i=1; lists.example.org; arc=none; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
+auth_res2 = b'i=2; lists.example.org; arc=pass; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
+auth_res3 = b'i=3; lists.example.org; arc=pass; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass'
 
 d = b'example.org'
 s = b'dummy'
 t = b'12347'
 i = 3
 
-as1 = b'''a=rsa-sha256; b=fOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ 7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy; t=12345'''
+as1 = b'''a=rsa-sha256; b=eEDEWXmmpxnX0f3j86ZGcurPDtlkx6oV3UzSv6ltqzJ4pTiScRA8F5nL+bd9anV5vXVnOC WYT1oCpveHVdtpSr52tWEO4RSx+eCUuFsvVHRyq7yM8Ex8v2xhaLWqNWvb7NH38LunxZfjV4 TuqD0pt+if/XL2X+ctewoCSAVDhT8=; cv=none; d=example.org; i=1; s=dummy; t=12345'''
 
-ams1 = b'''a=rsa-sha256; b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm 9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed; d=example.org; h=mime-version:date:from:to:subject; i=1; s=dummy; t=12345'''
+ams1 = b'''a=rsa-sha256; b=XWeK9DxQ8MUm+Me5GLZ5lQ3L49RdoFv7m7VlrAkKb3/C7jjw33TrTY0KYI5lkowvEGnAtm 5lAqLz67FxA/VrJc2JiYFQR/mBoJLLz/hh9y77byYmSO9tLfIDe2A83+6QsXHO3K6PxTz7+v rCB4wHD9GADeUKVfHzmpZhFuYOa88=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed; d=example.org; h=mime-version:date:from:to:subject; i=1; s=dummy; t=12345'''
 
 as2 = b'''a=rsa-sha256; b=rOfjske1NJtykYwgODc8BxJOW5Df1E2LLPasFXs0x00QIXX7SDUsEzD4u2IdtN0kNNJBPS IcfjOy4TaHEPkULPubiJG4fEx87iyAMCiVRraaMXabqxgg4IHpieNdl4tNMO1GkGHwG760+5 DmvXc4BINugnX66Z+sL0y0z3THR3A=; cv=pass; d=example.org; i=2; s=dummy; t=12346'''        
 ams2 = b'''a=rsa-sha256; b=UaNJhLFAa56Gpc+wKk0SL2Jq/LJgT9CYSZl59wcGYkpG0D5bjhDdj3qers6hD+3BpljNgn mFxq8zWssoPon3ydvTSCSjVwPRNgLol9zBP+FZo/QGQQbj74ZcGv04jOVe8TKDTFSaVe41L7 mH16ZdoLgRdSa2Ys+p9f0+DVFYTO4=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed; d=example.org; h=mime-version:date:from:to:subject; i=2; s=dummy; t=12346'''
@@ -79,7 +79,7 @@ arsh = lambda b, bh: [
     (b'arc-seal', as2),
     (b'arc-authentication-results', auth_res3),
     (b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh).replace(b'b=', b'b=' + b)),
-    (b'arc-seal', b'a=rsa-sha256; b=; cv=fail; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
+    (b'arc-seal', b'a=rsa-sha256; b=; cv=pass; d=%s; i=%i; s=%s; t=%s' % (d, i, s, t))
 ]
 
 sig_gen(public, private, body, amsh, arsh, fold=False, verbose=True, as_tmp=as_tmp, ams_tmp=ams_tmp)

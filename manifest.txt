@@ -7,6 +7,7 @@ V2:
   - dkim tags (z, x, l, q, ...)
   - qp-section, dkim-quoted-printable format
   - international domains & selector not an A-label - Section 2.3 of [RFC5890]
+  - > 50 hops???
 
 HOW?
 - dkim key size
@@ -16,6 +17,13 @@ HOW?
 VALIDATION TESTS:
 
 --- Arc Seal
+  - structure
+    * as_struct_i_na
+    * as_struct_i_empty
+    * as_struct_i_zero
+    * as_struct_i_invalid
+    * as_struct_dup
+    * as_struct_missing
   - format
     - tag=value list
       - pass
@@ -35,8 +43,6 @@ VALIDATION TESTS:
       * duplicated AS i= 1 (as_fields_i_dup)
       * duplicated AS i= 2 (as_fields_i_dup2)
       * missing AS i= (as_fields_i_missing)
-      ? missing AS i=0 (as_fields_i_malformed1)
-      ? missing AS i=a (as_fields_i_malformed2)                 
     - a=
       - pass
         * a=sha-rsa1(changes signature) (as_fields_a_sha1)
@@ -48,7 +54,6 @@ VALIDATION TESTS:
       - pass
         * ignores whitespace (as_fields_b_ignores_wsp)
         - key size
-          * signed with 512 key (as_fields_b_512)
           * signed with 1024 key (as_fields_b_1024)
           * signed with 2048 key (as_fields_b_2048)
         - cannonicalization
@@ -56,11 +61,12 @@ VALIDATION TESTS:
             * header field lines unfolded (as_fields_b_head_unfold)
             * eol whitespace stripped (as_fields_b_eol_wsp)
             * inline whitespace reduced (as_fields_b_inl_wsp)
-            * whitespace surrounding colon stripped (as_fields_b_col_wsp)         
+            * whitespace surrounding colon stripped (as_fields_b_col_wsp)
       - fail
         * NA (as_fields_b_na)
         * empty (as_fields_b_empty)
         * not base64 (as_fields_b_base64)
+        * signed with 512 key (as_fields_b_512)        
         - invalid value
           * modify signature (as_fields_b_mod_sig)
           - modified headers
@@ -78,7 +84,7 @@ VALIDATION TESTS:
         * NA (as_fields_d_na)
         * empty (as_fields_d_empty)
         - invalid format
-          * not valid domain name (as_fields_d_invalid)         
+          * not valid domain name (as_fields_d_invalid)
     - s=
       - fail
         * NA (as_fields_s_na)
@@ -91,23 +97,28 @@ VALIDATION TESTS:
         * invalid format (as_fields_t_invalid)
 
 --- Arc Message Signature
+  - structure
+    * ams_struct_i_na
+    * ams_struct_i_empty
+    * ams_struct_i_zero
+    * ams_struct_i_invalid    
+    * ams_struct_dup
+    * ams_struct_missing
   - format
     - tag=value list
       - pass
         * whitespace around ; (ams_format_sc_wsp)
-        * whitespace around = (ams_format_eq_wsp)     
+        * whitespace around = (ams_format_eq_wsp)
         * optional ";" at end of tag-list (ams_format_tags_trail_sc)
         * unknown tags(changes signature, but isnt invalid) (ams_format_tags_unknown)
       - fail
-        * invalid tag key (ams_format_inv_tag_key)      
+        * invalid tag key (ams_format_inv_tag_key)
         * duplicate tag (ams_format_tags_dup)
         * case change on tag key (ams_format_tags_key_case)
         * case change on tag value (ams_format_tags_val_case)
         * add whitespace (ams_format_tags_wsp)
         * random semicolon (ams_format_tags_sc)
   - fields
-    - i=
-      * duplicated AMS i= 1 (ams_fields_i_dup)
     - a=
       - pass
         * a=sha-rsa1(changes signature) (ams_fields_a_sha1)
@@ -123,7 +134,7 @@ VALIDATION TESTS:
             * header field lines unfolded (ams_fields_b_head_unfold)
             * eol whitespace stripped (ams_fields_b_eol_wsp)
             * inline whitespace reduced (ams_fields_b_inl_wsp)
-            * whitespace surrounding colon stripped (ams_fields_b_col_wsp)  
+            * whitespace surrounding colon stripped (ams_fields_b_col_wsp)
       - fail
         * NA (ams_fields_b_na)
         * empty (ams_fields_b_empty)
@@ -139,12 +150,12 @@ VALIDATION TESTS:
             - simple
               * base (ams_fields_bh_sim_base)
               * inline whitespace not reduced (ams_fields_bh_sim_inl_wsp)
-              * ignore empty lines at end of body (ams_fields_bh_sim_end_lines)             
-            - relaxed 
+              * ignore empty lines at end of body (ams_fields_bh_sim_end_lines)
+            - relaxed
               * eol whitespace stripped (ams_fields_bh_rel_eol_wsp)
               * inline whitespace reduced (ams_fields_bh_rel_inl_wsp)
               * ignore empty lines at end of body (ams_fields_bh_rel_end_lines)
-              * add CRLF at end if non existant (ams_fields_bh_rel_trail_crlf)            
+              * add CRLF at end if non existant (ams_fields_bh_rel_trail_crlf)
       - fail
         * NA (ams_fields_bh_na)
         * empty (ams_fields_bh_empty)
@@ -157,9 +168,9 @@ VALIDATION TESTS:
         * NA (ams_fields_c_na)
         * empty (ams_fields_c_empty)
         - various canonicalizations respected
-          * relaxed/relaxed (ams_fields_c_rr)                    
+          * relaxed/relaxed (ams_fields_c_rr)
           * relaxed/simple (ams_fields_c_rs)
-          * simple/relaxed (ams_fields_c_sr)          
+          * simple/relaxed (ams_fields_c_sr)
           * simple/simple (ams_fields_c_ss)
         * invalid value (ams_fields_c_invalid)
     - d=
@@ -167,10 +178,10 @@ VALIDATION TESTS:
         * NA (ams_fields_d_na)
         * empty (ams_fields_d_empty)
         - invalid format
-          * not valid domain name (ams_fields_d_invalid)          
+          * not valid domain name (ams_fields_d_invalid)
     - h=
       - pass
-        * empty (ams_fields_h_empty)      
+        * empty (ams_fields_h_empty)
         * whitespace ' : ' h= 1 (ams_fields_h_cws1)
         * whitespace ' : ' h= 1 (ams_fields_h_cws2)
         * h= case insensitive (ams_fields_h_case)
@@ -189,7 +200,7 @@ VALIDATION TESTS:
     - s=
       - fail
         * NA (ams_fields_s_na)
-        * empty (ams_fields_s_empty) BREAKS_DNS_SERVER      
+        * empty (ams_fields_s_empty) BREAKS_DNS_SERVER
     - t=
       - pass
         * NA (ams_fields_t_na)
@@ -253,11 +264,18 @@ VALIDATION TESTS:
         * cv2 = Fail (cv_fail_i2_as2_fail)
 
 --- Arc Authentication Results
+  - structure  
+    * aar_struct_i_na
+    * aar_struct_i_empty
+    * aar_struct_i_zero    
+    * aat_struct_i_invalid    
+    * aar_struct_dup
+    * aar_struct_missing
   * missing (aar_missing)
   * missing i= (aar_i_missing)
   * wrong i= (aar_i_wrong)
   * i= not prefixed (aar_i_not_prefix)
-  * i= not prefixed (aar_i_no_semi) 
+  * i= not prefixed (aar_i_no_semi)
   * missing (i=2) (aar2_missing)
 
 --- Public Key Tests
@@ -268,7 +286,7 @@ VALIDATION TESTS:
 
 --- System
   -? permuted arc headers (header_order1)
-  -? permuted arc headers (header_order2) 
+  -? permuted arc headers (header_order2)
   -? entirely invalid emails
 
 
@@ -286,45 +304,22 @@ SIGNATURE TESTS:
     * whitespace surrounding colon stripped (headers_col_wsp)
   - seal headers
     - valid
-      - i=0 (i0_base)   
-      - i=1 (i1_base)
-      - i=2 (i2_base)
+      * i=0 (i0_base)
+      * i=1 (i1_base)
+      * i=2 (i2_base)
     - invalid
-      - i=1 (i1_base_fail)
-      - i=2 (i2_base_fail)
+      * i=1 (i1_base_fail)
+      * i=2 (i2_base_fail)
+      * no_additional_sig
+   - authentication results
+     - merged by srv_id (ar_merged)
 
 
-    # These tests are currently on holed unti a better way to approach them is found
+    # These tests are currently on hold unti a better way to approach them is found
     - sig_headers list
-      * AMS header order (header_order)
-      * duplicate headers ord1 (header_dup_ord1)
-      * duplicate headers ord2 (header_dup_ord2)
-      * duplicate sig headers supplied once (sig_header_dup_once)           
-      * duplicate sig headers supplied twice (sig_header_dup_twice)
-      * non-existant headers (header_non) 
-
-
-    -? malformed ( THESE TESTS ARE NOT YET IMPLEMENTED, THE SPEC NEEDS REVISION )
-      - duplicate i=
-        - fully duplicate set (duplicate_arc_set)
-        - fully duplicate instance (duplicate_as)
-        - identical i, sorted by t (duplicate_as_i1)
-        - identical i, sorted by t (duplicate_as_i2)        
-        - identical t, sorted alphabetically (duplicate_as_i_t1)
-        - identical t, sorted alphabetically (duplicate_as_i_t2)        
-      - incomplete arc set
-        - missing as (missing_as)
-        - missing ams (missing_ams)
-        - missing aar (missing_aar)
-      - invalid i=
-        - ignore i NA  (invalid_i_na)       
-        - ignore i=  (invalid_i_missing)      
-        - ignore i=0 (invalid_i_range)
-        - ignore i=a (invalid_i_invalid)
-
-
-
-
-
-
-
+      - AMS header order (header_order)
+      - duplicate headers ord1 (header_dup_ord1)
+      - duplicate headers ord2 (header_dup_ord2)
+      - duplicate sig headers supplied once (sig_header_dup_once)
+      - duplicate sig headers supplied twice (sig_header_dup_twice)
+      - non-existant headers (header_non)

@@ -26,4 +26,7 @@ if(sys.argv[3].lower() == 'true'):
 with open(sys.argv[1],'rb') as mf:
     cv, results, comment = dkim.arc_verify(mf.read(), dnsfunc=arctestdns)
 
+if cv == None:
+    cv = b''
+    
 sys.stdout.write(cv.decode("utf-8"))

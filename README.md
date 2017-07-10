@@ -36,7 +36,9 @@ comment: >-
   This is a comment
 ```
 
-## Signing Cannonicalization
+## Signing Suite Assumptions
+An accurate chain validation status for the messages in the test suite has been stamped into the most recent Authentication-Results header.  Implementations are free to use this or not, although it is encouraged that the do so.  It is also assumed that signing implementations do not add additional Authentication-Results header fields, as this would be propagated into the AAR header & thus invalidate signatures.
+
 All tests in the signing test suite are generated using the relaxed/relaxed cannonicalization rules.
 
 ## Signing Header Format Standardization
