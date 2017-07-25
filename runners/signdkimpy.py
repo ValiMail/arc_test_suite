@@ -30,7 +30,7 @@ with open(sys.argv[1],'rb') as mf, open(sys.argv[3],'rb') as pkf:
 
     srv_id = sys.argv[4]    
     sig = dkim.arc_sign(message, sys.argv[5].encode(), sys.argv[6].encode(),
-                        privatekey, srv_id, include_headers=sys.argv[7].encode().split(b':'),
+                        privatekey, srv_id.encode(), include_headers=sys.argv[7].encode().split(b':'),
                         timestamp=sys.argv[8], standardize=True)
     
 sys.stdout.write(b"\n".join(sig).decode('utf-8'))

@@ -37,9 +37,33 @@ comment: >-
 ```
 
 ## Signing Suite Assumptions
-An accurate chain validation status for the messages in the test suite has been stamped into the most recent Authentication-Results header.  Implementations are free to use this or not, although it is encouraged that the do so.  It is also assumed that signing implementations do not add additional Authentication-Results header fields, as this would be propagated into the AAR header & thus invalidate signatures.
+An accurate chain validation status for the messages in the test suite has been stamped into the most recent Authentication-Results header.  Implementations are free to use this or not, although it is encouraged that they do so.  It is also assumed that signing implementations do not add additional Authentication-Results header fields, as this would be propagated into the AAR header & thus invalidate signatures.
 
 All tests in the signing test suite are generated using the relaxed/relaxed cannonicalization rules.
+
+## AR Consolidation
+When generating AAR'sm implementations are expected to consolidate AR headers with the ADMD's authserv_id. How this is done is implementation specific. In order to test this feature, we asume a standard way of accomplishing this.
+
+All AR's with the give authserv-id are consolidated, and kept in the order in which they appear in the message.  Each complete result is extracted from the AR headers, and kept in order.  These are added to the AAR, in order, one per line, beggining with the line containing the authserv_id.  For example:
+
+```
+Authentication-Results: lists.example.org; arc=none;
+  spf=pass smtp.mfrom=jqd@d1.example
+Authentication-Results: lists.example.org; dkim=pass (1024-bit key) header.i=@d1.example
+Authentication-Results: lists.example.org; dmarc=pass
+Authentication-Results: nobody.example.org; something=ignored      
+MIME-Version: 1.0
+Return-Path: <jqd@d1.example.org>
+....
+```
+Would yield the following AAR, assuming this to be the first arc hop:
+
+```
+ARC-Authentication-Results: i=1; lists.example.org; arc=none;
+  spf=pass smtp.mfrom=jqd@d1.example;
+  dkim=pass (1024-bit key) header.i=@d1.example;
+  dmarc=pass                
+```
 
 ## Signing Header Format Standardization
 

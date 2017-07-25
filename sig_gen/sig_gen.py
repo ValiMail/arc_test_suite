@@ -67,7 +67,7 @@ def sig_gen(public, private, body, amsh, arsh, fold=False, verbose=False, as_tmp
     h = hasher()
     h = HashThrough(hasher())
 
-    h.update(b"\r\n".join([x + b":" + y for (x,y) in arsh(msb, bh)]))
+    h.update(b"\r\n".join([x + b" : " + y for (x,y) in arsh(msb, bh)]))
     if verbose:
         print("\nsign ars hashed: %r" % h.hashed())
 

@@ -312,7 +312,8 @@ SIGNATURE TESTS:
       * i=2 (i2_base_fail)
       * no_additional_sig
    - authentication results
-     - merged by srv_id (ar_merged)
+     * merged by srv_id (ar_merged1)
+     * merged by srv_id (ar_merged2)     
 
 
     # These tests are currently on hold unti a better way to approach them is found
