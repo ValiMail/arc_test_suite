@@ -83,14 +83,14 @@ def sig_gen(public, private, body, amsh, arsh, fold=False, verbose=False, as_tmp
 
     accum = ''
     if as_tmp:
-        sb = sb[:70] + b"\n      " + sb[70:142] + b"\n      " + sb[142:214]# + b"\n    " + sb[214:286] + b"\n    " + msb[286:]
+        sb = sb[:70] + b"\n    " + sb[70:142] + b"\n    " + sb[142:214]# + b"\n    " + sb[214:286] + b"\n    " + msb[286:]
         res = as_tmp.replace(b'%b', sb)
         accum = res
         print(res.decode('utf-8'))
 
     if ams_tmp:
         msb = msb.replace(b' ', b'')
-        msb = msb[:70] + b"\n      " + msb[70:142] + b"\n      " + msb[142:214]# + b"\n    " + msb[214:286] + b"\n    " + msb[286:]
+        msb = msb[:70] + b"\n    " + msb[70:142] + b"\n    " + msb[142:214]# + b"\n    " + msb[214:286] + b"\n    " + msb[286:]
         res = ams_tmp.replace(b'%bh', bh)
         res = res.replace(b'%b', msb)
         accum += b"\n" + res
@@ -147,7 +147,7 @@ def sig_gen_multi(public_as, private_as, public_ams, private_ams, body, amsh, ar
     print("arsh b=")
     print(sb)
 
-    pk_as = parse_public_key(base64.b64decode(public_as))    
+    pk_as = parse_public_key(base64.b64decode(public_as))
     signature = base64.b64decode(sb)
     ams_valid = RSASSA_PKCS1_v1_5_verify(h, signature, pk_as)
     print("arsh sig valid: %r" % ams_valid)
@@ -168,4 +168,3 @@ def sig_gen_multi(public_as, private_as, public_ams, private_ams, body, amsh, ar
         print(res.decode('utf-8'))
 
     os.system(b'echo "' + accum + b'" | pbcopy')
-    
