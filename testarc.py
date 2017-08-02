@@ -7,12 +7,18 @@
 #
 
 import unittest
-import yaml
-import argparse
-import subprocess, os
+import sys
 
-from ddt import ddt, data
-from arcdns import ArcTestResolver
+try:
+    import yaml
+    import argparse
+    import subprocess, os
+
+    from ddt import ddt, data
+    from arcdns import ArcTestResolver
+except:
+    print("Mising dependency. Please check requirements.txt")
+    sys
 
 DEFAULT_DNS_PORT = 8053
 SIGN_TEST_FILE   = "tests/arc-draft-sign-tests.yml"
@@ -56,7 +62,7 @@ def sign_test(self, script, test_case, port, verbose=False):
                                  test_case.sel, test_case.domain, test_case.test["sig-headers"], str(test_case.test["t"]), str(verbose)],
                                 stdout=subprocess.PIPE)
         out  = proc.communicate()[0].decode("utf-8")
-        
+
     for f in os.listdir('tmp/'):
         os.remove('tmp/' + f)
 
@@ -72,12 +78,12 @@ def sign_test(self, script, test_case, port, verbose=False):
     if out == "":
         aar_valid = test_case.test["AAR"] == ""
         ams_valid = test_case.test["AMS"] == ""
-        as_valid  = test_case.test["AS"]  == ""        
+        as_valid  = test_case.test["AS"]  == ""
     else:
         for sig in out.split("\n\n"):
             sig = "".join(sig.split())
             (k, v) = sig.split(':', 1)
-            sig_res = set(v.split(';'))                    
+            sig_res = set(v.split(';'))
             if(k.lower() == "arc-authentication-results"):
                 s1 = "".join(test_case.test["AAR"].split())
                 s1 = set(s1.split(';'))
@@ -92,10 +98,10 @@ def sign_test(self, script, test_case, port, verbose=False):
                 as_valid = (sig_res <= s1)
             else:
                 continue
-        
+
     if verbose:
         print("RESULT:")
-        
+
     self.assertTrue(aar_valid, test_case.tid)
     self.assertTrue(as_valid, test_case.tid)
     self.assertTrue(ams_valid, test_case.tid)

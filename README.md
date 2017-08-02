@@ -51,7 +51,7 @@ Authentication-Results: lists.example.org; arc=none;
   spf=pass smtp.mfrom=jqd@d1.example
 Authentication-Results: lists.example.org; dkim=pass (1024-bit key) header.i=@d1.example
 Authentication-Results: lists.example.org; dmarc=pass
-Authentication-Results: nobody.example.org; something=ignored      
+Authentication-Results: nobody.example.org; something=ignored
 MIME-Version: 1.0
 Return-Path: <jqd@d1.example.org>
 ....
@@ -62,7 +62,7 @@ Would yield the following AAR, assuming this to be the first arc hop:
 ARC-Authentication-Results: i=1; lists.example.org; arc=none;
   spf=pass smtp.mfrom=jqd@d1.example;
   dkim=pass (1024-bit key) header.i=@d1.example;
-  dmarc=pass                
+  dmarc=pass
 ```
 
 ## Signing Header Format Standardization
@@ -154,4 +154,4 @@ comment: >-
 ```
 
 ## Running the Suite
-Included is an example python harness for running the test suite.  The harness takes as input the suite to run(sign/validate), and a command line tool which performs the operation.  A DNS server with the key records is started on a local port during suite execution.  More details are provided by ./testarc.py -h
+Included is an example python harness for running the test suite.  The harness takes as input the suite to run(sign/validate), and a command line tool which performs the operation.  A DNS server with the key records is started on a local port during suite execution.  More details are provided by ./testarc.py -h.  Dependencies for this script are documented in requirements.txt
