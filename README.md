@@ -1,6 +1,6 @@
 # ARC Test Suite
 
-This is an informal schema for the open source test suites for the [Authenticated Recieved Chain(ARC)](https://tools.ietf.org/html/draft-ietf-dmarc-arc-protocol-01) protocol, illustrated with examples.  This was prototyped from [the OpenSPF Test Suite](http://www.openspf.org/Test_Suite/Schema), and consists of two suites, one for the generation of ARC header fields, the other for their validation.
+This is an informal schema for the open source test suites for the [Authenticated Recieved Chain(ARC)](https://tools.ietf.org/id/draft-ietf-dmarc-arc-protocol-08.txt) protocol, illustrated with examples.  This was prototyped from [the OpenSPF Test Suite](http://www.openspf.org/Test_Suite/Schema), and consists of two suites, one for the generation of ARC header fields, the other for their validation.
 
 Their syntax is YAML. The top level object is a "scenario". A file can consist of multiple scenarios separated by '---' on a line by itself. Lexical comments are introduced by '#' and continue to the end of a line. Lexical comments are ignored. There are also comment fields which are part of a scenario. DKIM records, private keys, domains, and selectors are shared across scenarios.
 
@@ -88,6 +88,10 @@ tests:
     spec:        12/16
     description: basic test
     message:     |
+      Authentication-Results: lists.example.org;
+        spf=pass smtp.mfrom=jqd@d1.example;
+        dkim=pass (1024-bit key) header.i=@d1.example;
+        dmarc=pass
       MIME-Version: 1.0
       Return-Path: <jqd@d1.example.org>
       Received: by 10.157.14.6 with HTTP; Tue, 3 Jan 2017 12:22:54 -0800 (PST)
@@ -102,11 +106,7 @@ tests:
       --J.
     t:           12345
     sig-headers: from:to:subject
-    auth-res:    |
-      lists.example.org;
-      spf=pass smtp.mfrom=jqd@d1.example;
-      dkim=pass (1024-bit key) header.i=@d1.example;
-      dmarc=pass
+    srv-id: lists.example.org
     AS:          |
       a=rsa-sha256; b=oXNsU/I3fVAFVMIhssuTgCkdSqw6tLBI9w9c+izOlrVQElsVxarVCmhH
       7NGae7CyqDQMYxEFfrqjzSxsu6G9yhqxsge574oHCvZgx8VLkFAa16hrBe0M+YPauA0TCkMm
@@ -154,4 +154,7 @@ comment: >-
 ```
 
 ## Running the Suite
-Included is an example python harness for running the test suite.  The harness takes as input the suite to run(sign/validate), and a command line tool which performs the operation.  A DNS server with the key records is started on a local port during suite execution.  More details are provided by ./testarc.py -h.  Dependencies for this script are documented in requirements.txt
+Included is an example python harness for running the test suite.  The harness takes as input the suite to run(sign/validate), and a command line tool which performs the operation.  A DNS server with the key records is started on a local port during suite execution.  More details are provided by ./testarc.py -h.  Dependencies for this script are documented in requirements.txt.  OpenARC, dkimpy, & dummy runners are found in the runners directory.
+
+## Modifying the suite
+There are various tools for generating and modifying parts of the suite, found in the sig_gen directory.  See the Readme file in that directory for more information.
