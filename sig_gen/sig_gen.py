@@ -67,7 +67,7 @@ def sig_gen(public, private, body, amsh, arsh, fold=False, verbose=False, as_tmp
     h = hasher()
     h = HashThrough(hasher())
 
-    h.update(b"\r\n".join([x + b" : " + y for (x,y) in arsh(msb, bh)]))
+    h.update(b"\r\n".join([x + b":" + y for (x,y) in arsh(msb, bh)]))
     if verbose:
         print("\nsign ars hashed: %r" % h.hashed())
 
@@ -151,7 +151,7 @@ def sig_gen_multi(public_as, private_as, public_ams, private_ams, body, amsh, ar
     signature = base64.b64decode(sb)
     ams_valid = RSASSA_PKCS1_v1_5_verify(h, signature, pk_as)
     print("arsh sig valid: %r" % ams_valid)
-
+    
     accum = ''
     if as_tmp:
         sb = sb[:70] + b"\n      " + sb[70:142] + b"\n      " + sb[142:214]# + b"\n    " + sb[214:286] + b"\n    " + msb[286:]
