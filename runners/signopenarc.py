@@ -14,6 +14,7 @@ if len(sys.argv) != 10:
     print("Usage: arcsigntest.py messagefile dnsport privatekeyfile authserv-id selector domain headers timestamp verbose", file=sys.stderr)
     sys.exit(1)
 
+headers = ",".join(sys.argv[7].split(":"))
 conf = '''KeepTemporaryFiles     no
 
 Syslog                    yes
@@ -32,10 +33,11 @@ PidFile                   %s
 Canonicalization          relaxed/relaxed
 SignHeaders               %s
 AuthservID                %s
-''' % (sys.argv[6], sys.argv[5], sys.argv[3], sys.argv[8], USER, PID_FILE, sys.argv[7], sys.argv[4])
+''' % (sys.argv[6], sys.argv[5], sys.argv[3], sys.argv[8], USER, PID_FILE, headers, sys.argv[4])
+sys.stdout.write(conf)
 
 os.chmod(sys.argv[3], stat.S_IREAD | stat.S_IWRITE);
-        
+
 import tempfile
 with tempfile.NamedTemporaryFile() as tmp:
     tmp.write(conf.encode('utf-8'))
@@ -45,8 +47,8 @@ with tempfile.NamedTemporaryFile() as tmp:
 
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     out  = proc.communicate()[0].decode("utf-8").strip()
-    #if(sys.argv[9]):
-    #    sys.stdout.write(out)
+    if(sys.argv[9]):
+        sys.stdout.write(out)
 
     for line in out.split("\n"):
         if(line.startswith("### INSHEADER: ")):
@@ -64,4 +66,3 @@ with tempfile.NamedTemporaryFile() as tmp:
             idx = line.find(pref)
             if(idx != -1):
                 sys.stdout.write("ARC-Seal:" + line[idx + len(pref): -1])
-                
