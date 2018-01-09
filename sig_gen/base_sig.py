@@ -30,7 +30,7 @@ sig_head = [
     (b'subject', b'Example 1'),
 ]
 
-h = b" : ".join([x[0] for x in sig_head])
+h = b":".join([x[0] for x in sig_head])
 
 as_tmp = b'''    AS:          |
       a=rsa-sha256;

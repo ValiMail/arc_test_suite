@@ -74,7 +74,7 @@ tests:
       <div dir="ltr">This is a test message</div>
 
       --001a113e15fcdd0f9e0545366e8f--
-    cv:          None
+    cv:          None        
   cv_pass_i1_1:
     spec:        12/16
     description: passing message i=1 base1

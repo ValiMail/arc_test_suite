@@ -33,6 +33,7 @@ PidFile                   %s
 Canonicalization          relaxed/relaxed
 SignHeaders               %s
 AuthservID                %s
+Mode                      s
 ''' % (sys.argv[6], sys.argv[5], sys.argv[3], sys.argv[8], USER, PID_FILE, headers, sys.argv[4])
 
 os.chmod(sys.argv[3], stat.S_IREAD | stat.S_IWRITE);

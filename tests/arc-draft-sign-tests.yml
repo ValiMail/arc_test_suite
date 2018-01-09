@@ -462,10 +462,10 @@ tests:
       Received: by 10.157.11.240 with SMTP id 103csp420860oth;
           Fri, 6 Jan 2017 14:27:31 -0800 (PST)
       ARC-Seal: a=rsa-sha256;
-         b=eEDEWXmmpxnX0f3j86ZGcurPDtlkx6oV3UzSv6ltqzJ4pTiScRA8F5nL+bd9anV5vXVnOC
-         WYT1oCpveHVdtpSr52tWEO4RSx+eCUuFsvVHRyq7yM8Ex8v2xhaLWqNWvb7NH38LunxZfjV4
-         TuqD0pt+if/XL2X+ctewoCSAVDhT8=; cv=none; d=example.org; i=1; s=dummy;
-         t=12345
+         b=KalMXVkx0O4PZIytFfe3i6B/c64408LkuF6rYR9HzBsTazolbsFg/nTah+zh9xmVnylcbg
+         gZnvu+Rte97HXb9fCK6/rAJQJ97NvYVgzwnEiAzCDts/3dS3SO+PyoAV2HxGMQlUgNeqidAc
+         mpm7kE3NbSpgq8Z/rsK5FZ7ADceXw=; cv=none; d=example.org; i=1; s=dummy;
+         t=12345          
       ARC-Message-Signature: a=rsa-sha256;
          b=XWeK9DxQ8MUm+Me5GLZ5lQ3L49RdoFv7m7VlrAkKb3/C7jjw33TrTY0KYI5lkowvEGnAtm
          5lAqLz67FxA/VrJc2JiYFQR/mBoJLLz/hh9y77byYmSO9tLfIDe2A83+6QsXHO3K6PxTz7+v
@@ -496,10 +496,10 @@ tests:
     srv-id: lists.example.org
     AS:          |
       a=rsa-sha256;
-      b=x034ccYUvVc2knPq/udF0XGqz2CNAfeXkWPu3M5ZTMwJv6zCHDhwct9nyvzT9dJYnDZPui
-      Bo4U1Fn2puetTuljta5ESvvO+Ul/D1RInclDOMbK3VqabYYymMFTwVN49GfSB7pg+jaPi5lM
-      kjXJH6cxtiA8gamCejS4wZxJRD/fs=; cv=pass; d=example.org; i=2; s=dummy;
-      t=12346
+      b=KiRMwS+rbu4ScgsYQGrZdW72DMVPKRnmkXigPU2FpNPTRViMIRIclMAa48kvbOJ/APWJuG
+      eX3uW2PfI3u2EKtDitHFLvlU2LlCkHhyp8HSO5VJFr0aAk9Z3aQhcoE5hWJ061NXe8C1nafG
+      4ctcT8p0xkTjVrL9EVsz26o0mRlXY=; cv=pass; d=example.org; i=2; s=dummy;
+      t=12346    
     AMS:         |
       a=rsa-sha256;
       b=UaNJhLFAa56Gpc+wKk0SL2Jq/LJgT9CYSZl59wcGYkpG0D5bjhDdj3qers6hD+3BpljNgn
@@ -523,9 +523,9 @@ tests:
         dmarc=pass      
       MIME-Version: 1.0
       ARC-Seal: a=rsa-sha256;
-          b=rOfjske1NJtykYwgODc8BxJOW5Df1E2LLPasFXs0x00QIXX7SDUsEzD4u2IdtN0kNNJBPS
-          IcfjOy4TaHEPkULPubiJG4fEx87iyAMCiVRraaMXabqxgg4IHpieNdl4tNMO1GkGHwG760+5
-          DmvXc4BINugnX66Z+sL0y0z3THR3A=; cv=pass; d=example.org; i=2; s=dummy;
+          b=I8bdOhGPwqIRyhSYZysZdwFJmD/gRxZR3Dn8BQdKkv3fOsWG8A2aftWwnAHKsNreVi6MUF
+          W4M3tVxsG+pF52qzl3zQGn3bkQIS1N700fbu0z0Lg8IW/gcxziGJlLgK5Bk70uN1egGgdLwn
+          SiywwvouD7BX1ZlkxFk9i84SDf8/w=; cv=pass; d=example.org; i=2; s=dummy;
           t=12346
       ARC-Message-Signature: a=rsa-sha256;
           b=UaNJhLFAa56Gpc+wKk0SL2Jq/LJgT9CYSZl59wcGYkpG0D5bjhDdj3qers6hD+3BpljNgn
@@ -541,9 +541,9 @@ tests:
       Received: by 10.157.11.240 with SMTP id 103csp420860oth;
           Fri, 6 Jan 2017 14:27:31 -0800 (PST)
       ARC-Seal: a=rsa-sha256;               
-         b=eEDEWXmmpxnX0f3j86ZGcurPDtlkx6oV3UzSv6ltqzJ4pTiScRA8F5nL+bd9anV5vXVnOC
-         WYT1oCpveHVdtpSr52tWEO4RSx+eCUuFsvVHRyq7yM8Ex8v2xhaLWqNWvb7NH38LunxZfjV4
-         TuqD0pt+if/XL2X+ctewoCSAVDhT8=; cv=none; d=example.org; i=1; s=dummy;
+         b=KalMXVkx0O4PZIytFfe3i6B/c64408LkuF6rYR9HzBsTazolbsFg/nTah+zh9xmVnylcbg
+         gZnvu+Rte97HXb9fCK6/rAJQJ97NvYVgzwnEiAzCDts/3dS3SO+PyoAV2HxGMQlUgNeqidAc
+         mpm7kE3NbSpgq8Z/rsK5FZ7ADceXw=; cv=none; d=example.org; i=1; s=dummy;
          t=12345
       ARC-Message-Signature: a=rsa-sha256;
          b=XWeK9DxQ8MUm+Me5GLZ5lQ3L49RdoFv7m7VlrAkKb3/C7jjw33TrTY0KYI5lkowvEGnAtm
@@ -575,9 +575,9 @@ tests:
     srv-id: lists.example.org
     AS:          |
       a=rsa-sha256;
-      b=qQunugdoVyNwoa2P4Lb6CBFCUqr4tY9cnCBE4s0/rH8EPwMxc1MwUMDNHRbQWcbDy1R/N8
-      VaNyCuyUAFw7R2n4iISalDgFm2neCyo4YEQ8EcMdNi3oTFewLC0d1n6APsQX8TiHbtq5jJsD
-      YSk1xlys8Szgoc8H7dXffiQQlyhRI=; cv=pass; d=example.org; i=3; s=dummy;
+      b=amYobvirySPk39Y45uHWIsJOGQ0pDhn3D8ncaOew7h+9cddITDFGght2qHYE0GLdpDtLUG
+      J1CwEoM6hdVhG6BkJ80vHzy09Wj2id7B3DMpytPm9MjU7K6Le9VGdewFItwhmG+c15l8krp6
+      sKw7wUlgM60lSZT0EYTC2x8NXjNDI=; cv=pass; d=example.org; i=3; s=dummy;
       t=12347
     AMS:         |
       a=rsa-sha256;
@@ -604,17 +604,17 @@ tests:
       Received: by 10.157.11.240 with SMTP id 103csp420860oth;
           Fri, 6 Jan 2017 14:27:31 -0800 (PST)
       ARC-Seal: a=rsa-sha256;
-          b=fOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ
-          7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn
-          QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy;
-          t=12345
+         b=kalMXVkx0O4PZIytFfe3i6B/c64408LkuF6rYR9HzBsTazolbsFg/nTah+zh9xmVnylcbg
+         gZnvu+Rte97HXb9fCK6/rAJQJ97NvYVgzwnEiAzCDts/3dS3SO+PyoAV2HxGMQlUgNeqidAc
+         mpm7kE3NbSpgq8Z/rsK5FZ7ADceXw=; cv=none; d=example.org; i=1; s=dummy;
+         t=12345          
       ARC-Message-Signature: a=rsa-sha256;
-          b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm
-          9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE
-          cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=;
-          bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
-          d=example.org; h=mime-version:date:from:to:subject;
-          i=1; s=dummy; t=12345
+         b=XWeK9DxQ8MUm+Me5GLZ5lQ3L49RdoFv7m7VlrAkKb3/C7jjw33TrTY0KYI5lkowvEGnAtm
+         5lAqLz67FxA/VrJc2JiYFQR/mBoJLLz/hh9y77byYmSO9tLfIDe2A83+6QsXHO3K6PxTz7+v
+         rCB4wHD9GADeUKVfHzmpZhFuYOa88=;
+         bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
+         d=example.org; h=mime-version:date:from:to:subject;
+         i=1; s=dummy; t=12345          
       ARC-Authentication-Results: i=1; lists.example.org; arc=none;
           spf=pass smtp.mfrom=jqd@d1.example;
           dkim=pass (1024-bit key) header.i=@d1.example;
@@ -641,7 +641,7 @@ tests:
       b=1NUXYB6dkzvHNNuAxkPWkze6te3YkN29XbS1WtqXGPKmwZujBYH8Au3eMW+pKUnCFSK4Bj
       tyh0/cTU4jKwxE7sVnGV7BbwW8FdRsYSOgT5RCq3GBuWq5SAW5jDzTIoSMU5joN+jU55xw8a
       mcpcAZse7+iQbftRJflGDEyHZH8s4=; cv=fail; d=example.org; i=2; s=dummy;
-      t=12346
+      t=12346    
     AMS:         |
       a=rsa-sha256;
       b=UaNJhLFAa56Gpc+wKk0SL2Jq/LJgT9CYSZl59wcGYkpG0D5bjhDdj3qers6hD+3BpljNgn
@@ -662,12 +662,12 @@ tests:
       Authentication-Results: lists.example.org; arc=fail;
         spf=pass smtp.mfrom=jqd@d1.example;
         dkim=pass (1024-bit key) header.i=@d1.example;
-        dmarc=pass
-      MIME-Version: 1.0        
+        dmarc=pass        
+      MIME-Version: 1.0
       ARC-Seal: a=rsa-sha256;
-          b=rOfjske1NJtykYwgODc8BxJOW5Df1E2LLPasFXs0x00QIXX7SDUsEzD4u2IdtN0kNNJBPS
-          IcfjOy4TaHEPkULPubiJG4fEx87iyAMCiVRraaMXabqxgg4IHpieNdl4tNMO1GkGHwG760+5
-          DmvXc4BINugnX66Z+sL0y0z3THR3A=; cv=pass; d=example.org; i=2; s=dummy;
+          b=i8bdOhGPwqIRyhSYZysZdwFJmD/gRxZR3Dn8BQdKkv3fOsWG8A2aftWwnAHKsNreVi6MUF
+          W4M3tVxsG+pF52qzl3zQGn3bkQIS1N700fbu0z0Lg8IW/gcxziGJlLgK5Bk70uN1egGgdLwn
+          SiywwvouD7BX1ZlkxFk9i84SDf8/w=; cv=pass; d=example.org; i=2; s=dummy;
           t=12346
       ARC-Message-Signature: a=rsa-sha256;
           b=UaNJhLFAa56Gpc+wKk0SL2Jq/LJgT9CYSZl59wcGYkpG0D5bjhDdj3qers6hD+3BpljNgn
@@ -682,22 +682,22 @@ tests:
           dmarc=pass
       Received: by 10.157.11.240 with SMTP id 103csp420860oth;
           Fri, 6 Jan 2017 14:27:31 -0800 (PST)
-      ARC-Seal: a=rsa-sha256;
-          b=fOdFEyhrk/tw5wl3vMIogoxhaVsKJkrkEhnAcq2XqOLSQhPpGzhGBJzR7k1sWGokon3TmQ
-          7TX9zQLO6ikRpwd/pUswiRW5DBupy58fefuclXJAhErsrebfvfiueGyhHXV7C1LyJTztywzn
-          QGG4SCciU/FTlsJ0QANrnLRoadfps=; cv=none; d=example.org; i=1; s=dummy;
-          t=12345
+      ARC-Seal: a=rsa-sha256;               
+         b=KalMXVkx0O4PZIytFfe3i6B/c64408LkuF6rYR9HzBsTazolbsFg/nTah+zh9xmVnylcbg
+         gZnvu+Rte97HXb9fCK6/rAJQJ97NvYVgzwnEiAzCDts/3dS3SO+PyoAV2HxGMQlUgNeqidAc
+         mpm7kE3NbSpgq8Z/rsK5FZ7ADceXw=; cv=none; d=example.org; i=1; s=dummy;
+         t=12345
       ARC-Message-Signature: a=rsa-sha256;
-          b=QsRzR/UqwRfVLBc1TnoQomlVw5qi6jp08q8lHpBSl4RehWyHQtY3uOIAGdghDk/mO+/Xpm
-          9JA5UVrPyDV0f+2q/YAHuwvP11iCkBQkocmFvgTSxN8H+DwFFPrVVUudQYZV7UDDycXoM6UE
-          cdfzLLzVNPOAHEDIi/uzoV4sUqZ18=;
-          bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
-          d=example.org; h=mime-version:date:from:to:subject;
-          i=1; s=dummy; t=12345
+         b=XWeK9DxQ8MUm+Me5GLZ5lQ3L49RdoFv7m7VlrAkKb3/C7jjw33TrTY0KYI5lkowvEGnAtm
+         5lAqLz67FxA/VrJc2JiYFQR/mBoJLLz/hh9y77byYmSO9tLfIDe2A83+6QsXHO3K6PxTz7+v
+         rCB4wHD9GADeUKVfHzmpZhFuYOa88=;
+         bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed;
+         d=example.org; h=mime-version:date:from:to:subject;
+         i=1; s=dummy; t=12345                    
       ARC-Authentication-Results: i=1; lists.example.org; arc=none;
           spf=pass smtp.mfrom=jqd@d1.example;
           dkim=pass (1024-bit key) header.i=@d1.example;
-          dmarc=pass
+          dmarc=pass      
       Received: from segv.d1.example (segv.d1.example [72.52.75.15])
           by lists.example.org (8.14.5/8.14.5) with ESMTP id t0EKaNU9010123
           for <arc@example.org>; Thu, 14 Jan 2015 15:01:30 -0800 (PST)
@@ -720,7 +720,7 @@ tests:
       b=P3oIsF0qE5VDD1XPP0oH5XkvpG20k9jmkREcWvi1I9uy6P4UP9Y7mVYTAsNdi8XOg+AMiG
       CT1CUTmR5+MyYC4mqFW6943PIyzDrDvhZb8DLoy5/tM2cztpSzS0SItqM2XRh0YGp0yMA1sz
       obc7WTpkgtqFz5beCQC/PjnQ3ZkRw=; cv=fail; d=example.org; i=3; s=dummy;
-      t=12347
+      t=12347    
     AMS:         |
       a=rsa-sha256;
       b=QmCd8uJdwnr6wMmniYA/VHCuWButAIlcPZSpNWvk8KHgTuFMZlCPQToT2qVpf2BUfdNpnC

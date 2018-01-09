@@ -60,7 +60,7 @@ t = b'12346'
 i = 2
 
 ams1 = b'''a=rsa-sha256; b=XWeK9DxQ8MUm+Me5GLZ5lQ3L49RdoFv7m7VlrAkKb3/C7jjw33TrTY0KYI5lkowvEGnAtm 5lAqLz67FxA/VrJc2JiYFQR/mBoJLLz/hh9y77byYmSO9tLfIDe2A83+6QsXHO3K6PxTz7+v rCB4wHD9GADeUKVfHzmpZhFuYOa88=; bh=KWSe46TZKCcDbH4klJPo+tjk5LWJnVRlP5pvjXFZYLQ=; c=relaxed/relaxed; d=example.org; h=mime-version:date:from:to:subject; i=1; s=dummy; t=12345'''
-as1 = b'''a=rsa-sha256; b=eEDEWXmmpxnX0f3j86ZGcurPDtlkx6oV3UzSv6ltqzJ4pTiScRA8F5nL+bd9anV5vXVnOC WYT1oCpveHVdtpSr52tWEO4RSx+eCUuFsvVHRyq7yM8Ex8v2xhaLWqNWvb7NH38LunxZfjV4 TuqD0pt+if/XL2X+ctewoCSAVDhT8=; cv=none; d=example.org; i=1; s=dummy; t=12345'''
+as1 = b'''a=rsa-sha256; b=KalMXVkx0O4PZIytFfe3i6B/c64408LkuF6rYR9HzBsTazolbsFg/nTah+zh9xmVnylcbg gZnvu+Rte97HXb9fCK6/rAJQJ97NvYVgzwnEiAzCDts/3dS3SO+PyoAV2HxGMQlUgNeqidAc mpm7kE3NbSpgq8Z/rsK5FZ7ADceXw=; cv=none; d=example.org; i=1; s=dummy; t=12345'''
 
 ams = b'a=rsa-sha256; b=; bh=; c=relaxed/relaxed; d=%s; h=%s; i=%i; s=%s; t=%s' % (d, h, i, s, t)
 amsh = (lambda bh: sig_head + [(b'arc-message-signature', ams.replace(b'bh=', b'bh=' + bh))])

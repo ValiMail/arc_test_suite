@@ -39,11 +39,11 @@ with tempfile.NamedTemporaryFile() as tmp:
     cmd = [OPEN_ARC_PATH + "openarc",  "-c", tmp.name,  "-v", "-v", "-f", "-l", "-t", sys.argv[1]]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     out  = proc.communicate()[0].decode("utf-8").strip()
-    
+
     for line in out.split("\n"):
-        pref = "'ARC-Seal' hvalue='"
+        pref = "### INSHEADER"
         idx = line.find(pref)        
         if(idx != -1):
-            regex = re.compile('cv=((\w)+);')
+            regex = re.compile('arc=((\w)+)')
             sys.stdout.write(regex.search(line).groups()[0])
             

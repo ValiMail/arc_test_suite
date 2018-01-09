@@ -87,18 +87,19 @@ def sign_test(self, script, test_case, port, verbose=False):
             if(k.lower() == "arc-authentication-results"):
                 s1 = "".join(test_case.test["AAR"].split())
                 s1 = set(s1.split(';'))
-                aar_valid = (sig_res <= s1)
+                aar_valid = (s1 == sig_res)
             elif(k.lower() == "arc-message-signature"):
                 s1 = "".join(test_case.test["AMS"].split())
                 s1 = set(s1.split(';'))
-                ams_valid = (sig_res <= s1)
+                ams_valid = (sig_res == s1)
             elif(k.lower() == "arc-seal"):
                 s1 = "".join(test_case.test["AS"].split())
                 s1 = set(s1.split(';'))
-                as_valid = (sig_res <= s1)
+                as_valid = (sig_res == s1)
             else:
                 continue
 
+    print(aar_valid, ams_valid, as_valid)
     if verbose:
         print("RESULT:")
 
