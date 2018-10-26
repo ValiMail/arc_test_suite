@@ -164,8 +164,9 @@ VALIDATION TESTS:
           * modify bh value (ams_fields_bh_mod_sig)
           * modify body(non-canonically) (ams_fields_bh_mod_bod)
     - c=
-      - fail
+      - pass
         * NA (ams_fields_c_na)
+      - fail
         * empty (ams_fields_c_empty)
         - various canonicalizations respected
           * relaxed/relaxed (ams_fields_c_rr)

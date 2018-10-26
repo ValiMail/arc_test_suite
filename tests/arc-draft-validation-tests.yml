@@ -3435,7 +3435,7 @@ tests:
       Hey gang,
       This is a test message.
       --J.
-    cv:          Fail
+    cv:          Pass
   ams_fields_c_empty:
     spec:        12/16
     description: ams c= empty
