@@ -2249,7 +2249,7 @@ tests:
       Hey gang,
       This is a test message.
       --J.
-    cv:          Pass
+    cv:          Fail
   ams_fields_a_na:
     spec:        12/16
     description: a= not avaliable
@@ -5650,7 +5650,7 @@ tests:
       <div dir="ltr">This is a test message</div>
 
       --001a113e15fcdd0f9e0545366e8f--
-    cv:          Pass
+    cv:          Fail
   as_fields_a_na:
     spec:        12/16
     description: as a= not avaliable

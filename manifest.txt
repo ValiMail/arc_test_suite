@@ -45,11 +45,11 @@ VALIDATION TESTS:
       * missing AS i= (as_fields_i_missing)
     - a=
       - pass
-        * a=sha-rsa1(changes signature) (as_fields_a_sha1)
       - fail
         * NA (as_fields_a_na)
         * empty (as_fields_a_empty) BREAKS_DNS_SERVER
-        * unknkown algorithm(not rsa-sha1 or rsa-sha256) (as_fields_a_unknown)
+        * a=sha-rsa1(changes signature) (as_fields_a_sha1)
+        * unknkown algorithm(not rsa-sha256) (as_fields_a_unknown)
     - b=
       - pass
         * ignores whitespace (as_fields_b_ignores_wsp)
@@ -121,11 +121,11 @@ VALIDATION TESTS:
   - fields
     - a=
       - pass
-        * a=sha-rsa1(changes signature) (ams_fields_a_sha1)
       - fail
         * NA (ams_fields_a_na)
         * empty (ams_fields_a_empty)
-        * unknkown algorithm(not rsa-sha1 or rsa-sha256 ) (ams_fields_a_unknown)
+        * a=sha-rsa1(changes signature) (ams_fields_a_sha1)
+        * unknkown algorithm(not rsa-sha256 ) (ams_fields_a_unknown)
     - b=
       - pass
         * ignores whitespace (ams_fields_b_ignores_wsp)
