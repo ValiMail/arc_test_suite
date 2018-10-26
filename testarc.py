@@ -8,6 +8,7 @@
 
 import unittest
 import sys
+import tempfile
 
 try:
     import yaml
@@ -31,13 +32,12 @@ def validate_test(self, script, test_case, port, verbose=False):
         print("MSG:")
         print(test_case.test['message'])
 
-    with open('tmp/message.txt', 'w') as f:
-        f.write(test_case.test["message"])
-    with ArcTestResolver(test_case.txt_records, port, verbose):
-        proc = subprocess.Popen([script, 'tmp/message.txt', str(port), str(verbose)], stdout=subprocess.PIPE)
-        out  = proc.communicate()[0].decode("utf-8").strip()
-
-    os.remove('tmp/message.txt')
+    with tempfile.TemporaryDirectory() as tmpdir:
+        with open('{0}/message.txt'.format(tmpdir), 'w') as f:
+            f.write(test_case.test["message"])
+        with ArcTestResolver(test_case.txt_records, port, verbose):
+            proc = subprocess.Popen([script, '{0}/message.txt'.format(tmpdir), str(port), str(verbose)], stdout=subprocess.PIPE)
+            out  = proc.communicate()[0].decode("utf-8").strip()
 
     if verbose:
         print("RESULT:")
@@ -52,19 +52,17 @@ def sign_test(self, script, test_case, port, verbose=False):
         print("MSG:")
         print(test_case.test['message'])
 
-    with open('tmp/message.txt', 'w') as f:
-        f.write(test_case.test["message"])
-    with open('tmp/privatekey.pem', 'w') as f:
-        f.write(test_case.privatekey)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        with open('{0}/message.txt'.format(tmpdir), 'w') as f:
+            f.write(test_case.test["message"])
+        with open('{0}/privatekey.pem'.format(tmpdir), 'w') as f:
+            f.write(test_case.privatekey)
 
-    with ArcTestResolver(test_case.txt_records, port, verbose):
-        proc = subprocess.Popen([script, 'tmp/message.txt', str(port), 'tmp/privatekey.pem', test_case.test["srv-id"],
-                                 test_case.sel, test_case.domain, test_case.test["sig-headers"], str(test_case.test["t"]), str(verbose)],
-                                stdout=subprocess.PIPE)
-        out  = proc.communicate()[0].decode("utf-8")
-
-    for f in os.listdir('tmp/'):
-        os.remove('tmp/' + f)
+        with ArcTestResolver(test_case.txt_records, port, verbose):
+            proc = subprocess.Popen([script, '{0}/message.txt'.format(tmpdir), str(port), '{0}/privatekey.pem'.format(tmpdir), test_case.test["srv-id"],
+                                     test_case.sel, test_case.domain, test_case.test["sig-headers"], str(test_case.test["t"]), str(verbose)],
+                                    stdout=subprocess.PIPE)
+            out  = proc.communicate()[0].decode("utf-8")
 
     if verbose:
         print("\nOutput ARC-Set:")
