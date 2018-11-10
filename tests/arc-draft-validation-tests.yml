@@ -7184,6 +7184,39 @@ tests:
 
       --001a113e15fcdd0f9e0545366e8f--
     cv:          Fail
+  as_fields_h_present:
+    spec:        12/16
+    description: as has h= which is invalid
+    message:     |
+      Return-Path: <jqd@d1.example.org>
+      ARC-Seal: i=1; cv=none; a=rsa-sha256; d=example.com; s=test; t=12345; 
+       h=message-id : date : from : to : subject : from; 
+       b=mIurIuLl0/wAxWhA4DBS1wsUE15IBnmJ7o3sH15hIuesdD4smz1cCLXVhRtxQE
+       rVtVLv4OgNCgdFsB5zbSOUao2bSSYP6y0BGyCWvr+hU4tai5axIc1Kfwbtv/0Mqg
+       waiGJPreOAAeZOJ4vPfdaAbSXlN5MI4PHW89U82FSIBKI=
+      ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; 
+       d=example.com; s=test; t=12345; h=message-id : 
+       date : from : to : subject : from; 
+       bh=wE7NXSkgnx9PGiavN4OZhJztvkqPDlemV3OGuEnLwNo=; 
+       b=a0f6qc3k9eECTSR155A0TQS+LjqPFWfI/brQBA83EUz00SNxj
+       1wmWykvs1hhBVeM0r1kEQc6CKbzRYaBNSiFj4q8JBpRIujLz1qL
+       yGmPuAI6ddu/Z/1hQxgpVcp/odmI1UMV2R+d+yQ7tUp3EQxF/GY
+       Nt22rV4rNmDmANZVqJ90=
+      ARC-Authentication-Results: i=1; lists.example.org; arc=none;
+        spf=pass smtp.mfrom=jqd@d1.example;
+        dkim=pass (1024-bit key) header.i=@d1.example;
+        dmarc=pass
+      Authentication-Results: lists.example.org; arc=none; spf=pass smtp.mfrom=jqd@d1.example; dkim=pass (1024-bit key) header.i=@d1.example; dmarc=pass
+      Received: from localhost
+      Message-ID: <example@example.com>
+      Date: Mon, 01 Jan 2011 01:02:03 +0400
+      From: Test User <test@example.com>
+      To: somebody@example.com
+      Subject: Testing
+      
+      This is a test message.
+      
+    cv:          Fail
   as_fields_s_na:
     spec:        12/16
     description: as s= not available
