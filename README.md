@@ -12,7 +12,7 @@ Parts of the test suite use the following external packages:
 
 They can be easy installed with pip using the provided dependencies.py script:
 
-$ python3 dependencies.py
+$ ./dependencies.py
 
 
 ## Example Validation Scenario
