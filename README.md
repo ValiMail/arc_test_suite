@@ -1,10 +1,19 @@
 # ARC Test Suite
 
-This is an informal schema for the open source test suites for the [Authenticated Recieved Chain(ARC)](https://tools.ietf.org/id/draft-ietf-dmarc-arc-protocol-08.txt) protocol, illustrated with examples.  This was prototyped from [the OpenSPF Test Suite](http://www.openspf.org/Test_Suite/Schema), and consists of two suites, one for the generation of ARC header fields, the other for their validation.
+This is an informal schema for the open source test suites for the [Authenticated Recieved Chain(ARC)](https://tools.ietf.org/id/draft-ietf-dmarc-arc-protocol-18.txt) protocol, illustrated with examples.  This was prototyped from [the OpenSPF Test Suite](http://www.openspf.org/Test_Suite/Schema), and consists of two suites, one for the generation of ARC header fields, the other for their validation.
 
 Their syntax is YAML. The top level object is a "scenario". A file can consist of multiple scenarios separated by '---' on a line by itself. Lexical comments are introduced by '#' and continue to the end of a line. Lexical comments are ignored. There are also comment fields which are part of a scenario. DKIM records, private keys, domains, and selectors are shared across scenarios.
 
 The signing suite explicitly does not thoroughly test chain validation to avoid reimplementation of the validation test suite.
+
+Parts of the test suite use the following external packages:
+
+"dnslib", "dkimpy>=0.7.1", "pyyaml", "ddt", "authheaders"
+
+They can be easy installed with pip using the provided dependencies.py script:
+
+$ python3 dependencies.py
+
 
 ## Example Validation Scenario
 
